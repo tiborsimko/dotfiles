@@ -47,11 +47,18 @@ Second, install any wanted software (such as ``tmux``) using your operating
 system's package manager such as ``apt``, ``brew``, ``pacman`` or ``yum``:
 
 ```console
-$ pacman -S tmux
+$ pacman -S tmux vim zsh
 ```
 
-Third, activate ``tmux`` configuration via ``stow``:
+Third, install Prezto (used for zsh):
 
 ```console
-$ stow tmux
+$ # install Prezto (used for zsh):
+$ git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
+```
+
+Finally, activate all wanted configurations (such as ``tmux``) via ``stow``:
+
+```console
+$ stow tmux vim zsh
 ```
