@@ -1,2 +1,0 @@
-# dotfiles
-Tibor's dotfiles
