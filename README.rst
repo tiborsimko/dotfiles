@@ -18,13 +18,16 @@ environment and configure several preferred applications.
 
 Tested on the following platforms:
 
-- Arch Linux with Tmux/2.9, Vim/8.1, Zsh/5.7.
-- CentOS 7 with Tmux/1.8, Vim/7.4, Zsh/5.0.
+- Android Termux
+- Arch Linux
+- CentOS
 
 Screenshot
 ----------
 
-FIXME
+.. figure:: https://raw.githubusercontent.com/tiborsimko/dotfiles/master/screenshot.png
+   :alt: screenshot.png
+   :align: center
 
 Prerequisites
 -------------
@@ -38,27 +41,33 @@ Usage
 
 First, clone this repository to new home:
 
-```console
-$ cd $HOME
-$ git clone git@github.com:tiborsimko/dotfiles .dotfiles
-```
+.. code-block:: console
+
+    $ cd $HOME
+    $ git clone git@github.com:tiborsimko/dotfiles .dotfiles
 
 Second, install any wanted software (such as ``tmux``) using your operating
 system's package manager such as ``apt``, ``brew``, ``pacman`` or ``yum``:
 
-```console
-$ pacman -S tmux vim zsh
-```
+.. code-block:: console
 
-Third, install Prezto (used for zsh):
+    $ pacman -S tmux vim zsh
 
-```console
-$ # install Prezto (used for zsh):
-$ git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
-```
+Third, install Prezto (used for zsh), vim-plug and space-vim (used for vim):
+
+.. code-block:: console
+
+    $ # install Prezto (used for zsh):
+    $ git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
+    $ # install vim-plug (used for vim):
+    $ curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    $ # install space-vim (used for vim):
+    $ git clone https://github.com/liuchengxu/space-vim.git ~/.space-vim
+    $ ln -s ~/.space-vim/init.vim ~/.vimrc
 
 Finally, activate all wanted configurations (such as ``tmux``) via ``stow``:
 
-```console
-$ stow tmux vim zsh
-```
+.. code-block:: console
+
+    $ stow tmux vim zsh

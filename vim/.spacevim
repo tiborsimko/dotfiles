@@ -1,0 +1,122 @@
+" Comment the following line if you don't want Vim and NeoVim to share the
+" same plugin download directory.
+let g:spacevim_plug_home = '~/.vim/plugged'
+
+" Uncomment the following line to override the leader key. The default value is space key "<\Space>".
+" let g:spacevim_leader = "<\Space>"
+
+" Uncomment the following line to override the local leader key. The default value is comma ','.
+" let g:spacevim_localleader = ','
+
+" Enable the existing layers in space-vim.
+" Refer to https://github.com/liuchengxu/space-vim/blob/master/layers/LAYERS.md for all available layers.
+let g:spacevim_layers = [
+      \ 'better-defaults',
+      \ 'better-motion',
+      \ 'docker',
+      \ 'editing',
+      \ 'file-manager',
+      \ 'fzf',
+      \ 'git',
+      \ 'github',
+      \ 'haskell',
+      \ 'html',
+      \ 'javascript',
+      \ 'latex',
+      \ 'markdown',
+      \ 'programming',
+      \ 'python',
+      \ 'syntax-checking',
+      \ 'text-align',
+      \ 'tmux',
+      \ 'ycmd',
+      \ 'which-key',
+      \ ]
+
+" Uncomment the following line if your terminal(-emulator) supports true colors.
+" let g:spacevim_enable_true_color = 1
+
+" Uncomment the following if you have some nerd font installed.
+" let g:spacevim_nerd_fonts = 1
+
+" If you want to have more control over the layer, try using Layer command.
+" if g:spacevim.gui
+"   Layer 'airline'
+" endif
+
+" Exclude some unwanted plugins:
+" let g:spacevim_excluded = ['dominikduda/vim_current_word']
+
+" Manage your own plugins.
+" Refer to https://github.com/junegunn/vim-plug for more detials.
+function! UserInit()
+
+  " Add your own plugin via Plug command.
+
+  " Black
+  Plug 'psf/black'
+
+  " colorscheme
+  Plug 'morhetz/gruvbox'
+
+  " CWL
+  Plug 'manabuishii/vim-cwl'
+
+  " GnuPG
+  Plug 'jamessan/vim-gnupg'
+
+  " vimwiki
+  Plug 'vimwiki/vimwiki'
+
+  " TeX
+  Plug 'lervag/vimtex'
+
+endfunction
+
+" Override the default settings from space-vim as well as adding extras
+function! UserConfig()
+
+  " Override the default settings.
+  " Uncomment the following line to disable relative number.
+  " set norelativenumber
+
+  " Adding extras.
+  " Uncomment the following line If you have installed the powerline fonts.
+  " It is good for airline layer.
+  " let g:airline_powerline_fonts = 1
+
+  " set colorscheme
+  colorscheme gruvbox
+  set background=dark
+
+  " workaround for vim_current_word plugin and gruvbox theme
+  hi CurrentWord gui=underline cterm=underline
+
+  " automatically remove trailing whitespace for all file types
+  autocmd BufWritePre * %s/\s\+$//e
+
+  " disable automatic comment insertion upon newline
+  autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+
+  " for Python, use Black as auto-formatter instead of yapf
+  let g:spacevim_python_fmt = 'black'
+
+  " for Python, do not auto-format when I save the file
+  autocmd FileType python let b:ale_fixers = ['remove_trailing_lines', 'isort']
+
+  " set tmux navigation via C-hjkl
+  nnoremap <silent> <c-h> :TmuxNavigateLeft<cr>
+  nnoremap <silent> <c-j> :TmuxNavigateDown<cr>
+  nnoremap <silent> <c-k> :TmuxNavigateUp<cr>
+  nnoremap <silent> <c-l> :TmuxNavigateRight<cr>
+  nnoremap <silent> <c-\> :TmuxNavigatePrevious<cr>
+
+  " set vimtex viewer
+  let g:vimtex_view_method = 'mupdf'
+
+  " set vimwiki options
+  let g:vimwiki_map_prefix = '<LocalLeader>w'
+  let g:vimwiki_list = [{'path': '~/private/notes/',
+                        \ 'syntax': 'markdown', 'ext': '.md'}]
+
+endfunction
