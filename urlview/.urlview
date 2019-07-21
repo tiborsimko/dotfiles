@@ -1,0 +1,10 @@
+# Tibor's urlview configuration.
+
+# regular expression to use to match URLs:
+REGEXP (((http|https|ftp|gopher)|mailto)[.:][^ >"\t]*|www\.[-a-z0-9.]+)[^ .,;\t>">\):]
+
+# command to invoke for selected URL:
+COMMAND /usr/bin/qutebrowser %s
+
+# quit urlview after launch
+QUITONLAUNCH
