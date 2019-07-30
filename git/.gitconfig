@@ -1,0 +1,66 @@
+# Tibor's ~/.gitconfig
+[user]
+    email = tibor.simko@cern.ch
+    name = Tibor Šimko
+    signingkey = BA5A2B67
+[include]
+    path = ~/.gitconfig.local  # contains user secrets such as hub tokens
+[alias]
+    k = log --graph --decorate --pretty=format:'%C(blue)%d%Creset %C(yellow)%h%Creset %s, %C(bold green)%an%Creset, %C(green)%cd%Creset' --date=relative
+    ka = log --graph --decorate --pretty=format:'%C(blue)%d%Creset %C(yellow)%h%Creset %s, %C(bold green)%an%Creset, %C(green)%cd%Creset' --date=relative --all
+    g = grep
+    l = log --format=oneline
+    lm = log master.. --format=oneline
+    lmp = log master.. -p
+    lms = log master.. --stat
+    lp = log production.. --format=oneline
+    lpp = log production.. -p
+    lps = log production.. --stat
+    lq = log qa.. --format=oneline
+    lqp = log qa.. -p
+    lqs = log qa.. --stat
+    xq = log production..qa
+    cm = checkout master
+    cp = checkout production
+    cq = checkout qa
+    lbi = !"git for-each-ref --format='%(committerdate:short) %(refname)' --sort=committerdate refs/heads/*$1*"
+    rbi = !"git for-each-ref --format='%(committerdate:short) %(refname)' --sort=committerdate refs/remotes/$1"
+    b = branch -vv
+    s = status -s
+    f = fetch
+    m = merge --ff-only
+    fu = fetch upstream
+    pom = push origin master
+    pum = push upstream master
+    merge-push-delete-branch = !sh -c 'git fetch upstream && git fetch origin && git checkout master && git merge --ff-only upstream/master && git merge --ff-only $1 && git branch -d $1 && git push upstream master && git push origin master && git push origin :$1' -
+    merge-push-delete-pr = !sh -c 'git fetch upstream && git checkout master && git merge --ff-only upstream/master && git merge --ff-only upstream/pr/$1 && git branch -d pr-$1 && git push upstream master && git push origin master' -
+    dm = diff master
+    dp = diff production
+    dq = diff qa
+    dms = diff master --stat
+    dps = diff production --stat
+    dqs = diff qa --stat
+    dum = diff upstream/master master
+    dup = diff upstream/production production
+    duq = diff upstream/qa qa
+    mum = !"git checkout master && git merge --ff-only upstream/master && git checkout -"
+    mup = !"git checkout production && git merge --ff-only upstream/production && git checkout -"
+    muq = !"git checkout qa && git merge --ff-only upstream/qa && git checkout -"
+[color]
+    ui = auto
+    branch = auto
+    interactive = auto
+    status = auto
+[diff]
+    renamelimit = 99999
+[grep]
+    lineNumber = true
+[magithub]
+    online = true
+    contextRemote = "upstream"
+[magithub "status"]
+    includeStatusHeader = true
+    includePullRequestsSection = true
+    includeIssuesSection = true
+[merge]
+    tool = vimdiff
