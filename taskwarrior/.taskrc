@@ -1,0 +1,4 @@
+# Tibor's Taskwarrior configuration.
+include /usr/share/doc/task/rc/dark-yellow-green.theme
+data.location=~/private/task
+search.case.sensitive=no
