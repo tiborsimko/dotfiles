@@ -1,0 +1,36 @@
+# HTML
+text/html; w3m -I %{charset} -T text/html; copiousoutput;
+
+# PDF
+application/pdf; mupdf %s;
+application/x-pdf; mupdf %s;
+application/x-pdf; mupdf %s;
+
+# MS Excel
+application/x-msexcel; libreoffice --calc %s;
+application/ms-exc; libreoffice --calc %s;
+application/excel; libreoffice --calc %s;
+application/msexcel; libreoffice --calc %s;
+application/vnd.ms-exc; libreoffice --calc %s;
+application/vnd.ms-excel; libreoffice --calc %s;
+
+# MS Word
+application/msword; libreoffice --writer %s;
+application/vnd.sun.xml.writer; libreoffice --writer %s;
+application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; libreoffice --writer %s;
+application/vnd.openxmlformats-officedocument.spreadsheetml.template; libreoffice --writer %s;
+application/vnd.openxmlformats-officedocument.presentationml.template; libreoffice --writer %s;
+application/vnd.openxmlformats-officedocument.presentationml.slideshow; libreoffice --writer %s;
+application/vnd.openxmlformats-officedocument.presentationml.presentation; libreoffice --writer %s;
+application/vnd.openxmlformats-officedocument.presentationml.slide; libreoffice --writer %s;
+application/vnd.openxmlformats-officedocument.wordprocessingml.document; libreoffice --writer %s;
+application/vnd.openxmlformats-officedocument.wordprocessingml.template; libreoffice --writer %s;
+application/vnd.ms-excel.addin.macroEnabled.12; libreoffice --writer %s;
+application/vnd.ms-excel.sheet.binary.macroEnabled.12; libreoffice --writer %s;
+
+# Images
+image/jpeg; sxiv %s;
+image/pjpeg; sxiv %s;
+image/png; sxiv %s;
+image/gif; sxiv %s;
+image/tiff; sxiv %s;
