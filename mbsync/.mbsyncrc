@@ -1,0 +1,60 @@
+# Tibor's mbsync configuration.
+
+# Defaults for all channels
+Create Slave
+Sync All
+Expunge Both
+SyncState *
+
+# CERN
+IMAPAccount CERN
+Host cernmail.cern.ch
+User simko
+PassCmd "gpg --quiet --for-your-eyes-only --no-tty --decrypt ~/.gnupg/password-simko-cern.txt.gpg"
+Port 993
+SSLType IMAPS
+Timeout 60
+
+# Remote storage
+IMAPStore CERN-remote
+Account CERN
+
+# Local storage
+MaildirStore CERN-local
+Path ~/Local/mbsyncmail/
+Inbox ~/Local/mbsyncmail/INBOX
+SubFolders Legacy
+
+# CERN - Inbox
+Channel CERN-Inbox
+Master :CERN-remote:Inbox
+Slave :CERN-local:INBOX
+
+# CERN - Github
+Channel CERN-Github
+Master :CERN-remote:Github
+Slave :CERN-local:Github
+
+# CERN - Junk
+Channel CERN-Junk
+Master :CERN-remote:"Junk E-mail"
+Slave :CERN-local:Junk
+
+# CERN - Archive
+Channel CERN-Archive
+Master :CERN-remote:Archive
+Slave :CERN-local:Archive
+
+# CERN - Others
+Channel CERN-Others
+Master :CERN-remote:
+Slave :CERN-local:
+Patterns * !Inbox !Github !Junk !"Junk E-mail" !Archive !Drafts !Trash
+
+# CERN group - all channels
+Group CERN
+Channel CERN-Inbox
+Channel CERN-Github
+Channel CERN-Junk
+Channel CERN-Archive
+Channel CERN-Others
