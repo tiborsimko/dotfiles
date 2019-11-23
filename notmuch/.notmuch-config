@@ -1,0 +1,18 @@
+# Tibor's notmuch configuration.
+
+[database]
+path=/home/simko/Local/mbsyncmail
+
+[user]
+name=Tibor Simko
+primary_email=tibor.simko@cern.ch
+
+[new]
+tags=
+ignore=.mbsyncstate;.uidvalidity;
+
+[search]
+exclude_tags=
+
+[maildir]
+synchronize_flags=false
