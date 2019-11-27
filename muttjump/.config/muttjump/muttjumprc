@@ -1,0 +1,5 @@
+# Tibor's muttjump configuration.
+
+MUTTJUMP_INDEXER=notmuch
+
+MUTTJUMP_MODE=limit
