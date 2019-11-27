@@ -1,0 +1,5 @@
+#!/bin/sh
+#
+# Tibor's SSD trimming utility.
+
+sudo fstrim /

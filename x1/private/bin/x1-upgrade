@@ -1,0 +1,16 @@
+#!/bin/sh
+#
+# Tibor's Arch Linux upgrade helper.
+
+# exit on errors
+set -ex
+
+# upgrade regular packages
+sudo pacman -Syu
+
+# remove very old versions from pacman cache
+sudo paccache -rk2
+
+# update AUR packages
+yay -Syu
+

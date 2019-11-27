@@ -1,0 +1,12 @@
+#!/bin/sh
+#
+# Tibor's date and time setting utility.
+
+# quit on errors
+set -ex
+
+# get precise time from network
+sudo ntpdate -u pool.ntp.org
+
+# synchronise this time to hardware clock too
+sudo hwclock --systohc

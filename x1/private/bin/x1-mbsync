@@ -1,0 +1,42 @@
+#!/bin/bash
+#
+# Tibor's mail synchronisation helper.
+
+# quit on errors
+set -o errexit
+
+# quit on unbound symbols
+set -o nounset
+
+# usage help
+usage () {
+  echo "Usage: $0 [inbox|archive|all|help] [...]"
+}
+
+# synchronise mail
+needhelp=1
+if [[ "$@" = *"inbox"* ]]; then
+  # synchronise only current mail: takes ~3 seconds
+  needhelp=0
+  mbsync CERN-Inbox CERN-Github CERN-Junk
+fi
+if [[ "$@" = *"archive"* ]]; then
+  # synchronise only current archive: takes ~3 seconds
+  needhelp=0
+  mbsync CERN-Archive
+fi
+if [[ "$@" = *"all"* ]]; then
+  # synchronise everything: takes ~3 minutes
+  needhelp=0
+  mbsync -a
+fi
+if [[ "$@" = *"help"* ]]; then
+  needhelp=1
+fi
+if [ "$needhelp" -gt "0" ]; then
+  usage
+  exit 1
+fi
+
+# index new mail
+notmuch new

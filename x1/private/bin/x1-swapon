@@ -1,0 +1,19 @@
+#!/bin/sh
+#
+# Tibor's swap-to-file utility.
+#
+# First create files as follows:
+#
+# $ fallocate -l 4G /swapfile0
+# $ chmod 600 /swapfile0
+# $ mkswap /swapfile
+#
+# Then this utility can be called many times to start swapping on them.
+
+for swapfile in /swapfile0 /swapfile1 /swapfile2; do
+  if swapon | grep -q ${swapfile}; then
+     true
+  else
+     sudo swapon ${swapfile}
+  fi
+done

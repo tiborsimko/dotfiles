@@ -1,0 +1,45 @@
+#!/bin/sh
+#
+# Tibor's simple program to use external monitors from laptop. Useful for xmonad/i3wm.
+
+laptopmon="eDP1"
+extmonres="2560x1440"
+
+usage () {
+    echo "Usage: $0 [option] [resolution=1920x1080]"
+    echo "Options:"
+    echo "    --help  print this help"
+    echo "    list    list available resolutions"
+    echo "    clone   clone laptop screen on external monitor"
+    echo "    on      start using external monitor"
+    echo "    off     stop using external monitor"
+}
+
+if [ "$2" != "" ]; then
+    laptopcloneresolution=$2
+else
+    laptopcloneresolution="1920x1080"
+fi
+
+if [ "$1" = "" ]; then
+    usage
+    exit 0
+elif [ "$1" = "--help" ]; then
+    usage
+    exit 0
+elif [ "$1" = "list" ]; then
+    xrandr -q
+elif [ "$1" = "clone" ]; then
+    xrandr --output "$laptopmon" --auto --primary
+    extmon=$(xrandr -q | grep ' connected ' | grep -v $laptopmon | awk '{print $1}')
+    xrandr --output "$extmon" --mode "$laptopcloneresolution" --same-as "$laptopmon"
+elif [ "$1" = "on" ]; then
+    extmon=$(xrandr -q | grep ' connected ' | grep -v $laptopmon | awk '{print $1}')
+    xrandr --output "$extmon" --mode "$extmonres" --primary
+    xrandr --output "$laptopmon" --off
+elif [ "$1" = "off" ]; then
+    xrandr --output "$laptopmon" --auto --primary
+    for monitor in $(xrandr -q | grep -v $laptopmon | grep ' connected ' | awk '{print $1;}'); do
+        xrandr --output "$monitor" --off
+    done
+fi
