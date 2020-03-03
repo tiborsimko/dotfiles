@@ -46,9 +46,14 @@ export TERMINAL="termite"
 export LANG=C
 export LC_ALL=en_GB.utf8
 
-# fix for CERN LXPLUS7 self-compiled software (such as vim8)
+# fix for CERN LXPLUS7 self-compiled software (such as tmux, vim)
 if [[ -d $HOME/public/lxplus7/bin ]]; then
     export PATH=$HOME/public/lxplus7/bin:$PATH
+fi
+
+# fix for CERN LXPLUS7 self-compiled libraries (such as libevent needed for tmux)
+if [[ -d $HOME/public/lxplus7/lib ]]; then
+    export LD_LIBRARY_PATH=$HOME/public/lxplus7/lib:$LD_LIBRARY_PATH
 fi
 
 # shortcuts for some directories
