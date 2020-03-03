@@ -46,27 +46,32 @@ First, clone this repository to new home:
     $ cd $HOME
     $ git clone git@github.com:tiborsimko/dotfiles .dotfiles
 
-Second, install any wanted software (such as ``tmux``) using your operating
-system's package manager such as ``apt``, ``brew``, ``pacman`` or ``yum``:
+Second, install any wanted software (such as ``tmux``, ``vim``, ``zsh``) using
+your operating system's package manager (such as ``apt``, ``brew``, ``pacman``,
+``yum``):
 
 .. code-block:: console
 
-    $ pacman -S tmux vim zsh
+    $ sudo pacman -S tmux vim zsh
 
-Third, install Prezto (used for zsh), vim-plug and space-vim (used for vim):
+Third, install tpm (used for tmux), vim-plug and space-vim (used for vim), and
+prezto (used for zsh):
 
 .. code-block:: console
 
-    $ # install Prezto (used for zsh):
-    $ git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
+    $ # install tpm (used for tmux):
+    $ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
     $ # install vim-plug (used for vim):
     $ curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     $ # install space-vim (used for vim):
-    $ git clone https://github.com/liuchengxu/space-vim.git ~/.space-vim
+    $ git clone https://github.com/liuchengxu/space-vim ~/.space-vim
     $ ln -s ~/.space-vim/init.vim ~/.vimrc
+    $ # install prezto (used for zsh):
+    $ git clone --recursive https://github.com/sorin-ionescu/prezto "${ZDOTDIR:-$HOME}/.zprezto"
 
-Finally, activate all wanted configurations (such as ``tmux``) via ``stow``:
+Finally, activate all wanted configurations (such as ``tmux``, ``vim``,
+``zsh``) via ``stow``:
 
 .. code-block:: console
 
