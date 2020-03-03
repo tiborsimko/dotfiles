@@ -46,6 +46,11 @@ export TERMINAL="termite"
 export LANG=C
 export LC_ALL=en_GB.utf8
 
+# fix for CERN LXPLUS7 self-compiled software (such as vim8)
+if [[ -d $HOME/public/lxplus7/bin ]]; then
+    export PATH=$HOME/public/lxplus7/bin:$PATH
+fi
+
 # shortcuts for some directories
 setopt autonamedirs
 r=$HOME/private/project/reana/src
