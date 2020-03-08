@@ -92,6 +92,12 @@ function! UserConfig()
   " set default spell checking language
   set spell spelllang=en_gb
 
+  " wrap long lines by default
+  set wrap
+
+  " do not join spaces when reformatting paragraphs
+  set nojoinspaces
+
   " workaround for vim_current_word plugin and gruvbox theme
   hi CurrentWord gui=underline cterm=underline
 
