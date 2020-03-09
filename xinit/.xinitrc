@@ -6,9 +6,8 @@ xsetroot -solid black
 # xsettingsd &
 stalonetray &
 unclutter &
-qutebrowser &
 nm-applet &
 dunst &
 autocutsel -selection CLIPBOARD -fork &
 autocutsel -selection PRIMARY -fork &
-exec xmonad
+exec herbstluftwm --locked

@@ -11,10 +11,10 @@ environment and configure several preferred applications.
 - Editor: Emacs, Vim
 - Multiplexer: Tmux
 - Shell: Zsh
-- System monitor: XMobar
+- System monitor: Barpyrus
 - Terminal: Termite
 - Theme: Gruvbox
-- Window manager: XMonad
+- Window manager: Herbstluftwm
 
 Tested on the following platforms:
 

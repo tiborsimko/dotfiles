@@ -33,13 +33,16 @@ elif [ "$1" = "clone" ]; then
     xrandr --output "$laptopmon" --auto --primary
     extmon=$(xrandr -q | grep ' connected ' | grep -v $laptopmon | awk '{print $1}')
     xrandr --output "$extmon" --mode "$laptopcloneresolution" --same-as "$laptopmon"
+    herbstclient detect_monitors
 elif [ "$1" = "on" ]; then
     extmon=$(xrandr -q | grep ' connected ' | grep -v $laptopmon | awk '{print $1}')
     xrandr --output "$extmon" --mode "$extmonres" --primary
     xrandr --output "$laptopmon" --off
+    herbstclient detect_monitors
 elif [ "$1" = "off" ]; then
     xrandr --output "$laptopmon" --auto --primary
     for monitor in $(xrandr -q | grep -v $laptopmon | grep ' connected ' | awk '{print $1;}'); do
         xrandr --output "$monitor" --off
     done
+    herbstclient detect_monitors
 fi
