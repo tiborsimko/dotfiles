@@ -1,0 +1,9 @@
+decorations none
+dockapp_mode none
+geometry 5x1-400+0
+background "#101010"
+kludges force_icons_size
+grow_gravity NE
+icon_gravity NE
+icon_size 10
+sticky true
