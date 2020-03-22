@@ -93,6 +93,18 @@ macro index ,t \
 "notmuch: reconstruct thread"
 
 # key bindings - mbsync
-macro index ,x "<shell-escape>x1-mbsync inbox<return>" "Synchronise inbox folders (fast)"
-macro index ,X "<shell-escape>x1-mbsync inbox archive<return>" "Synchronise inbox folders and current archive (medium)"
-macro index ,Y "<shell-escape>x1-mbsync all<return>" "Synchronise inbox folders and all past archives (slow)"
+macro index ,x \
+"<enter-command>set my_old_pipe_decode=\$pipe_decode my_old_wait_key=\$wait_key nopipe_decode nowait_key<enter>\
+<shell-escape>x1-mbsync inbox<enter>\
+<enter-command>set pipe_decode=\$my_old_pipe_decode wait_key=\$my_old_wait_key<enter>" \
+"Synchronise inbox folders (fast)"
+macro index ,X \
+"<enter-command>set my_old_pipe_decode=\$pipe_decode my_old_wait_key=\$wait_key nopipe_decode nowait_key<enter>\
+<shell-escape>x1-mbsync inbox archive<enter>\
+<enter-command>set pipe_decode=\$my_old_pipe_decode wait_key=\$my_old_wait_key<enter>" \
+"Synchronise inbox folders and current archive (medium)"
+macro index ,Y \
+"<enter-command>set my_old_pipe_decode=\$pipe_decode my_old_wait_key=\$wait_key nopipe_decode nowait_key<enter>\
+<shell-escape>x1-mbsync all<enter>\
+<enter-command>set pipe_decode=\$my_old_pipe_decode wait_key=\$my_old_wait_key<enter>" \
+"Synchronise inbox folders and all past archives (slow)"
