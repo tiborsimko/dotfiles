@@ -9,4 +9,5 @@ nm-applet &
 dunst &
 autocutsel -selection CLIPBOARD -fork &
 autocutsel -selection PRIMARY -fork &
+export _JAVA_AWT_WM_NONREPARENTING=1
 exec herbstluftwm --locked
