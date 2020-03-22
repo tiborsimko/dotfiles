@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Tibor's simple program to use external monitors from laptop. Useful for xmonad/i3wm.
+# Tibor's simple program to use external monitors from laptop.
 
 laptopmon="eDP1"
 extmonres="2560x1440"
