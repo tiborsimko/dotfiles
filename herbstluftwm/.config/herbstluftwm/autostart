@@ -144,6 +144,7 @@ hc rule focus=on # normally focus new clients
 hc rule windowtype~'_NET_WM_WINDOW_TYPE_(DIALOG|UTILITY|SPLASH)' pseudotile=on
 hc rule windowtype='_NET_WM_WINDOW_TYPE_DIALOG' focus=on
 hc rule windowtype~'_NET_WM_WINDOW_TYPE_(NOTIFICATION|DOCK|DESKTOP)' manage=off
+hc rule class~'(Pinentry|Pinentry-gtk-2)' pseudotile=on
 
 hc set tree_style '╾│ ├└╼─┐'
 
@@ -163,6 +164,29 @@ hc keybind $Mod-d spawn rofi -theme gruvbox-dark -show run -font 'Inconsolata 12
 hc keybind $Mod-w spawn rofi -theme gruvbox-dark -show window -font 'Inconsolata 12'
 hc keybind $Mod-g spawn rofi -theme gruvbox-dark -show window -font 'Inconsolata 12'
 
+# jump to apps
+hc keybind $Mod-b spawn ~/.config/herbstluftwm/jumpto.sh class qutebrowser
+hc keybind $Mod-e spawn ~/.config/herbstluftwm/jumpto.sh class emacs
+hc keybind $Mod-q spawn ~/.config/herbstluftwm/jumpto.sh class qutebrowser
+hc keybind $Mod-t spawn ~/.config/herbstluftwm/jumpto.sh class termite
+hc keybind $Mod-x spawn ~/.config/herbstluftwm/jumpto.sh class discord
+
+# maximise
+hc keybind $Mod-m spawn /usr/share/doc/herbstluftwm/examples/maximize.sh
+
+# gimp
+hc add gimp
+hc load gimp '
+(split horizontal:0.850000:0
+(split horizontal:0.200000:1
+(clients vertical:0)
+(clients grid:0))
+(clients vertical:0))'
+hc rule class=Gimp tag=gimp index=01 pseudotile=on
+hc rule class=Gimp windowrole~'gimp-(image-window|toolbox|dock)' pseudotile=off
+hc rule class=Gimp windowrole=gimp-toolbox-1 focus=off index=00
+hc rule class=Gimp windowrole=gimp-dock-1 focus=off index=1
+
 # lock
 hc keybind $Mod-Mod1-l spawn slock
 
@@ -181,4 +205,9 @@ for monitor in $(herbstclient list_monitors | cut -d: -f1) ; do
     # start it on each monitor
     "$panel" $monitor &
 done
+
+# stalonetray
+if [[ $(pgrep -c stalonetray) -eq 0 ]]; then
+  stalonetray &
+fi
 
