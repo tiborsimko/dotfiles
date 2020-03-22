@@ -14,7 +14,7 @@ hc = hlwm.connect()
 monitor = sys.argv[1] if len(sys.argv) >= 2 else 0
 (x, y, monitor_w, monitor_h) = hc.monitor_rect(monitor)
 height = 16 # height of the panel
-width = monitor_w # width of the panel
+width = monitor_w - 60 # width of the panel (making room for stalonetray)
 hc(['pad', str(monitor), str(height)]) # get space for the panel
 
 # An example conky-section:
@@ -26,47 +26,33 @@ bat_icons = [
 # first icon: 0 percent
 # last icon: 100 percent
 bat_delta = 100 / len(bat_icons)
-conky_text = '%{F\\#9fbc00}%{T2}\ue026%{T-}%{F\\#989898}${loadavg} '
-conky_text += '%{F\\#9fbc00}%{T2}\ue026%{T-}%{F\\#989898}${cpu}% '
-conky_text += '%{F\\#9fbc00}%{T2}\ue021%{T-}%{F\\#989898}${memperc}% '
-conky_text += '%{F\\#9fbc00}%{T2}\ue021%{T-}%{F\\#989898}${fs_free} '
-conky_text += '%{F\\#9fbc00}%{T2}\ue13c%{T-}%{F\\#989898}${downspeedf wlp4s0}K '
-conky_text += '%{F\\#9fbc00}%{T2}\ue13b%{T-}%{F\\#989898}${upspeedf wlp4s0}K '
+conky_text = ''
+conky_text += '%{F\\#98971a}CPU%{F\\#928374} ${cpu}% ${loadavg} '
+conky_text += '%{F\\#98971a}MEM%{F\\#928374} ${memperc}% ${memmax} '
+conky_text += '%{F\\#98971a}SWP%{F\\#928374} ${swapperc}% ${swapmax} '
+conky_text += '%{F\\#98971a}HDD%{F\\#928374} ${fs_free} '
+conky_text += '%{F\\#98971a}NET%{F\\#928374} ${wireless_essid wlp4s0} ${upspeedf wlp4s0}u ${downspeedf wlp4s0}d '
+conky_text += '%{F\\#98971a}BAT%{F\\#928374} '
 conky_text += "${if_existing /sys/class/power_supply/BAT0}"
-conky_text += "%{T2}"
 conky_text += "${if_match \"$battery\" == \"discharging $battery_percent%\"}"
-conky_text += "%{F\\#FFC726}"
+conky_text += "%{F\\#d79921}"
 conky_text += "$else"
-conky_text += "%{F\\#9fbc00}"
+conky_text += "%{F\\#928374}"
 conky_text += "$endif"
-for i,icon in enumerate(bat_icons[:-1]):
-    conky_text += "${if_match $battery_percent < %d}" % ((i+1)*bat_delta)
-    conky_text += chr(icon)
-    conky_text += "${else}"
-conky_text += chr(bat_icons[-1]) # icon for 100 percent
-for _ in bat_icons[:-1]:
-    conky_text += "${endif}"
-conky_text += "%{T-} $battery_percent% "
+conky_text += "$battery_percent% "
 conky_text += "${endif}"
 conky_text += "%{F-}"
-
-# example options for the hlwm.HLWMLayoutSwitcher widget
-xkblayouts = [
-    'us us -variant altgr-intl us'.split(' '),
-    'de de de'.split(' '),
-]
-setxkbmap = 'setxkbmap -option compose:menu -option ctrl:nocaps'
-setxkbmap += ' -option compose:ralt -option compose:rctrl'
+conky_text += '%{F\\#98971a}DAY%{F\\#928374}'
 
 # you can define custom themes
-grey_frame = Theme(bg = '#101010', fg = '#999999', padding = (3,3))
+grey_frame = Theme(bg = '#000000', fg = '#928374', padding = (3,3))
 
 # Widget configuration:
 bar = lemonbar.Lemonbar(geometry = (x,y,width,height))
 bar.widget = W.ListLayout([
     W.RawLabel('%{l}'),
     hlwm.HLWMTags(hc, monitor, tag_renderer = hlwm.underlined_tags),
-    W.RawLabel('%{c}'),
+    conky.ConkyWidget(text='   '),
     hlwm.HLWMMonitorFocusLayout(hc, monitor,
            # this widget is shown on the focused monitor:
            grey_frame(hlwm.HLWMWindowTitle(hc)),
@@ -74,13 +60,6 @@ bar.widget = W.ListLayout([
            conky.ConkyWidget('df /: ${fs_used_perc /}%')
                                     ),
     W.RawLabel('%{r}'),
-    conky.ConkyWidget(text= conky_text),
-    # something like a tabbed widget with the tab labels '>' and '<'
-    W.ShortLongLayout(
-        W.RawLabel(''),
-        W.ListLayout([
-            hlwm.HLWMLayoutSwitcher(hc, xkblayouts, command = setxkbmap.split(' ')),
-            W.RawLabel(' '),
-        ])),
-        grey_frame(W.DateTime('%Y-%m-%d %H:%M')),
+    conky.ConkyWidget(text=conky_text),
+    grey_frame(W.DateTime('%Y-%m-%d %H:%M')),
 ])

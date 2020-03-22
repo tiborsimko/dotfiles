@@ -4,7 +4,6 @@
 xmodmap ~/.Xmodmap
 xsetroot -solid black
 # xsettingsd &
-stalonetray &
 unclutter &
 nm-applet &
 dunst &
