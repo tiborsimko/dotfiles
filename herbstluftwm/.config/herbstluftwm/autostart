@@ -170,6 +170,7 @@ hc keybind $Mod-e spawn ~/.config/herbstluftwm/jumpto.sh class emacs
 hc keybind $Mod-q spawn ~/.config/herbstluftwm/jumpto.sh class qutebrowser
 hc keybind $Mod-t spawn ~/.config/herbstluftwm/jumpto.sh class termite
 hc keybind $Mod-x spawn ~/.config/herbstluftwm/jumpto.sh class discord
+hc keybind $Mod-z spawn ~/.config/herbstluftwm/jumpto.sh class zoom
 
 # maximise
 hc keybind $Mod-m spawn /usr/share/doc/herbstluftwm/examples/maximize.sh
