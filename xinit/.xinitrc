@@ -6,6 +6,7 @@ xsetroot -solid black
 # xsettingsd &
 unclutter &
 nm-applet &
+parcellite &
 dunst &
 autocutsel -selection CLIPBOARD -fork &
 autocutsel -selection PRIMARY -fork &
