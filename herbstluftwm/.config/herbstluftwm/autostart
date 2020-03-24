@@ -175,19 +175,6 @@ hc keybind $Mod-z spawn ~/.config/herbstluftwm/jumpto.sh class zoom
 # maximise
 hc keybind $Mod-m spawn /usr/share/doc/herbstluftwm/examples/maximize.sh
 
-# gimp
-hc add gimp
-hc load gimp '
-(split horizontal:0.850000:0
-(split horizontal:0.200000:1
-(clients vertical:0)
-(clients grid:0))
-(clients vertical:0))'
-hc rule class=Gimp tag=gimp index=01 pseudotile=on
-hc rule class=Gimp windowrole~'gimp-(image-window|toolbox|dock)' pseudotile=off
-hc rule class=Gimp windowrole=gimp-toolbox-1 focus=off index=00
-hc rule class=Gimp windowrole=gimp-dock-1 focus=off index=1
-
 # lock
 hc keybind $Mod-Mod1-l spawn slock
 
