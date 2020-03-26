@@ -50,7 +50,7 @@ c.spellcheck.languages = ['en-GB']
 c.hints.chars = '1234567890'
 
 # fonts
-c.fonts.monospace = 'Inconsolata 16px'
+c.fonts.default_family = 'monospace'
 
 # password manager
 config.bind('<z><l>', 'spawn --userscript qute-pass --dmenu-invocation dmenu')
