@@ -3,6 +3,9 @@ import sys
 from barpyrus import conky, hlwm, lemonbar
 from barpyrus import widgets as W
 from barpyrus.core import Theme
+from tasklib import TaskWarrior
+
+tw = TaskWarrior()
 
 # Copy this config to ~/.config/barpyrus/config.py
 
@@ -44,8 +47,17 @@ conky_text += "${endif}"
 conky_text += "%{F-}"
 conky_text += '%{F\\#98971a}DAY%{F\\#928374}'
 
+# taskwarrior information
+taskwarrior_text = ''
+active_tasks = tw.tasks.filter('+ACTIVE')
+if active_tasks:
+    current_task = active_tasks[0]
+    taskwarrior_text += '%{{F\\#98971a}}\#{}%{{F\\#928374}} '.format(current_task['id'])
+    taskwarrior_text += '{} (1 of {}) '.format(current_task['description'],
+                                               len(active_tasks))
+
 # you can define custom themes
-grey_frame = Theme(bg = '#000000', fg = '#928374', padding = (3,3))
+grey_frame = Theme(bg = '#101010', fg = '#928374', padding = (3,3))
 
 # Widget configuration:
 bar = lemonbar.Lemonbar(geometry = (x,y,width,height))
@@ -60,6 +72,7 @@ bar.widget = W.ListLayout([
            conky.ConkyWidget('df /: ${fs_used_perc /}%')
                                     ),
     W.RawLabel('%{r}'),
+    conky.ConkyWidget(text=taskwarrior_text, config={'update_interval': '5'}),
     conky.ConkyWidget(text=conky_text),
     grey_frame(W.DateTime('%Y-%m-%d %H:%M')),
 ])
