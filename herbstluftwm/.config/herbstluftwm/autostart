@@ -104,8 +104,11 @@ hc keybind $Mod-BackSpace   cycle_monitor
 hc keybind $Mod-Tab         cycle_all +1
 hc keybind $Mod-Shift-Tab   cycle_all -1
 hc keybind $Mod-c cycle
-hc keybind $Mod-n cycle_all +1
 hc keybind $Mod-i jumpto urgent
+
+# dwm stack-like movement
+hc keybind $Mod-n cycle_all +1
+hc keybind $Mod-Shift-n cycle_all -1
 
 # theme
 hc attr theme.tiling.reset 1
