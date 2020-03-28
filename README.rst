@@ -8,13 +8,13 @@ About
 This repository contains dotfiles to set up my personal GNU/Linux development
 environment and configure several preferred applications.
 
-- Editor: Emacs, Vim
+- Editor: Vim
 - Multiplexer: Tmux
 - Shell: Zsh
-- System monitor: Barpyrus
-- Terminal: Termite
+- System monitor: Slstatus
+- Terminal: St
 - Theme: Gruvbox
-- Window manager: Herbstluftwm
+- Window manager: Dwm
 
 Tested on the following platforms:
 
