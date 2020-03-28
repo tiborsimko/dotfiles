@@ -42,7 +42,7 @@ export EDITOR="vim"
 export VISUAL="vim"
 export PAGER="less -insMXRE"
 export BROWSER="qutebrowser"
-export TERMINAL="termite"
+export TERMINAL="st"
 export LANG=C
 export LC_ALL=en_GB.utf8
 
