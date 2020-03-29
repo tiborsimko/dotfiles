@@ -34,7 +34,7 @@ Prerequisites
 
 This repository uses `GNU Stow <https://www.gnu.org/software/stow/>`_ to manage
 symbolic links to dotfiles. The ``stow`` package should be readily installable
-using operating system's package manager.
+using your operating system's package manager.
 
 Usage
 -----
@@ -70,9 +70,18 @@ prezto (used for zsh):
     $ # install prezto (used for zsh):
     $ git clone --recursive https://github.com/sorin-ionescu/prezto "${ZDOTDIR:-$HOME}/.zprezto"
 
-Finally, activate all wanted configurations (such as ``tmux``, ``vim``,
+Fourth, activate all wanted configurations (such as ``tmux``, ``vim``,
 ``zsh``) via ``stow``:
 
 .. code-block:: console
 
     $ stow tmux vim zsh
+
+Fifth, build and install dwm window manager and associated suckless tools; the
+configuration is done during compile-time so don't use ``stow`` for these:
+
+.. code-block:: console
+
+    $ for app in dmenu dwm slock slstatus st; do \
+        cd $app && make download clean build install && cd ..; \
+      done

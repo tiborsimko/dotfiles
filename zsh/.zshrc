@@ -46,11 +46,6 @@ export TERMINAL="st"
 export LANG=C
 export LC_ALL=en_GB.utf8
 
-# autocompletion for herbstluftwm client
-if [[ -e /usr/share/zsh/functions/Completion/X/_herbstclient ]]; then
-    source /usr/share/zsh/functions/Completion/X/_herbstclient
-fi
-
 # fix for CERN LXPLUS7 self-compiled software (such as tmux, vim)
 if [[ -d $HOME/public/lxplus7/bin ]]; then
     export PATH=$HOME/public/lxplus7/bin:$PATH
