@@ -23,6 +23,7 @@ let g:spacevim_layers = [
       \ 'html',
       \ 'javascript',
       \ 'latex',
+      \ 'lightline',
       \ 'markdown',
       \ 'programming',
       \ 'python',
@@ -88,6 +89,11 @@ function! UserConfig()
   " set colorscheme
   colorscheme gruvbox
   set background=dark
+
+  " lightline
+  let g:lightline = {
+       \ 'colorscheme': 'gruvbox',
+      \ }
 
   " set default spell checking language
   set spell spelllang=en_gb
