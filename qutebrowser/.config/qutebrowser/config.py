@@ -6,7 +6,7 @@ c.qt.force_software_rendering = 'software-opengl'
 # start when we left off
 c.auto_save.session = True
 
-# unbind some shortcuts
+# bind some shortcuts
 config.bind('<ctrl+n>', 'tab-next')
 config.bind('<ctrl+p>', 'tab-prev')
 
@@ -14,30 +14,111 @@ config.bind('<ctrl+p>', 'tab-prev')
 c.tabs.show = 'never'
 config.bind(',t', 'config-cycle tabs.show never always')
 
-# show tabs on top
+# show tabs on bottom
 c.tabs.position = 'bottom'
 
-# tmux-like gruvbox-like colours
-c.colors.statusbar.insert.bg = "#3a3a3a"
-c.colors.statusbar.insert.fg = "#a8a8a8"
-c.colors.statusbar.normal.bg = "#3a3a3a"
-c.colors.statusbar.normal.fg = "#a8a8a8"
-c.colors.tabs.even.bg = "#3a3a3a"
-c.colors.tabs.even.fg = "#a8a8a8"
-c.colors.tabs.odd.bg = "#3a3a3a"
-c.colors.tabs.odd.fg = "#a8a8a8"
-c.colors.tabs.pinned.even.bg = "#3a3a3a"
-c.colors.tabs.pinned.even.fg = "#a8a8a8"
-c.colors.tabs.pinned.odd.bg = "#3a3a3a"
-c.colors.tabs.pinned.odd.fg = "#a8a8a8"
-c.colors.tabs.pinned.selected.even.bg = "#4e4e4e"
-c.colors.tabs.pinned.selected.even.fg = "#ffaf00"
-c.colors.tabs.pinned.selected.odd.bg = "#4e4e4e"
-c.colors.tabs.pinned.selected.odd.fg = "#ffaf00"
-c.colors.tabs.selected.even.bg = "#4e4e4e"
-c.colors.tabs.selected.even.fg = "#ffaf00"
-c.colors.tabs.selected.odd.bg = "#4e4e4e"
-c.colors.tabs.selected.odd.fg = "#ffaf00"
+# gruvbox dark colours
+gruvbox_bg0 = "#282828"
+gruvbox_bg1 = "#3c3836"
+gruvbox_bg2 = "#504945"
+gruvbox_bg3 = "#665c54"
+gruvbox_fg3 = "#bdae93"
+gruvbox_fg2 = "#d5c4a1"
+gruvbox_fg1 = "#ebdbb2"
+gruvbox_fg0 = "#fbf1c7"
+gruvbox_grey = "#928374"
+gruvbox_red = "#fb4934"
+gruvbox_orange = "#fe8019"
+gruvbox_yellow = "#fabd2f"
+gruvbox_green = "#b8bb26"
+gruvbox_aqua = "#8ec07c"
+gruvbox_blue = "#83a598"
+gruvbox_purple = "#d3869b"
+gruvbox_orange_dark = "#d65d0e"
+
+# qutebrowser in gentle gruvbox dark colours
+c.colors.completion.category.bg = gruvbox_bg0
+c.colors.completion.category.border.bottom = gruvbox_bg0
+c.colors.completion.category.border.top = gruvbox_bg0
+c.colors.completion.category.fg = gruvbox_grey
+c.colors.completion.even.bg = gruvbox_bg0
+c.colors.completion.fg = gruvbox_fg3
+c.colors.completion.item.selected.bg = gruvbox_bg1
+c.colors.completion.item.selected.border.bottom = gruvbox_bg1
+c.colors.completion.item.selected.border.top = gruvbox_bg1
+c.colors.completion.item.selected.fg = gruvbox_fg0
+c.colors.completion.item.selected.match.fg = gruvbox_blue
+c.colors.completion.match.fg = gruvbox_blue
+c.colors.completion.odd.bg = gruvbox_bg0
+c.colors.completion.scrollbar.bg = gruvbox_bg0
+c.colors.completion.scrollbar.fg = gruvbox_grey
+c.colors.downloads.bar.bg = gruvbox_bg0
+c.colors.downloads.error.fg = gruvbox_red
+c.colors.downloads.start.bg = gruvbox_grey
+c.colors.downloads.start.fg = gruvbox_bg0
+c.colors.downloads.stop.bg = gruvbox_green
+c.colors.downloads.stop.fg = gruvbox_bg0
+c.colors.hints.fg = gruvbox_bg0
+c.colors.hints.match.fg = gruvbox_fg1
+c.colors.keyhint.bg = gruvbox_bg0
+c.colors.keyhint.fg = gruvbox_fg1
+c.colors.keyhint.suffix.fg = gruvbox_grey
+c.colors.messages.error.bg = gruvbox_red
+c.colors.messages.error.border = gruvbox_red
+c.colors.messages.error.fg = gruvbox_bg0
+c.colors.messages.info.bg = gruvbox_bg0
+c.colors.messages.info.border = gruvbox_bg0
+c.colors.messages.info.fg = gruvbox_grey
+c.colors.messages.warning.bg = gruvbox_orange
+c.colors.messages.warning.border = gruvbox_orange
+c.colors.messages.warning.fg = gruvbox_bg0
+c.colors.prompts.bg = gruvbox_bg0
+c.colors.prompts.border = gruvbox_bg0
+c.colors.prompts.fg = gruvbox_grey
+c.colors.prompts.selected.bg = gruvbox_bg0
+c.colors.statusbar.caret.bg = gruvbox_fg1
+c.colors.statusbar.caret.fg = gruvbox_bg0
+c.colors.statusbar.caret.selection.bg = gruvbox_fg1
+c.colors.statusbar.caret.selection.fg = gruvbox_bg0
+c.colors.statusbar.command.bg = gruvbox_bg0
+c.colors.statusbar.command.fg = gruvbox_fg1
+c.colors.statusbar.command.private.bg = gruvbox_grey
+c.colors.statusbar.command.private.fg = gruvbox_bg0
+c.colors.statusbar.insert.bg = gruvbox_bg0
+c.colors.statusbar.insert.fg = gruvbox_grey
+c.colors.statusbar.normal.bg = gruvbox_bg0
+c.colors.statusbar.normal.fg = gruvbox_grey
+c.colors.statusbar.passthrough.bg = gruvbox_blue
+c.colors.statusbar.passthrough.fg = gruvbox_bg0
+c.colors.statusbar.private.bg = gruvbox_grey
+c.colors.statusbar.private.fg = gruvbox_bg0
+c.colors.statusbar.progress.bg = gruvbox_green
+c.colors.statusbar.url.error.fg = gruvbox_red
+c.colors.statusbar.url.fg = gruvbox_grey
+c.colors.statusbar.url.hover.fg = gruvbox_blue
+c.colors.statusbar.url.success.http.fg = gruvbox_grey
+c.colors.statusbar.url.success.https.fg = gruvbox_grey
+c.colors.statusbar.url.warn.fg = gruvbox_orange
+c.colors.tabs.bar.bg = gruvbox_bg0
+c.colors.tabs.even.bg = gruvbox_bg0
+c.colors.tabs.even.fg = gruvbox_grey
+c.colors.tabs.indicator.error = gruvbox_red
+c.colors.tabs.indicator.start = gruvbox_bg0
+c.colors.tabs.indicator.stop = gruvbox_bg0
+c.colors.tabs.odd.bg = gruvbox_bg0
+c.colors.tabs.odd.fg = gruvbox_grey
+c.colors.tabs.pinned.even.bg = gruvbox_bg0
+c.colors.tabs.pinned.even.fg = gruvbox_grey
+c.colors.tabs.pinned.odd.bg = gruvbox_bg0
+c.colors.tabs.pinned.odd.fg = gruvbox_grey
+c.colors.tabs.pinned.selected.even.bg = gruvbox_bg0
+c.colors.tabs.pinned.selected.even.fg = gruvbox_fg1
+c.colors.tabs.pinned.selected.odd.bg = gruvbox_bg0
+c.colors.tabs.pinned.selected.odd.fg = gruvbox_fg1
+c.colors.tabs.selected.even.bg = gruvbox_bg0
+c.colors.tabs.selected.even.fg = gruvbox_fg1
+c.colors.tabs.selected.odd.bg = gruvbox_bg0
+c.colors.tabs.selected.odd.fg = gruvbox_fg1
 
 # show statusbar only when I need
 c.statusbar.hide = True
@@ -51,6 +132,7 @@ c.hints.chars = '1234567890'
 
 # fonts
 c.fonts.default_family = 'monospace'
+c.fonts.default_size = '13px'
 
 # password manager
 config.bind('<z><l>', 'spawn --userscript qute-pass --dmenu-invocation dmenu')
