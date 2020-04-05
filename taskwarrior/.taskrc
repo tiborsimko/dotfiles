@@ -1,4 +1,12 @@
 # Tibor's Taskwarrior configuration.
-include /usr/share/doc/task/rc/dark-yellow-green.theme
+
+# use dark-16 theme only; it provides the same "plain" background colour for
+# every row, which is nicer on the eyes than the "stripe" different colouring
+# of even/odd rows
+include /usr/share/doc/task/rc/dark-16.theme
+
+# location of task database
 data.location=~/private/task
+
+# search regardless of case sensitivity
 search.case.sensitive=no
