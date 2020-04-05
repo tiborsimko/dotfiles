@@ -2,9 +2,9 @@
 text/html; w3m -I %{charset} -T text/html; copiousoutput;
 
 # PDF
-application/pdf; mupdf %s;
-application/x-pdf; mupdf %s;
-application/x-pdf; mupdf %s;
+application/pdf; zathura %s;
+application/x-pdf; zathura %s;
+application/postscript; zathura %s;
 
 # MS Excel
 application/x-msexcel; libreoffice --calc %s;

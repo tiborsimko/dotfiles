@@ -127,7 +127,7 @@ function! UserConfig()
   nnoremap <silent> <c-\> :TmuxNavigatePrevious<cr>
 
   " set vimtex viewer
-  let g:vimtex_view_method = 'mupdf'
+  let g:vimtex_view_method = 'zathura'
 
   " set vimwiki options
   let g:vimwiki_map_prefix = '<LocalLeader>w'

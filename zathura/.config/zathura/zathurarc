@@ -1,0 +1,9 @@
+# Tibor's zathura configuration.
+
+# disable status bar
+set guioptions none
+
+# show PDF file base name and page numbers in window title
+set window-title-basename true
+set window-title-page true
+
