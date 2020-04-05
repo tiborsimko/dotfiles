@@ -32,9 +32,7 @@ bindkey -M viins '^W' vi-backward-kill-word
 bindkey -M vicmd '^W' vi-backward-kill-word
 
 # python venv
-if [ -e /usr/bin/virtualenvwrapper.sh ]; then
-    source /usr/bin/virtualenvwrapper.sh
-fi
+[ -e /usr/bin/virtualenvwrapper.sh ] && source /usr/bin/virtualenvwrapper.sh
 
 # common customisations (PATH, PAGER and friends)
 export PATH=$HOME/private/bin:$PATH
@@ -47,14 +45,11 @@ export LANG=C
 export LC_ALL=en_GB.utf8
 
 # fix for CERN LXPLUS7 self-compiled software (such as tmux, vim)
-if [[ -d $HOME/public/lxplus7/bin ]]; then
-    export PATH=$HOME/public/lxplus7/bin:$PATH
-fi
+[ -d $HOME/public/lxplus7/bin ] && export PATH=$HOME/public/lxplus7/bin:$PATH
 
 # fix for CERN LXPLUS7 self-compiled libraries (such as libevent needed for tmux)
-if [[ -d $HOME/public/lxplus7/lib ]]; then
+[ -d $HOME/public/lxplus7/lib ] && \
     export LD_LIBRARY_PATH=$HOME/public/lxplus7/lib:$LD_LIBRARY_PATH
-fi
 
 # shortcuts for some directories
 setopt autonamedirs
