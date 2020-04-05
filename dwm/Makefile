@@ -17,8 +17,7 @@ download: # Download dwm sources and additional patches.
 	wget https://dwm.suckless.org/patches/scratchpad/dwm-scratchpad-6.2.diff && \
 	wget https://dwm.suckless.org/patches/movestack/dwm-movestack-6.1.diff && \
 	wget https://dwm.suckless.org/patches/zoomswap/dwm-zoomswap-6.2.diff && \
-	wget https://dwm.suckless.org/patches/focusurgent/dwm-focusurgent-20160831-56a31dc.diff && \
-	wget https://dwm.suckless.org/patches/hide_vacant_tags/dwm-hide_vacant_tags-6.2.diff
+	wget https://dwm.suckless.org/patches/focusurgent/dwm-focusurgent-20160831-56a31dc.diff
 
 build: # Build dwm executable.
 	mkdir _build && cd _build && tar xvfz ../_src/dwm-6.2.tar.gz
@@ -32,7 +31,6 @@ build: # Build dwm executable.
 	patch -p1 -i ../../_src/dwm-movestack-6.1.diff && \
 	patch -p1 -i ../../_src/dwm-zoomswap-6.2.diff && \
 	filterdiff --lines=0,94 ../../_src/dwm-focusurgent-20160831-56a31dc.diff | patch -p1 && \
-	patch -p1 -i ../../_src/dwm-hide_vacant_tags-6.2.diff && \
 	cp ../../config.h . && \
 	make clean dwm
 
