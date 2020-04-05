@@ -2,7 +2,7 @@
 
 xmodmap ~/.Xmodmap
 xrdb -merge ~/.Xresources
-xsetroot -solid '#101010'
+xsetroot -solid '#282828'
 unclutter &
 nm-applet &
 parcellite &
