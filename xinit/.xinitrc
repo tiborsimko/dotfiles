@@ -13,4 +13,6 @@ autocutsel -selection CLIPBOARD -fork &
 autocutsel -selection PRIMARY -fork &
 export _JAVA_AWT_WM_NONREPARENTING=1
 slstatus &
-exec dwm
+while true; do
+    dwm 2> ~/.dwm.log
+done
