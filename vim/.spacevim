@@ -87,13 +87,35 @@ function! UserConfig()
   " let g:airline_powerline_fonts = 1
 
   " set colorscheme
-  colorscheme gruvbox
+  let g:gruvbox_contrast_dark='medium'
+  let g:gruvbox_contrast_light='hard'
   set background=dark
+  colorscheme gruvbox
+
+  " Note: if gruvbox colours don't look quite right, don't forget to
+  " source $HOME/.vim/plugged/gruvbox/gruvbox_256palette.sh
+  " in your shell starting scripts.
+
+  " set fzf colours to match the gruvbox colorscheme
+  let g:fzf_colors = {
+      \ 'fg':      ['fg', 'GruvboxFg1'],
+      \ 'bg':      ['fg', 'GruvboxBg0'],
+      \ 'hl':      ['fg', 'GruvboxYellow'],
+      \ 'fg+':     ['fg', 'GruvboxFg1'],
+      \ 'bg+':     ['fg', 'GruvboxBg1'],
+      \ 'hl+':     ['fg', 'GruvboxYellow'],
+      \ 'info':    ['fg', 'GruvboxBlue'],
+      \ 'prompt':  ['fg', 'GruvboxFg4'],
+      \ 'pointer': ['fg', 'GruvboxBlue'],
+      \ 'marker':  ['fg', 'GruvboxOrange'],
+      \ 'spinner': ['fg', 'GruvboxYellow'],
+      \ 'header':  ['fg', 'GruvboxBg3']
+      \ }
 
   " lightline
   let g:lightline = {
        \ 'colorscheme': 'gruvbox',
-      \ }
+       \ }
 
   " set default spell checking language
   set spell spelllang=en_gb
