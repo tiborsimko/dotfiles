@@ -73,7 +73,6 @@ static void focusmaster(const Arg *arg) {
     focus(nexttiled(selmon->clients));
 }
 
-#include "movestack.c"
 #include <X11/XF86keysym.h>
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -93,8 +92,8 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_l,      setmfact,       {.f = +0.05} },
 	{ MODKEY|ShiftMask,             XK_k,      setmfact,       {.f = -0.05} },
 	{ MODKEY|ShiftMask,             XK_j,      setmfact,       {.f = +0.05} },
-	{ MODKEY|ShiftMask,             XK_n,      movestack,      {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_p,      movestack,      {.i = -1 } },
+	{ MODKEY|ShiftMask,             XK_n,      pushdown,       {0} },
+	{ MODKEY|ShiftMask,             XK_p,      pushup,         {0} },
 	{ MODKEY,                       XK_Return, zoom,           {0} },
 	{ MODKEY,                       XK_Tab,    view,           {0} },
 	{ MODKEY,                       XK_c,      view,           {0} },
