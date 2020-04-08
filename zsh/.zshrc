@@ -31,8 +31,8 @@ bindkey '^W' vi-backward-kill-word
 bindkey -M viins '^W' vi-backward-kill-word
 bindkey -M vicmd '^W' vi-backward-kill-word
 
-# python venv
-[ -e /usr/bin/virtualenvwrapper.sh ] && source /usr/bin/virtualenvwrapper.sh
+# python venv: using lazy wrapper for much faster shell startup times
+[ -e /usr/bin/virtualenvwrapper_lazy.sh ] && source /usr/bin/virtualenvwrapper_lazy.sh
 
 # common customisations (PATH, PAGER and friends)
 export PATH=$HOME/private/bin:$PATH
