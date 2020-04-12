@@ -10,24 +10,34 @@
 # Browser
 #
 
-if [[ "$OSTYPE" == darwin* ]]; then
-  export BROWSER='open'
-fi
+export BROWSER="qutebrowser"
 
 #
 # Editors
 #
 
-export EDITOR='nano'
-export VISUAL='nano'
-export PAGER='less'
+export EDITOR="vim"
+export VISUAL="vim"
+export PAGER="less"
+
+#
+# Terminal
+#
+
+export TERMINAL="st"
+
+#
+# Opener
+#
+
+export OPENER="xdg-open"
 
 #
 # Language
 #
 
 if [[ -z "$LANG" ]]; then
-  export LANG='en_US.UTF-8'
+  export LANG='en_GB.UTF-8'
 fi
 
 #
@@ -62,3 +72,31 @@ export LESS='-F -g -i -M -R -S -w -X -z-4'
 if (( $#commands[(i)lesspipe(|.sh)] )); then
   export LESSOPEN="| /usr/bin/env $commands[(i)lesspipe(|.sh)] %s 2>&-"
 fi
+
+# private PATH additions
+[ -d $HOME/private/bin ] && \
+    export PATH=$HOME/private/bin:$PATH
+
+# fix for CERN LXPLUS7 self-compiled software (such as tmux, vim)
+[ -d $HOME/public/lxplus7/bin ] && export PATH=$HOME/public/lxplus7/bin:$PATH
+
+# fix for CERN LXPLUS7 self-compiled libraries (such as libevent needed for tmux)
+[ -d $HOME/public/lxplus7/lib ] && \
+    export LD_LIBRARY_PATH=$HOME/public/lxplus7/lib:$LD_LIBRARY_PATH
+
+# fzf with rg
+export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*"'
+
+# fzf layout
+export FZF_DEFAULT_OPTS='--layout=reverse --height 50%'
+
+# fzf gruvbox dark medium theme
+export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
+  --color=fg:#ebdbb2,bg:#282828,hl:#83a598
+  --color=fg+:#ebdbb2,bg+:#3c3836,hl+:#83a598,gutter:#282828
+  --color=info:#8ec07c,prompt:#7c6f64,pointer:#8ec07c
+  --color=marker:#8ec07c,spinner:#8ec07c,header:#665c54
+    '
+
+# start X11 on tty1 after logging in
+[[ -z $DISPLAY  ]] && [ "$(tty)" = "/dev/tty1" ] && exec startx

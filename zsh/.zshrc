@@ -34,22 +34,6 @@ bindkey -M vicmd '^W' vi-backward-kill-word
 # python venv: using lazy wrapper for much faster shell startup times
 [ -e /usr/bin/virtualenvwrapper_lazy.sh ] && source /usr/bin/virtualenvwrapper_lazy.sh
 
-# common customisations (PATH, PAGER and friends)
-export PATH=$HOME/private/bin:$PATH
-export EDITOR="vim"
-export VISUAL="vim"
-export PAGER="less -insMXRE"
-export BROWSER="qutebrowser"
-export TERMINAL="st"
-export LANG="en_GB.UTF-8"
-
-# fix for CERN LXPLUS7 self-compiled software (such as tmux, vim)
-[ -d $HOME/public/lxplus7/bin ] && export PATH=$HOME/public/lxplus7/bin:$PATH
-
-# fix for CERN LXPLUS7 self-compiled libraries (such as libevent needed for tmux)
-[ -d $HOME/public/lxplus7/lib ] && \
-    export LD_LIBRARY_PATH=$HOME/public/lxplus7/lib:$LD_LIBRARY_PATH
-
 # shortcuts for some directories
 setopt autonamedirs
 r=$HOME/private/project/reana/src
@@ -82,6 +66,7 @@ alias e="$EDITOR"
 alias g="git"
 alias t="task"
 alias to="taskopen"
+alias open="$OPENER"
 
 # fix gruvbox colours
 [ -f $HOME/.vim/plugged/gruvbox/gruvbox_256palette.sh ] && \
@@ -107,20 +92,6 @@ if [ -e /usr/share/fzf/completion.zsh ]; then
     source /usr/share/fzf/completion.zsh
 fi
 
-# fzf with rg
-export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*"'
-
-# fzf layout
-export FZF_DEFAULT_OPTS='--layout=reverse-list --height 40%'
-
-# fzf gruvbox dark medium theme
-export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
-  --color=fg:#ebdbb2,bg:#282828,hl:#8ec07c
-  --color=fg+:#ebdbb2,bg+:#3c3836,hl+:#8ec07c,gutter:#282828
-  --color=info:#8ec07c,prompt:#7c6f64,pointer:#8ec07c
-  --color=marker:#8ec07c,spinner:#8ec07c,header:#665c54
-    '
-
 # fzf: ff = fuzzy file (and edit)
 ff() (
   IFS=$'\n' files=($(fzf-tmux --query="$1" --multi --select-1 --exit-0))
@@ -143,15 +114,15 @@ fs() {
 fv() {
     if [ ! "$#" -gt 0 ]; then echo "Need a string to search for!"; return 1; fi
     local file
-    file="$(rg --max-count=1 --ignore-case --files-with-matches --no-messages "$@" | fzf-tmux +m --preview="rg --ignore-case --pretty --context 10 '"$@"' {}")" && xdg-open "$file"
+    file="$(rg --max-count=1 --ignore-case --files-with-matches --no-messages "$@" | fzf-tmux +m --preview="rg --ignore-case --pretty --context 10 '"$@"' {}")" && ${OPENER} "$file"
 }
 
 # fzf: o (open argument or most used files; using fasd)
 unalias o 2> /dev/null
 o() {
-    [ $# -eq 1 ] && test -e "$1" && xdg-open "$1" && return
+    [ $# -eq 1 ] && test -e "$1" && ${OPENER} "$1" && return
     local file
-    file="$(fasd -Rfl "$@" | fzf -1 -0 --no-sort +m)" && xdg-open "${file}" || return 1
+    file="$(fasd -Rfl "$@" | fzf -1 -0 --no-sort +m)" && ${OPENER} "${file}" || return 1
 }
 
 # fzf: v (edit argument or most used files in vim; using viminfo)
