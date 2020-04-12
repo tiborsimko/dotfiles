@@ -5,7 +5,7 @@ xrdb -merge ~/.Xresources
 xsetroot -solid '#282828'
 unclutter &
 nm-applet &
-parcellite &
+clipmenud &
 dunst &
 qutebrowser &
 st &
