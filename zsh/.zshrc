@@ -24,9 +24,9 @@ bindkey -M vicmd '^E' vi-end-of-line
 bindkey '^[F' vi-forward-word
 bindkey -M viins '^[F' vi-forward-word
 bindkey -M vicmd '^[F' vi-forward-word
-bindkey '^[B' vi-backward-word
-bindkey -M viins '^[B' vi-backward-word
-bindkey -M vicmd '^[B' vi-backward-word
+bindkey '^B' vi-backward-word
+bindkey -M viins '^B' vi-backward-word
+bindkey -M vicmd '^B' vi-backward-word
 bindkey '^W' vi-backward-kill-word
 bindkey -M viins '^W' vi-backward-kill-word
 bindkey -M vicmd '^W' vi-backward-kill-word
