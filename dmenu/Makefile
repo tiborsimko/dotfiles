@@ -9,12 +9,14 @@ download: # Download dmenu sources and additional patches.
 	mkdir -p _src
 	cd _src && \
 	wget https://dl.suckless.org/tools/dmenu-4.9.tar.gz && \
-	wget https://tools.suckless.org/dmenu/patches/fuzzymatch/dmenu-fuzzymatch-4.9.diff
+	wget https://tools.suckless.org/dmenu/patches/fuzzymatch/dmenu-fuzzymatch-4.9.diff && \
+	wget https://tools.suckless.org/dmenu/patches/fuzzyhighlight/dmenu-fuzzyhighlight-4.9.diff
 
 build: # Build dmenu executable.
 	mkdir _build && cd _build && tar xvfz ../_src/dmenu-4.9.tar.gz
 	cd _build/dmenu-4.9 && \
 	patch -p1 -i ../../_src/dmenu-fuzzymatch-4.9.diff && \
+	patch -p1 -i ../../_src/dmenu-fuzzyhighlight-4.9.diff && \
 	cp ../../config.h . && \
 	make clean dmenu
 
