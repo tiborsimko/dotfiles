@@ -67,6 +67,8 @@ prezto (used for zsh):
     $ # install space-vim (used for vim):
     $ git clone https://github.com/liuchengxu/space-vim ~/.space-vim
     $ ln -s ~/.space-vim/init.vim ~/.vimrc
+    $ # prepare some vim directories
+    $ mkdir -p ~/.vim/undo ~/.vim/backup
     $ # install prezto (used for zsh):
     $ git clone --recursive https://github.com/sorin-ionescu/prezto "${ZDOTDIR:-$HOME}/.zprezto"
 

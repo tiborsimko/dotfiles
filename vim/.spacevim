@@ -158,4 +158,10 @@ function! UserConfig()
   let g:vimwiki_list = [{'path': '~/private/notes/',
                         \ 'syntax': 'markdown', 'ext': '.md'}]
 
+  " persistent backup, swap, undo
+  set backupdir=~/.vim/backup
+  set backup
+  set undodir=~/.vim/undo
+  set undofile
+
 endfunction
