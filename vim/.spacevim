@@ -11,8 +11,10 @@ let g:spacevim_plug_home = '~/.vim/plugged'
 " Enable the existing layers in space-vim.
 " Refer to https://github.com/liuchengxu/space-vim/blob/master/layers/LAYERS.md for all available layers.
 let g:spacevim_layers = [
+      \ 'auto-completion',
       \ 'better-defaults',
       \ 'better-motion',
+      \ 'code-snippets',
       \ 'docker',
       \ 'editing',
       \ 'file-manager',
@@ -30,7 +32,6 @@ let g:spacevim_layers = [
       \ 'syntax-checking',
       \ 'text-align',
       \ 'tmux',
-      \ 'ycmd',
       \ 'which-key',
       \ ]
 
