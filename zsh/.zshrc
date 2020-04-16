@@ -64,9 +64,10 @@ bindkey -M vicmd "??" history-beginning-search-forward
 alias b="$BROWSER"
 alias e="$EDITOR"
 alias g="git"
+alias k="kubectl"
+alias open="$OPENER"
 alias t="task"
 alias to="taskopen"
-alias open="$OPENER"
 
 # fix gruvbox colours
 [ -f $HOME/.vim/plugged/gruvbox/gruvbox_256palette.sh ] && \
