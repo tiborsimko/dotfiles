@@ -27,8 +27,10 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class      instance    title       tags mask     isfloating   monitor */
-    { NULL,       NULL,       NULL,       0,            False,       -1 },
+	/* class          instance    title       tags mask     isfloating   monitor */
+    { "qutebrowser",  NULL,       NULL,       1,            False,       -1 },
+    { "zoom",         NULL,       NULL,       1 << 7,       False,       -1 },
+    { "discord",      NULL,       NULL,       1 << 8,       False,       -1 },
 };
 
 /* layout(s) */
