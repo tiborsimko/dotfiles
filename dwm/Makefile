@@ -15,7 +15,7 @@ download: # Download dwm sources and additional patches.
 	wget https://dwm.suckless.org/patches/ru_gaps/dwm-ru_centeredmaster-6.2.diff && \
 	wget https://dwm.suckless.org/patches/ru_gaps/dwm-ru_deck-6.2.diff && \
 	wget https://dwm.suckless.org/patches/scratchpad/dwm-scratchpad-6.2.diff && \
-	wget https://dwm.suckless.org/patches/push/dwm-6.2-push_no_master.diff && \
+	wget https://dwm.suckless.org/patches/push/dwm-push_no_master-6.2.diff && \
 	wget https://dwm.suckless.org/patches/zoomswap/dwm-zoomswap-6.2.diff && \
 	wget https://dwm.suckless.org/patches/focusurgent/dwm-focusurgent-20160831-56a31dc.diff
 
@@ -28,7 +28,7 @@ build: # Build dwm executable.
 	patch -p1 -i ../../_src/dwm-ru_centeredmaster-6.2.diff && \
 	filterdiff --lines=158,658 ../../_src/dwm-ru_deck-6.2.diff | patch -p1 && \
 	patch -p1 -i ../../_src/dwm-scratchpad-6.2.diff && \
-	patch -p1 -i ../../_src/dwm-6.2-push_no_master.diff && \
+	patch -p1 -i ../../_src/dwm-push_no_master-6.2.diff && \
 	patch -p1 -i ../../_src/dwm-zoomswap-6.2.diff && \
 	filterdiff --lines=0,94 ../../_src/dwm-focusurgent-20160831-56a31dc.diff | patch -p1 && \
 	cp ../../config.h . && \
