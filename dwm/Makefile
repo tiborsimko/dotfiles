@@ -17,7 +17,7 @@ download: # Download dwm sources and additional patches.
 	wget https://dwm.suckless.org/patches/scratchpad/dwm-scratchpad-6.2.diff && \
 	wget https://dwm.suckless.org/patches/push/dwm-push_no_master-6.2.diff && \
 	wget https://dwm.suckless.org/patches/zoomswap/dwm-zoomswap-6.2.diff && \
-	wget https://dwm.suckless.org/patches/focusurgent/dwm-focusurgent-20160831-56a31dc.diff
+	wget https://dwm.suckless.org/patches/focusonnetactive/dwm-focusonnetactive-2017-12-24-3756f7f.diff
 
 build: # Build dwm executable.
 	mkdir _build && cd _build && tar xvfz ../_src/dwm-6.2.tar.gz
@@ -30,7 +30,7 @@ build: # Build dwm executable.
 	patch -p1 -i ../../_src/dwm-scratchpad-6.2.diff && \
 	patch -p1 -i ../../_src/dwm-push_no_master-6.2.diff && \
 	patch -p1 -i ../../_src/dwm-zoomswap-6.2.diff && \
-	filterdiff --lines=0,94 ../../_src/dwm-focusurgent-20160831-56a31dc.diff | patch -p1 && \
+	patch -p1 -i ../../_src/dwm-focusonnetactive-2017-12-24-3756f7f.diff && \
 	cp ../../config.h . && \
 	make clean dwm
 
