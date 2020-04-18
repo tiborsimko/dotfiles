@@ -14,7 +14,6 @@ download: # Download dwm sources and additional patches.
 	wget https://dwm.suckless.org/patches/ru_gaps/dwm-ru_bottomstack-6.2.diff && \
 	wget https://dwm.suckless.org/patches/ru_gaps/dwm-ru_centeredmaster-6.2.diff && \
 	wget https://dwm.suckless.org/patches/ru_gaps/dwm-ru_deck-6.2.diff && \
-	wget https://dwm.suckless.org/patches/scratchpad/dwm-scratchpad-6.2.diff && \
 	wget https://dwm.suckless.org/patches/push/dwm-push_no_master-6.2.diff && \
 	wget https://dwm.suckless.org/patches/zoomswap/dwm-zoomswap-6.2.diff && \
 	wget https://dwm.suckless.org/patches/focusonnetactive/dwm-focusonnetactive-2017-12-24-3756f7f.diff
@@ -27,7 +26,6 @@ build: # Build dwm executable.
 	filterdiff --lines=211,2176 ../../_src/dwm-ru_bottomstack-6.2.diff | patch -p1 && \
 	patch -p1 -i ../../_src/dwm-ru_centeredmaster-6.2.diff && \
 	filterdiff --lines=158,658 ../../_src/dwm-ru_deck-6.2.diff | patch -p1 && \
-	patch -p1 -i ../../_src/dwm-scratchpad-6.2.diff && \
 	patch -p1 -i ../../_src/dwm-push_no_master-6.2.diff && \
 	patch -p1 -i ../../_src/dwm-zoomswap-6.2.diff && \
 	patch -p1 -i ../../_src/dwm-focusonnetactive-2017-12-24-3756f7f.diff && \
