@@ -54,8 +54,7 @@ your operating system's package manager (such as ``apt``, ``brew``, ``pacman``,
 
     $ sudo pacman -S tmux vim zsh
 
-Third, install tpm (used for tmux), vim-plug and space-vim (used for vim), and
-prezto (used for zsh):
+Third, install tpm (used for tmux), vim-plug (used for vim), and prezto (used for zsh):
 
 .. code-block:: console
 
@@ -64,11 +63,8 @@ prezto (used for zsh):
     $ # install vim-plug (used for vim):
     $ curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    $ # install space-vim (used for vim):
-    $ git clone https://github.com/liuchengxu/space-vim ~/.space-vim
-    $ ln -s ~/.space-vim/init.vim ~/.vimrc
     $ # prepare some vim directories
-    $ mkdir -p ~/.vim/undo ~/.vim/backup
+    $ mkdir -p ~/.vim/undo
     $ # install prezto (used for zsh):
     $ git clone --recursive https://github.com/sorin-ionescu/prezto "${ZDOTDIR:-$HOME}/.zprezto"
 
