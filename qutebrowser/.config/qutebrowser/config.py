@@ -1,23 +1,20 @@
 # Tibor's qutebrowser configuration.
 
-# workaroung for Intel GPU troubles
-c.qt.force_software_rendering = 'software-opengl'
-
-# start when we left off
+# Start when we left off
 c.auto_save.session = True
 
-# bind some shortcuts
+# Bind some shortcuts
 config.bind('<ctrl+n>', 'tab-next')
 config.bind('<ctrl+p>', 'tab-prev')
 
-# show tabs only when I ask
+# Show tabs only when I ask
 c.tabs.show = 'never'
 config.bind(',t', 'config-cycle tabs.show never always')
 
-# show tabs on bottom
+# Show tabs on bottom
 c.tabs.position = 'bottom'
 
-# gruvbox dark colours
+# Gruvbox dark colours
 gruvbox_bg0 = "#282828"
 gruvbox_bg1 = "#3c3836"
 gruvbox_bg2 = "#504945"
@@ -36,7 +33,7 @@ gruvbox_blue = "#83a598"
 gruvbox_purple = "#d3869b"
 gruvbox_orange_dark = "#d65d0e"
 
-# qutebrowser in gentle gruvbox dark colours
+# Qutebrowser in gentle gruvbox dark colours
 c.colors.completion.category.bg = gruvbox_bg0
 c.colors.completion.category.border.bottom = gruvbox_bg0
 c.colors.completion.category.border.top = gruvbox_bg0
@@ -120,38 +117,38 @@ c.colors.tabs.selected.even.fg = gruvbox_fg1
 c.colors.tabs.selected.odd.bg = gruvbox_bg0
 c.colors.tabs.selected.odd.fg = gruvbox_fg1
 
-# show statusbar only when I need
+# Show statusbar only when I need
 c.statusbar.hide = True
 config.bind(',b', 'config-cycle statusbar.hide', mode='normal')
 
-# spell check languages
+# Spell check languages
 c.spellcheck.languages = ['en-GB']
 
-# numbers for hints
+# Numbers for hints
 c.hints.chars = '1234567890'
 
-# fonts
+# Fonts
 c.fonts.default_family = 'monospace'
 c.fonts.default_size = '13px'
 
-# password manager
+# Password manager
 config.bind('<z><l>', 'spawn --userscript qute-pass --dmenu-invocation dmenu')
 config.bind('<z><u><l>', 'spawn --userscript qute-pass --dmenu-invocation dmenu --username-only')
 config.bind('<z><p><l>', 'spawn --userscript qute-pass --dmenu-invocation dmenu --password-only')
 
-# edit text areas in vim
+# Edit text areas in vim
 c.editor.command = ['st', '-e', 'vim', '{file}']
 
-# create task for the current web page
+# Create task for the current web page
 config.bind(',T', 'spawn --userscript taskadd')
 
-# use mpv for videos
+# Use mpv for videos
 config.bind(',m', 'spawn --userscript view_in_mpv')
 
-# open URL in Chromium
+# Open URL in Chromium
 config.bind(',c', 'spawn -d chromium {url}')
 
-# search engines
+# Search engines
 c.url.searchengines["a"] = "https://arxiv.org/search/?query={}&searchtype=all&source=header"
 c.url.searchengines["aw"] = "https://wiki.archlinux.org/?search={}"
 c.url.searchengines["az"] = "https://www.amazon.fr/s/?field-keywords={}"
