@@ -1,17 +1,69 @@
-# Tibor's Prezto configuration.
-#
-# Executes commands at the start of an interactive session.
-#
-# Authors:
-#   Sorin Ionescu <sorin.ionescu@gmail.com>
-#
+# Tibor's zshrc.
 
-# Source Prezto.
-if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
-    source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
+### Added by Zinit's installer
+if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
+    print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma/zinit%F{220})…%f"
+    command mkdir -p "$HOME/.zinit" && command chmod g-rwX "$HOME/.zinit"
+    command git clone https://github.com/zdharma/zinit "$HOME/.zinit/bin" && \
+        print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
+        print -P "%F{160}▓▒░ The clone has failed.%f%b"
 fi
 
-# Customize to your needs...
+source "$HOME/.zinit/bin/zinit.zsh"
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
+### End of Zinit's installer chunk
+
+# Syntax highlighting
+zinit ice wait lucid atinit"zicompinit; zicdreplay"
+zinit light zdharma/fast-syntax-highlighting
+
+# Autosuggestions
+zinit ice wait lucid atload"_zsh_autosuggest_start"
+zinit light zsh-users/zsh-autosuggestions
+
+# Completions
+zinit ice wait lucid blockf atpull'zinit creinstall -q .'
+zinit light zsh-users/zsh-completions
+
+# History substring searching
+zinit ice wait lucid atload'__bind_history_keys'
+zinit light zsh-users/zsh-history-substring-search
+function __bind_history_keys() {
+    bindkey '^[[A' history-substring-search-up
+    bindkey '^[[B' history-substring-search-down
+    bindkey '^P' history-substring-search-up
+    bindkey '^N' history-substring-search-down
+}
+
+# Abbreviations
+if is-at-least 5.5; then
+    zinit ice wait lucid
+    zinit light olets/zsh-abbr
+fi
+
+# Ssh agent
+zinit ice wait lucid
+zinit snippet PZT::modules/ssh
+
+# Fuzzy finder (installed via vim, so not using zinit packs)
+[ -f $HOME/.fzf.zsh ] && source $HOME/.fzf.zsh
+
+# z
+zinit ice wait blockf lucid
+zinit light rupa/z
+
+# z tab completion
+zinit ice wait lucid
+zinit light changyuheng/fz
+
+# z / fzf (ctrl-g)
+zinit ice wait lucid
+zinit light andrewferrier/fzf-z
+
+# cd
+zinit ice wait lucid
+zinit light changyuheng/zsh-interactive-cd
 
 # vi mode with some emacs bindings
 set -o vi
@@ -31,10 +83,10 @@ bindkey '^W' vi-backward-kill-word
 bindkey -M viins '^W' vi-backward-kill-word
 bindkey -M vicmd '^W' vi-backward-kill-word
 
-# python venv: using lazy wrapper for much faster shell startup times
+# Python venv: using lazy wrapper for much faster shell startup times
 [ -e /usr/bin/virtualenvwrapper_lazy.sh ] && source /usr/bin/virtualenvwrapper_lazy.sh
 
-# shortcuts for some directories
+# Shortcuts for some directories
 setopt autonamedirs
 r=$HOME/private/project/reana/src
 o=$HOME/private/project/opendata/src/opendata.cern.ch
@@ -45,80 +97,62 @@ i=$HOME/private/project/invenio/src
 autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
 add-zsh-hook chpwd chpwd_recent_dirs
 
-# fish-like search history
-bindkey "^R" history-incremental-search-backward
-bindkey '^[[A' history-substring-search-up
-bindkey '^[[B' history-substring-search-down
-bindkey "$terminfo[kcuu1]" history-substring-search-up
-bindkey "$terminfo[kcud1]" history-substring-search-down
-bindkey -M emacs '^P' history-substring-search-up
-bindkey -M emacs '^N' history-substring-search-down
-bindkey -M vicmd 'k' history-substring-search-up
-bindkey -M vicmd 'j' history-substring-search-down
-bindkey -M vicmd "/" history-incremental-search-backward
-bindkey -M vicmd "?" history-incremental-search-forward
-bindkey -M vicmd "//" history-beginning-search-backward
-bindkey -M vicmd "??" history-beginning-search-forward
+# History
+HISTFILE=$HOME/.cache/zsh/history
+HISTSIZE=90000
+SAVEHIST=90000
 
-# useful aliases
-alias b="$BROWSER"
-alias e="$EDITOR"
-alias g="git"
-alias k="kubectl"
-alias open="$OPENER"
-alias t="task"
-alias to="taskopen"
-
-# fix gruvbox colours
-[ -f $HOME/.vim/plugged/gruvbox/gruvbox_256palette.sh ] && \
-    source $HOME/.vim/plugged/gruvbox/gruvbox_256palette.sh
-
-# do not share history between terminals with my tmux workflow
+# Do not share history between terminals with my tmux workflow
 setopt no_share_history
 unsetopt share_history
 
-# allow '>' redirection to overwrite existing files
+# Useful aliases
+alias b="$BROWSER"
+alias cp='cp -i'
+alias e="$EDITOR"
+alias g="git"
+alias k="kubectl"
+alias l="ls -la --color"
+alias ll="ls -l --color"
+alias mv='mv -i'
+alias open="$OPENER"
+alias rg='rg --hidden --glob !.git'
+alias rm='rm -i'
+alias t="task"
+alias to="taskopen"
+
+# Fix gruvbox colours
+[ -f $HOME/.vim/plugged/gruvbox/gruvbox_256palette.sh ] && \
+    source $HOME/.vim/plugged/gruvbox/gruvbox_256palette.sh
+
+# Allow '>' redirection to overwrite existing files
 setopt clobber
 
-# single-line pure prompt
-prompt_newline='%666v'
-PURE_PROMPT_SYMBOL='$'
-PURE_PROMPT_VICMD_SYMBOL='#'
-PROMPT=" $PROMPT"
 
-# fzf
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-if [ -e /usr/share/fzf/completion.zsh ]; then
-    source /usr/share/fzf/key-bindings.zsh
-    source /usr/share/fzf/completion.zsh
-fi
-
-# fzf: ff = fuzzy file (and edit)
+# ff = fuzzy file (and edit)
 ff() (
-  IFS=$'\n' files=($(fzf-tmux --query="$1" --multi --select-1 --exit-0))
-  [[ -n "$files" ]] && ${EDITOR} "${files[@]}"
+    IFS=$'\n' files=($(fzf-tmux --query="$1" --multi --select-1 --exit-0))
+    [[ -n "$files" ]] && ${EDITOR} "${files[@]}"
 )
 
-# fzf: fs = fuzzy search (string and edit matching files)
+# fs = fuzzy search (string and edit matching files)
 fs() {
-  local file
-  local line
-  read -r file line <<<"$(ag --nobreak --noheading $@ | fzf -0 -1 | awk -F: '{print $1, $2}')"
-  if [[ -n $file ]]
-  then
-    # note: uses nvim due to <https://github.com/liuchengxu/space-vim/issues/407>
-    nvim $file +$line
-  fi
+    local file
+    local line
+    read -r file line <<<"$(ag --nobreak --noheading $@ | fzf -0 -1 | awk -F: '{print $1, $2}')"
+    if [[ -n $file ]]; then
+        ${EDITOR} $file +$line
+    fi
 }
 
-# fzf: fv = fuzzy view (of a string in files)
+# fv = fuzzy view (of a string in files)
 fv() {
     if [ ! "$#" -gt 0 ]; then echo "Need a string to search for!"; return 1; fi
     local file
     file="$(rg --max-count=1 --ignore-case --files-with-matches --no-messages "$@" | fzf-tmux +m --preview="rg --ignore-case --pretty --context 10 '"$@"' {}")" && ${OPENER} "$file"
 }
 
-# fzf: o (open argument or most used files; using fasd)
+# o (open argument or most used files; using fasd)
 unalias o 2> /dev/null
 o() {
     [ $# -eq 1 ] && test -e "$1" && ${OPENER} "$1" && return
@@ -126,7 +160,7 @@ o() {
     file="$(fasd -Rfl "$@" | fzf -1 -0 --no-sort +m)" && ${OPENER} "${file}" || return 1
 }
 
-# fzf: v (edit argument or most used files in vim; using viminfo)
+# v (edit argument or most used files in vim; using viminfo)
 v() {
     [ $# -eq 1 ] && test -e "$1" && ${EDITOR} "$1" && return
     local files
@@ -136,9 +170,10 @@ v() {
         done | fzf-tmux -d -m -q "$*" -1) && ${EDITOR} ${files//\~/$HOME}
 }
 
-# fzf: z (jump around most used directories; using fasd)
-z() {
-    [ $# -eq 1 ] && test -d "$1" && cd "$1" && return
-    local dir
-    dir="$(fasd -Rdl "$@" | fzf -1 -0 --no-sort +m)" && cd "${dir}" || return 1
-}
+# Prompt
+zinit ice pick"async.zsh" src"pure.zsh"
+zinit light sindresorhus/pure
+prompt_newline='%666v'
+PURE_PROMPT_SYMBOL='$'
+PURE_PROMPT_VICMD_SYMBOL='#'
+PROMPT=" $PROMPT"

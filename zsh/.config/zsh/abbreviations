@@ -1,0 +1,5 @@
+abbr gca="git commit --amend -s"
+abbr gcm="git checkout master"
+abbr kga="kubectl get all"
+abbr kgp="kubectl get pods"
+abbr kgs="kubectl get services"

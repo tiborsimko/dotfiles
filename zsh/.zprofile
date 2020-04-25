@@ -1,96 +1,41 @@
-# Tibor's Prezto configuration.
-#
-# Executes commands at login pre-zshrc.
-#
-# Authors:
-#   Sorin Ionescu <sorin.ionescu@gmail.com>
-#
+# Tibor's zprofile.
 
-#
-# Browser
-#
-
+# Set prefereed programs
 export BROWSER="qutebrowser"
-
-#
-# Editors
-#
-
 export EDITOR="vim"
 export VISUAL="vim"
 export PAGER="less"
-
-#
-# Terminal
-#
-
 export TERMINAL="st"
-
-#
-# Opener
-#
-
 export OPENER="xdg-open"
+export LANG='en_GB.UTF-8'
 
-#
-# Language
-#
-
-if [[ -z "$LANG" ]]; then
-  export LANG='en_GB.UTF-8'
-fi
-
-#
-# Paths
-#
-
-# Ensure path arrays do not contain duplicates.
+# Ensure path arrays do not contain duplicates
 typeset -gU cdpath fpath mailpath path
 
-# Set the list of directories that cd searches.
-# cdpath=(
-#   $cdpath
-# )
-
-# Set the list of directories that Zsh searches for programs.
+# Set the list of directories that Zsh searches for programs
 path=(
   /usr/local/{bin,sbin}
   $path
 )
 
-#
-# Less
-#
-
-# Set the default Less options.
-# Mouse-wheel scrolling has been disabled by -X (disable screen clearing).
-# Remove -X and -F (exit if the content fits on one screen) to enable it.
-export LESS='-F -g -i -M -R -S -w -X -z-4'
-
-# Set the Less input preprocessor.
-# Try both `lesspipe` and `lesspipe.sh` as either might exist on a system.
-if (( $#commands[(i)lesspipe(|.sh)] )); then
-  export LESSOPEN="| /usr/bin/env $commands[(i)lesspipe(|.sh)] %s 2>&-"
-fi
-
-# private PATH additions
+# Private PATH additions
 [ -d $HOME/private/bin ] && \
     export PATH=$HOME/private/bin:$PATH
 
-# fix for CERN LXPLUS7 self-compiled software (such as tmux, vim)
+# Fix for CERN LXPLUS7 self-compiled software (such as tmux, vim)
 [ -d $HOME/public/lxplus7/bin ] && export PATH=$HOME/public/lxplus7/bin:$PATH
 
-# fix for CERN LXPLUS7 self-compiled libraries (such as libevent needed for tmux)
+# Fix for CERN LXPLUS7 self-compiled libraries (such as libevent needed for tmux)
 [ -d $HOME/public/lxplus7/lib ] && \
     export LD_LIBRARY_PATH=$HOME/public/lxplus7/lib:$LD_LIBRARY_PATH
 
-# fzf with rg
+# Fzf with rg
 export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*"'
 
-# fzf layout
+# Fzf layout
 export FZF_DEFAULT_OPTS='--layout=reverse --height 50%'
 
-# fzf gruvbox dark medium theme
+# Fzf gruvbox dark medium theme
 export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
   --color=fg:#ebdbb2,bg:#282828,hl:#83a598
   --color=fg+:#ebdbb2,bg+:#3c3836,hl+:#83a598,gutter:#282828
@@ -98,5 +43,15 @@ export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
   --color=marker:#8ec07c,spinner:#8ec07c,header:#665c54
     '
 
-# start X11 on tty1 after logging in
+# Less
+export LESS='-F -g -i -M -R -S -w -X -z-4'
+export LESS_TERMCAP_mb=$'\E[01;31m'
+export LESS_TERMCAP_md=$'\E[01;31m'
+export LESS_TERMCAP_me=$'\E[0m'
+export LESS_TERMCAP_se=$'\E[0m'
+export LESS_TERMCAP_so=$'\E[00;47;30m'
+export LESS_TERMCAP_ue=$'\E[0m'
+export LESS_TERMCAP_us=$'\E[01;32m'
+
+# Start X11 on tty1 after logging in
 [[ -z $DISPLAY  ]] && [ "$(tty)" = "/dev/tty1" ] && exec startx
