@@ -1,20 +1,20 @@
 # Tibor's mutt configuration.
 
-# colour scheme
+# Colour scheme
 source ~/.mutt/gruvbox-theme
 
-# speed
+# Speed
 set sleep_time = 0
 
-# attachments
+# Attachments
 set mailcap_path = ~/.mutt/mailcap
 
-# sort preferences
+# Sort preferences
 set sort=threads
 set sort_browser=reverse-date
 set sort_aux=last-date-received
 
-# address book
+# Address book
 set query_command = "echo && notmuch address from:%s"
 set query_format="%4c %t %-70.70a %-70.70n %?e?(%e)?"
 bind editor <Tab> complete-query
@@ -34,29 +34,33 @@ set postponed = =Drafts
 set record = =Archive
 save-hook . =Archive
 
-# composing mail
+# Viewing mail
+set wrap=80
+set markers=no
+
+# Composing mail
 #my_hdr Bcc: Tibor Simko <tibor.simko@cern.ch>
 set attribution = "On %[!%a, %d %b %Y at %H:%M], %n wrote:"
 set fast_reply = yes
 set include = yes
-set edit_headers
-set text_flowed
+set edit_headers = yes
+set text_flowed = yes
 set signature = "~/.mutt/signature"
 unset sig_dashes
 
-# sending mail
+# Sending mail
 set realname = "Tibor Simko"
 set from = "tibor.simko@cern.ch"
 set sendmail = "/usr/bin/msmtp --account=cern"
 
-# key bindings - general vim-like
+# Key bindings - general vim-like
 bind pager g top
 bind pager G bottom
 bind attach,index g first-entry
 bind attach,index G last-entry
 bind index,pager R group-reply
 
-# key bindings - quick folder operations
+# Key bindings - quick folder operations
 macro index,pager ,,  "<change-folder>=INBOX<enter><limit>~U<enter>" "Shortcut to go to unread INBOX"
 macro index,pager ,g1  "<change-folder>=INBOX<enter><limit>~d <1d<enter>" "Go to last 1 day"
 macro index,pager ,g7  "<change-folder>=INBOX<enter><limit>~d <1w<enter>" "Go to 7 days"
@@ -66,19 +70,18 @@ macro index,pager ,gi "<change-folder>=INBOX<enter>" "Go to INBOX folder"
 macro index,pager ,gj "<change-folder>=Junk<enter>" "Go to Junk folder"
 macro index,pager ,gu  "<change-folder>=INBOX<enter><limit>~U<enter>" "Go to unread"
 
-# key bindings - mail archiving
+# Key bindings - mail archiving
 macro index,pager ,a ":set confirmappend=no delete=yes auto_tag=yes\n<save-message>=Archive\n<sync-mailbox>:set confirmappend=yes delete=ask-yes\n"
-macro index,pager ,b ":set confirmappend=no delete=yes auto_tag=yes\n<save-message>=Archive-`date +%Y`\n<sync-mailbox>:set confirmappend=yes delete=ask-yes\n"
 
-# key bindings - muttjump
+# Key bindings - muttjump
 macro generic ,j "<enter-command>push <pipe-message>muttjump<enter><enter>" "jump to original message"
 
-# key bindings - taskwarrior
+# Key bindings - taskwarrior
 macro index,pager ,T "<pipe-message>/usr/share/taskopen/scripts/mutt2task<enter>"
 macro index,pager ,m "<pipe-message>/usr/share/taskopen/scripts/mess2task2<enter>"
 macro index,pager ,M "<pipe-message>/usr/share/taskopen/scripts/mess2task<enter>"
 
-# key bindings - notmuch
+# Key bindings - notmuch
 macro index ,s \
 "<enter-command>set my_old_pipe_decode=\$pipe_decode my_old_wait_key=\$wait_key nopipe_decode nowait_key<enter>\
 <shell-escape>notmuch-mutt -r --prompt search<enter>\
@@ -92,7 +95,7 @@ macro index ,t \
 <enter-command>set pipe_decode=\$my_old_pipe_decode wait_key=\$my_old_wait_key<enter>" \
 "notmuch: reconstruct thread"
 
-# key bindings - mbsync
+# Key bindings - mbsync
 macro index ,x \
 "<enter-command>set my_old_pipe_decode=\$pipe_decode my_old_wait_key=\$wait_key nopipe_decode nowait_key<enter>\
 <shell-escape>x1-mbsync inbox<enter>\
