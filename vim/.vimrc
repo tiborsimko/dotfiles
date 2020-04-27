@@ -103,6 +103,23 @@ Plug 'christoomey/vim-tmux-navigator'
     nnoremap <silent> <c-k> :TmuxNavigateUp<cr>
     nnoremap <silent> <c-l> :TmuxNavigateRight<cr>
     nnoremap <silent> <c-\> :TmuxNavigatePrevious<cr>
+    " Allow pane switching directly from insert mode
+    inoremap <silent> <c-h> <esc>:TmuxNavigateLeft<cr>
+    inoremap <silent> <c-j> <esc>:TmuxNavigateDown<cr>
+    inoremap <silent> <c-k> <esc>:TmuxNavigateUp<cr>
+    inoremap <silent> <c-l> <esc>:TmuxNavigateRight<cr>
+    inoremap <silent> <c-\> <esc>:TmuxNavigatePrevious<cr>
+
+" Vimux
+Plug 'benmills/vimux'
+    " Prompt for a command to run in another tmux runner pane
+    map <Leader>vp :VimuxPromptCommand<CR>
+    " Repeat last run command
+    map <Leader>vl :VimuxRunLastCommand<CR>
+    " Inspect tmux runner pane
+    map <Leader>vi :VimuxInspectRunner<CR>
+    " Zoom tmux runner pane
+    map <Leader>vz :VimuxZoomRunner<CR>
 
 " Ale
 Plug 'w0rp/ale'
