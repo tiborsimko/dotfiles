@@ -145,6 +145,15 @@ Plug 'tpope/vim-unimpaired'
 
 " Distraction-free writing
 Plug 'junegunn/goyo.vim'
+    nmap <silent> <Leader>tg :Goyo<CR>
+    function! s:goyo_enter()
+        set nocursorline
+    endfunction
+    function! s:goyo_leave()
+        set cursorline
+    endfunction
+    autocmd! User GoyoEnter nested call <SID>goyo_enter()
+    autocmd! User GoyoLeave nested call <SID>goyo_leave()
 
 " Email address completion for Mutt/Notmuch
 Plug 'adborden/vim-notmuch-address'
