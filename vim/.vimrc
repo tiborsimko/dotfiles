@@ -144,6 +144,10 @@ Plug 'honza/vim-snippets'
 Plug 'tpope/vim-unimpaired'
 
 " Distraction-free writing
+Plug 'junegunn/limelight.vim'
+    nmap <silent> <Leader>tl :Limelight!!<CR>
+    let g:limelight_conceal_ctermfg = 243
+    let g:limelight_conceal_guifg = '#7c6f64'
 Plug 'junegunn/goyo.vim'
     nmap <silent> <Leader>tg :Goyo<CR>
     function! s:goyo_enter()
