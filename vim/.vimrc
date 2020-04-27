@@ -16,10 +16,6 @@ Plug 'morhetz/gruvbox'
     let g:gruvbox_contrast_light='hard'
     set background=dark
 
-" Status line
-Plug 'itchyny/lightline.vim'
-    let g:lightline = { 'colorscheme': 'gruvbox' }
-
 " Editing
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
@@ -230,6 +226,29 @@ set backspace=indent,eol,start
 " Always show status line
 set laststatus=2
 
+" Simple non-obtrusive status line
+function! s:statusline_expr()
+    " Tune down the status line background for all windows; we'll use cursor
+    " line to distinguish between active and non-active windows
+    let col = '%#StatusLineNC#'
+    let mod = "%{&modified ? '[+] ' : !&modifiable ? '[x] ' : ''}"
+    let ro  = "%{&readonly ? '[RO] ' : ''}"
+    let ft  = "%{len(&filetype) ? '['.&filetype.'] ' : ''}"
+    let fug = "%{exists('g:loaded_fugitive') ? fugitive#statusline() : ''}"
+    let sep = ' %= '
+    let pos = ' %-12(%l : %c%V%) '
+    let pct = ' %P'
+  return col.'[%n] %F %<'.mod.ro.ft.fug.sep.pos.pct
+endfunction
+let &statusline = s:statusline_expr()
+
+" Highlight cursor line only in the currently active window
+augroup BgHighlight
+    autocmd!
+    autocmd WinEnter * set cursorline
+    autocmd WinLeave * set nocursorline
+augroup END
+
 " Do not join spaces when reformatting paragraphs
 set nojoinspaces
 
@@ -261,7 +280,6 @@ autocmd BufReadPost *
     \ | endif
 
 " Use format flowed and Goyo mode in Mutt
-autocmd BufRead,BufNewFile /tmp/mutt-* call lightline#init()
 autocmd BufRead,BufNewFile /tmp/mutt-* set tw=72 wm=0 fo+=w
 autocmd BufRead,BufNewFile /tmp/mutt-* DisableStripWhitespaceOnSave
 autocmd BufRead,BufNewFile /tmp/mutt-* :Goyo
