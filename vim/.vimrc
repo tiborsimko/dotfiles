@@ -23,6 +23,11 @@ Plug 'ntpeters/vim-better-whitespace'
     let g:strip_whitespace_confirm=0
     let g:strip_whitespace_on_save=1
 
+" Undo tree
+Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
+    let g:undotree_WindowLayout = 2
+    nmap <Leader>u :UndotreeToggle<CR>
+
 " Fuzzy finder
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
