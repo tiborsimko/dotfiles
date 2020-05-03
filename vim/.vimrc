@@ -150,13 +150,11 @@ Plug 'junegunn/limelight.vim'
     let g:limelight_conceal_guifg = '#7c6f64'
 Plug 'junegunn/goyo.vim'
     nmap <silent> <Leader>tg :Goyo<CR>
-    function! s:goyo_enter()
-        set nocursorline
-    endfunction
     function! s:goyo_leave()
-        set cursorline
+        " Tune down status line to our defaults (see below)
+        highlight StatusLine ctermbg=237 ctermfg=248 cterm=NONE
+        highlight StatusLineNC ctermbg=237 ctermfg=245 cterm=NONE
     endfunction
-    autocmd! User GoyoEnter nested call <SID>goyo_enter()
     autocmd! User GoyoLeave nested call <SID>goyo_leave()
 
 " Email address completion for Mutt/Notmuch
@@ -168,8 +166,8 @@ call plug#end()
 " Show line numbers
 set number relativenumber
 
-" Highlight cursor line
-set cursorline
+" Do not highlight cursor line
+set nocursorline
 
 " Break lines at word (requires Wrap lines)
 set linebreak
@@ -241,9 +239,6 @@ set laststatus=2
 
 " Simple non-obtrusive status line
 function! s:statusline_expr()
-    " Tune down the status line background for all windows; we'll use cursor
-    " line to distinguish between active and non-active windows
-    let col = '%#StatusLineNC#'
     let mod = "%{&modified ? '[+] ' : !&modifiable ? '[x] ' : ''}"
     let ro  = "%{&readonly ? '[RO] ' : ''}"
     let ft  = "%{len(&filetype) ? '['.&filetype.'] ' : ''}"
@@ -251,16 +246,9 @@ function! s:statusline_expr()
     let sep = ' %= '
     let pos = ' %-12(%l : %c%V%) '
     let pct = ' %P'
-  return col.'[%n] %F %<'.mod.ro.ft.fug.sep.pos.pct
+  return '[%n] %F %<'.mod.ro.ft.fug.sep.pos.pct
 endfunction
 let &statusline = s:statusline_expr()
-
-" Highlight cursor line only in the currently active window
-augroup BgHighlight
-    autocmd!
-    autocmd WinEnter * set cursorline
-    autocmd WinLeave * set nocursorline
-augroup END
 
 " Do not join spaces when reformatting paragraphs
 set nojoinspaces
@@ -297,6 +285,8 @@ autocmd BufRead,BufNewFile /tmp/mutt-* set tw=72 wm=0 fo+=w
 autocmd BufRead,BufNewFile /tmp/mutt-* DisableStripWhitespaceOnSave
 autocmd BufRead,BufNewFile /tmp/mutt-* :Goyo
 
-" Set colour scheme
+" Set colour scheme and tune it down a bit
 colorscheme gruvbox
 highlight clear SignColumn
+highlight StatusLine ctermbg=237 ctermfg=248 cterm=NONE
+highlight StatusLineNC ctermbg=237 ctermfg=245 cterm=NONE
