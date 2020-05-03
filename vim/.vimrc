@@ -76,6 +76,8 @@ Plug 'tpope/vim-fugitive'
     nnoremap <Leader>gs :Gstatus<CR>
 Plug 'airblade/vim-gitgutter'
     let g:gitgutter_override_sign_column_highlight=1
+    nmap <Leader>c <Plug>(GitGutterNextHunk)
+    nmap <Leader>C <Plug>(GitGutterPrevHunk)
 
 " GnuPG
 Plug 'jamessan/vim-gnupg'
