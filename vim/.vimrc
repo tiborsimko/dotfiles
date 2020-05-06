@@ -175,18 +175,17 @@ Plug 'junegunn/limelight.vim'
     let g:limelight_conceal_guifg = '#7c6f64'
 Plug 'junegunn/goyo.vim'
     nmap <silent> <Leader>tg :Goyo<CR>
-    function! s:goyo_leave()
-        " Tune down status line to our defaults (see below)
-        highlight StatusLine ctermbg=237 ctermfg=248 cterm=NONE
-        highlight StatusLineNC ctermbg=237 ctermfg=245 cterm=NONE
-    endfunction
-    autocmd! User GoyoLeave nested call <SID>goyo_leave()
 
 " Email address completion for Mutt/Notmuch
 Plug 'adborden/vim-notmuch-address'
 
 " Initialize plugin system
 call plug#end()
+
+" My terminal supports true colours
+let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+set termguicolors
 
 " Show line numbers
 set number relativenumber
@@ -319,8 +318,21 @@ autocmd BufRead,BufNewFile /tmp/mutt-* set tw=72 wm=0 fo+=w
 autocmd BufRead,BufNewFile /tmp/mutt-* DisableStripWhitespaceOnSave
 autocmd BufRead,BufNewFile /tmp/mutt-* :Goyo
 
-" Set colour scheme and tune it down a bit
+" Tune down gruvbox theme
+function! MyGruvbox() abort
+    highlight clear SignColumn
+    highlight SignifySignAdd cterm=NONE ctermfg=green ctermbg=NONE gui=NONE guifg=#b8bb26 guibg=NONE
+    highlight SignifySignDelete cterm=NONE ctermfg=red ctermbg=NONE gui=NONE guifg=#fb4934 guibg=NONE
+    highlight SignifySignChange cterm=NONE ctermfg=yellow ctermbg=NONE gui=NONE guifg=#fabd2f guibg=NONE
+    highlight StatusLine cterm=NONE ctermfg=248 gui=NONE guifg=#bdae93 guibg=#3c3836
+    highlight StatusLineNC cterm=NONE ctermfg=245 gui=NONE guifg=#928374 guibg=#3c3836
+endfunction
+
+" Tune down colours whenever a colour scheme is changed
+augroup MyColors
+    autocmd!
+    autocmd ColorScheme * call MyGruvbox()
+augroup END
+
+" Set colour scheme
 colorscheme gruvbox
-highlight clear SignColumn
-highlight StatusLine ctermbg=237 ctermfg=248 cterm=NONE
-highlight StatusLineNC ctermbg=237 ctermfg=245 cterm=NONE
