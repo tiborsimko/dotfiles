@@ -231,6 +231,18 @@ set ignorecase
 " Searches for strings incrementally
 set incsearch
 
+" Filetype support
+filetype plugin indent on
+
+" Syntax highlighting
+syntax on
+
+" Allow having several unsaved buffers
+set hidden
+
+" Nicer command-line completion
+set wildmenu
+
 " Auto-indent new lines
 set autoindent
 
