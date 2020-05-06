@@ -82,16 +82,25 @@ Plug 'junegunn/fzf.vim'
 " Git
 Plug 'tpope/vim-fugitive'
     nnoremap <Leader>ga :Git add %:p<CR><CR>
-    nnoremap <Leader>gb :Gblame<CR>
+    nnoremap <Leader>gb :Gbrowse<CR>
+    nnoremap <Leader>gB :Gblame<CR>
     nnoremap <Leader>gd :Gdiff<CR>
     nnoremap <Leader>gk :exe ':!cd ' . expand('%:p:h') . '; git k'<CR>
     nnoremap <Leader>gka :exe ':!cd ' . expand('%:p:h') . '; git ka'<CR>
     nnoremap <Leader>gl :silent! Glog<CR>:bot copen<CR>
     nnoremap <Leader>gs :Gstatus<CR>
-Plug 'airblade/vim-gitgutter'
-    let g:gitgutter_override_sign_column_highlight=1
-    nmap <Leader>c <Plug>(GitGutterNextHunk)
-    nmap <Leader>C <Plug>(GitGutterPrevHunk)
+Plug 'mhinz/vim-signify'
+    let g:signify_sign_show_count = 0
+    let g:signify_sign_show_text = 1
+    let g:signify_sign_change = '~'
+    nmap <Leader>h <Plug>(signify-next-hunk)
+    nmap <Leader>H <Plug>(signify-prev-hunk)
+Plug 'junegunn/gv.vim'
+    nnoremap <Leader>gv :GV<CR>
+    nnoremap <Leader>gV :GV!<CR>
+
+" GitHub
+Plug 'tpope/vim-rhubarb'
 
 " GnuPG
 Plug 'jamessan/vim-gnupg'
@@ -281,6 +290,15 @@ set mouse=a
 
 " Use system clipboard
 set clipboard=unnamed
+
+" Shorter mapped key sequence wait time limit
+set timeoutlen=500
+
+" Faster update time for asynchronous operations
+set updatetime=100
+
+" Always show sign column to keep the same visual width
+set signcolumn=yes
 
 " Location
 nnoremap <Leader>l :lnext<cr>zz
