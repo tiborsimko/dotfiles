@@ -34,3 +34,8 @@ image/pjpeg; sxiv %s;
 image/png; sxiv %s;
 image/gif; sxiv %s;
 image/tiff; sxiv %s;
+
+# Calendar (press `m` when viewing attachments)
+text/ics; gcalcli --calendar 'tibor.simko@gmail.com' import %s;
+text/calendar; gcalcli --calendar 'tibor.simko@gmail.com' import %s;
+application/ics; gcalcli --calendar 'tibor.simko@gmail.com' import %s;
