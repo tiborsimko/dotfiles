@@ -41,6 +41,9 @@ save-hook . =Archive
 set wrap=80
 set markers=no
 
+# Show mail index when viewing a message
+set pager_index_lines=10
+
 # Composing mail
 #my_hdr Bcc: Tibor Simko <tibor.simko@cern.ch>
 set attribution = "On %[!%a, %d %b %Y at %H:%M], %n wrote:"
