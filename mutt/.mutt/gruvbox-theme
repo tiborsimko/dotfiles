@@ -19,7 +19,7 @@ color quoted4     color250 color235
 color quoted5     color108 color235
 color search      color235 color208
 color signature   color108 color235
-color status      color248 color237
+color status      color245 color235
 color tilde       color243 color235
 color tree        color142 color235
 color underline   color223 color239
@@ -36,7 +36,7 @@ color index color167 color235 ~=
 color index color235 color223 ~T
 color index color235 color167 ~D
 
-color header color214 color235 "^(To:|From:)"
+color header color214 color235 "^(To:|Cc:|Bcc:|From:)"
 color header color142 color235 "^Subject:"
 color header color108 color235 "^X-Spam-Status:"
 color header color108 color235 "^Received:"
