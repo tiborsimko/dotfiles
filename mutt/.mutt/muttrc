@@ -37,8 +37,11 @@ set postponed = =Drafts
 set record = =Archive
 save-hook . =Archive
 
-# Viewing mail
+# Wrap lines when viewing mail
 set wrap=80
+set smart_wrap=yes
+
+# Do not show any leading markers when wrapping lines
 set markers=no
 
 # Show mail index when viewing a message
