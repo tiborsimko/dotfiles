@@ -279,12 +279,15 @@ function! s:statusline_expr()
     let ro  = "%{&readonly ? '[RO] ' : ''}"
     let ft  = "%{len(&filetype) ? '['.&filetype.'] ' : ''}"
     let fug = "%{exists('g:loaded_fugitive') ? fugitive#statusline() : ''}"
-    let sep = ' %= '
-    let pos = ' %-12(%l : %c%V%) '
-    let pct = ' %P'
+    let sep = '%='
+    let pos = '%-12(L%l_C%c%V%)'
+    let pct = '%P'
   return '[%n] %F %<'.mod.ro.ft.fug.sep.pos.pct
 endfunction
 let &statusline = s:statusline_expr()
+
+" Status line fill characters
+set fillchars=stl:_,stlnc:.,vert:\|,fold:-,diff:-
 
 " Do not join spaces when reformatting paragraphs
 set nojoinspaces
@@ -336,8 +339,8 @@ function! MyGruvbox() abort
     highlight SignifySignAdd cterm=NONE ctermfg=green ctermbg=NONE gui=NONE guifg=#b8bb26 guibg=NONE
     highlight SignifySignDelete cterm=NONE ctermfg=red ctermbg=NONE gui=NONE guifg=#fb4934 guibg=NONE
     highlight SignifySignChange cterm=NONE ctermfg=yellow ctermbg=NONE gui=NONE guifg=#fabd2f guibg=NONE
-    highlight StatusLine cterm=NONE ctermfg=248 gui=NONE guifg=#bdae93 guibg=#3c3836
-    highlight StatusLineNC cterm=NONE ctermfg=245 gui=NONE guifg=#928374 guibg=#3c3836
+    highlight StatusLine cterm=NONE ctermfg=245 gui=NONE guifg=#928374 guibg=NONE
+    highlight StatusLineNC cterm=NONE ctermfg=245 gui=NONE guifg=#928374 guibg=NONE
 endfunction
 
 " Tune down colours whenever a colour scheme is changed
