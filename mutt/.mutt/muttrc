@@ -44,6 +44,10 @@ set markers=no
 # Show mail index when viewing a message
 set pager_index_lines=10
 
+# View message headers in wanted order
+unhdr_order *
+hdr_order From: To: Cc: Subject: Date:
+
 # Composing mail
 #my_hdr Bcc: Tibor Simko <tibor.simko@cern.ch>
 set attribution = "On %[!%a, %d %b %Y at %H:%M], %n wrote:"
