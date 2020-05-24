@@ -6,6 +6,7 @@ c.auto_save.session = True
 # Bind some shortcuts
 config.bind('<ctrl+n>', 'tab-next')
 config.bind('<ctrl+p>', 'tab-prev')
+config.bind('<ctrl+s>', 'tab-focus last')
 
 # Show tabs only when I ask
 c.tabs.show = 'never'
