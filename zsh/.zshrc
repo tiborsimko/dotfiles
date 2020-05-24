@@ -177,3 +177,6 @@ prompt_newline='%666v'
 PURE_PROMPT_SYMBOL='$'
 PURE_PROMPT_VICMD_SYMBOL='#'
 PROMPT=" $PROMPT"
+
+# Load local host customisations
+[ -f $HOME/.zshrc.local ] && source $HOME/.zshrc.local
