@@ -136,6 +136,18 @@ static Key keys[] = {
 	{ 0, XF86XK_AudioMicMute,	    spawn,		SHCMD("amixer set Capture toggle") },
 	{ 0, XF86XK_MonBrightnessDown,	spawn,		SHCMD("xbacklight -dec 5") },
 	{ 0, XF86XK_MonBrightnessUp,	spawn,		SHCMD("xbacklight -inc 5") },
+        /* Additional configuration for the French AZERTY keyboard */
+        TAGKEYS(                        XK_ampersand,                     0)
+        TAGKEYS(                        XK_eacute,                        1)
+        TAGKEYS(                        XK_quotedbl,                      2)
+        TAGKEYS(                        XK_apostrophe,                    3)
+        TAGKEYS(                        XK_parenleft,                     4)
+        TAGKEYS(                        XK_minus,                         5)
+        TAGKEYS(                        XK_egrave,                        6)
+        TAGKEYS(                        XK_underscore,                    7)
+        TAGKEYS(                        XK_ccedilla,                      8)
+        { MODKEY,                       XK_agrave,      view,           {.ui = ~0 } },
+        { MODKEY|ShiftMask,             XK_agrave,      tag,            {.ui = ~0 } },
 };
 
 /* button definitions */
