@@ -1,7 +1,7 @@
 # Tibor's dunst configuration.
 
 [global]
-    font = Inconsolata 12px
+    font = monospace 10
     allow_markup = yes
     format = "<b>%s</b>\n%b"
     sort = yes
