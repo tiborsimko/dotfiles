@@ -1,0 +1,19 @@
+! Tibor's Xresources.
+
+! Monitor dpi
+Xft.dpi: 109
+
+! Antialiasing
+Xft.antialias: 1
+Xft.autohint: 1
+Xft.hinting: 1
+Xft.hintstyle: hintfull
+Xft.rgba: rgb
+Xft.lcdfilter: lcddefault
+
+! Foreground and background colours
+*foreground: #ebdbb2
+*background: #282828
+
+! Fonts
+*.font: monospace:size=10
