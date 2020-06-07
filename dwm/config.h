@@ -134,8 +134,8 @@ static Key keys[] = {
 	{ 0, XF86XK_AudioRaiseVolume,	spawn,		SHCMD("amixer set Master 5%+") },
 	{ 0, XF86XK_AudioLowerVolume,	spawn,		SHCMD("amixer set Master 5%-") },
 	{ 0, XF86XK_AudioMicMute,	    spawn,		SHCMD("amixer set Capture toggle") },
-	{ 0, XF86XK_MonBrightnessDown,	spawn,		SHCMD("xbacklight -dec 5") },
-	{ 0, XF86XK_MonBrightnessUp,	spawn,		SHCMD("xbacklight -inc 5") },
+	{ 0, XF86XK_MonBrightnessDown,	spawn,		SHCMD("light -U 5") },
+	{ 0, XF86XK_MonBrightnessUp,	spawn,		SHCMD("light -A 5") },
         /* Additional configuration for the French AZERTY keyboard */
         TAGKEYS(                        XK_ampersand,                     0)
         TAGKEYS(                        XK_eacute,                        1)
