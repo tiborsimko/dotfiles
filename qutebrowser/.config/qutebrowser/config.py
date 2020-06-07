@@ -130,7 +130,7 @@ c.hints.chars = '1234567890'
 
 # Fonts
 c.fonts.default_family = 'monospace'
-c.fonts.default_size = '13px'
+c.fonts.default_size = '10pt'
 
 # Password manager
 config.bind('<z><l>', 'spawn --userscript qute-pass --dmenu-invocation dmenu')
