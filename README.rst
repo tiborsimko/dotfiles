@@ -64,7 +64,7 @@ Third, install tpm (used for tmux), vim-plug (used for vim), and zinit (used for
     $ curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     $ # prepare some vim and zsh directories
-    $ mkdir -p ~/.vim/undo ~/.cache/zsh
+    $ mkdir -p ~/.vim/undo ~/.cache/zsh ~/.cache/dwm
     $ # install zinit (used for zsh):
     $ sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zinit/master/doc/install.sh)"
 
