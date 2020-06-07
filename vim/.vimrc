@@ -22,6 +22,7 @@ Plug 'tpope/vim-commentary'
 Plug 'ntpeters/vim-better-whitespace'
     let g:strip_whitespace_confirm=0
     let g:strip_whitespace_on_save=1
+Plug 'editorconfig/editorconfig-vim'
 
 " Undo tree
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
