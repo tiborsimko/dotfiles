@@ -107,7 +107,7 @@ Plug 'tpope/vim-rhubarb'
 Plug 'jamessan/vim-gnupg'
 
 " Python
-Plug 'psf/black', { 'for': 'python' }
+Plug 'psf/black', { 'for': 'python', 'tag': '19.10b0' }
 
 " Markdown
 Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
