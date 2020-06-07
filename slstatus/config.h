@@ -63,14 +63,20 @@ static const char unknown_str[] = "n/a";
  */
 static const struct arg args[] = {
 	/* function format          argument */
-	{ load_avg, "CPU %s ", NULL},
-	{ cpu_perc, "%s%% ", NULL},
-	{ ram_free, "RAM %s ", NULL },
-	{ swap_free, "SWAP %s ", NULL },
-	{ disk_free, "HDD %s ", "/" },
-	{ wifi_essid, "NET %s ", "wlp82s0" },
+	{ cpu_perc, " CPU %s%% ", NULL},
+	{ load_avg, "%s ", NULL},
+	{ ram_perc, "| RAM %s%% ", NULL },
+	{ ram_free, "%s ", NULL },
+	/* { swap_perc, "| SWP %s%% ", NULL }, */
+	/* { swap_free, "%s ", NULL }, */
+	{ disk_perc, "| HDD %s%% ", "/" },
+	{ disk_free, "%s ", "/" },
+	{ temp, "| TMP %s ", "/sys/class/thermal/thermal_zone0/temp" },
+	{ run_command, "| VOL %s ", "amixer -D pulse get Master | awk -F 'Left:|[][]' 'BEGIN {RS=\"\"}{ print $3 \" \" $5}'" },
+	{ run_command, "| MIC %s ", "amixer -D pulse get Capture | awk -F 'Left:|[][]' 'BEGIN {RS=\"\"}{ print $3 \" \" $5}'" },
+	{ wifi_essid, "| NET %s ", "wlp82s0" },
 	{ wifi_perc, "%s%% ", "wlp82s0" },
-	{ battery_perc, "BAT %s%%", "BAT0" },
+	{ battery_perc, "| BAT %s%%", "BAT0" },
 	{ battery_state, "%s ", "BAT0" },
-    { datetime, "%s", "%F %T" },
+        { datetime, "| DAT %s", "%F %T" },
 };
