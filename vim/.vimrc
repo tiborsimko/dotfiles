@@ -16,6 +16,12 @@ Plug 'morhetz/gruvbox'
     let g:gruvbox_contrast_light='hard'
     set background=dark
 
+" Molokai colour scheme
+Plug 'tomasr/molokai'
+    " let g:molokai_original = 1
+    " let g:rehash256 = 1
+    set background=dark
+
 " Editing
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
