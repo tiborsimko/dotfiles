@@ -6,13 +6,14 @@ path=/home/simko/Local/mbsyncmail
 [user]
 name=Tibor Simko
 primary_email=tibor.simko@cern.ch
+other_email=tibor.simko@gmail.com
 
 [new]
-tags=
+tags=inbox
 ignore=.mbsyncstate;.uidvalidity;
 
 [search]
 exclude_tags=
 
 [maildir]
-synchronize_flags=false
+synchronize_flags=true
