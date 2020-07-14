@@ -1,4 +1,4 @@
-! Tibor's Xresources.
+! Tibor`s Xresources.
 
 ! Monitor dpi
 Xft.dpi: 109
@@ -17,3 +17,6 @@ Xft.lcdfilter: lcddefault
 
 ! Fonts
 *.font: monospace:size=10
+
+! Emacs X11 internal borders set the same as st terminal internal borders
+Emacs.internalBorder: 10
