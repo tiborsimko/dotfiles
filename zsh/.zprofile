@@ -2,8 +2,8 @@
 
 # Set prefereed programs
 export BROWSER="qutebrowser"
-export EDITOR="vim"
-export VISUAL="vim"
+export EDITOR="emacsclient"
+export VISUAL="emacsclient"
 export PAGER="less"
 export TERMINAL="st"
 export OPENER="xdg-open"
