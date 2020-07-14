@@ -37,10 +37,3 @@ if [ "$needhelp" -gt "0" ]; then
   usage
   exit 1
 fi
-
-# index and tag new mail
-notmuch new
-notmuch tag +github -inbox from:notifications@github.com
-
-# move archived and deleted messages to Archive and Trash folders
-afew -m
