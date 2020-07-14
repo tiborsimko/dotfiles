@@ -8,12 +8,14 @@ config.bind('<ctrl+n>', 'tab-next')
 config.bind('<ctrl+p>', 'tab-prev')
 config.bind('<ctrl+s>', 'tab-focus last')
 
-# Show tabs only when I ask
-c.tabs.show = 'never'
-config.bind(',t', 'config-cycle tabs.show never always')
-
 # Show tabs on bottom
 c.tabs.position = 'bottom'
+
+# Show/hide tabs
+config.bind(',t', 'config-cycle tabs.show never always')
+
+# Show/hide statusbar
+config.bind(',s', 'config-cycle statusbar.show never always')
 
 # Gruvbox dark colours
 gruvbox_bg0 = "#282828"
@@ -117,10 +119,6 @@ c.colors.tabs.selected.even.bg = gruvbox_bg0
 c.colors.tabs.selected.even.fg = gruvbox_fg1
 c.colors.tabs.selected.odd.bg = gruvbox_bg0
 c.colors.tabs.selected.odd.fg = gruvbox_fg1
-
-# Show statusbar only when I need
-c.statusbar.hide = True
-config.bind(',b', 'config-cycle statusbar.hide', mode='normal')
 
 # Spell check languages
 c.spellcheck.languages = ['en-GB']
