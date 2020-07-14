@@ -46,8 +46,8 @@ fi
 zinit ice wait lucid
 zinit snippet PZT::modules/ssh
 
-# Fuzzy finder (installed via vim, so not using zinit packs)
-[ -f $HOME/.fzf.zsh ] && source $HOME/.fzf.zsh
+# Fasd
+eval "$(fasd --init auto)"
 
 # z
 zinit ice wait blockf lucid
@@ -128,7 +128,6 @@ alias to="taskopen"
 # Allow '>' redirection to overwrite existing files
 setopt clobber
 
-
 # ff = fuzzy file (and edit)
 ff() (
     IFS=$'\n' files=($(fzf-tmux --query="$1" --multi --select-1 --exit-0))
@@ -177,6 +176,9 @@ prompt_newline='%666v'
 PURE_PROMPT_SYMBOL='$'
 PURE_PROMPT_VICMD_SYMBOL='#'
 PROMPT=" $PROMPT"
+
+# Fuzzy finder (installed via vim, so not using zinit packs)
+[ -f $HOME/.fzf.zsh ] && source $HOME/.fzf.zsh
 
 # Load local host customisations
 [ -f $HOME/.zshrc.local ] && source $HOME/.zshrc.local
