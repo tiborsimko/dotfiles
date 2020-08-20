@@ -1,9 +1,7 @@
 # Tibor's xinit configuration file.
 
-# Use NVIDIA graphics
-xrandr --setprovideroutputsource modesetting NVIDIA-0
-xrandr --dpi 109
-xrandr --auto
+# NVIDIA optimus-manager
+/usr/bin/prime-offload
 
 # Modify keys
 xmodmap ~/.Xmodmap
@@ -37,6 +35,4 @@ autocutsel -selection PRIMARY -fork &
 slstatus &
 
 # Run window manager
-while true; do
-    dwm 2> ~/.cache/dwm/dwm.log
-done
+dwm 2> ~/.cache/dwm/dwm.log

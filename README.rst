@@ -62,7 +62,7 @@ Third, install tpm (used for tmux), vim-plug (used for vim), and zinit (used for
     $ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
     $ # install vim-plug (used for vim):
     $ curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+	https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     $ # prepare some vim and zsh directories
     $ mkdir -p ~/.vim/undo ~/.cache/zsh ~/.cache/dwm
     $ # install zinit (used for zsh):
@@ -81,5 +81,8 @@ configuration is done during compile-time so don't use ``stow`` for these:
 .. code-block:: console
 
     $ for app in dmenu dwm slock slstatus st; do \
-        cd $app && make download clean build install && cd ..; \
+	cd $app && make download clean build install && cd ..; \
       done
+
+Sixth, if necessary, copy system-wide files such as
+``optimus-manager/foo`` into ``/foo`` on your laptop.
