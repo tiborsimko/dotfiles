@@ -34,5 +34,10 @@ autocutsel -selection PRIMARY -fork &
 # Run status bar monitor
 slstatus &
 
+# Run initial applications
+qutebrowser &
+emacs &
+st &
+
 # Run window manager
 dwm 2> ~/.cache/dwm/dwm.log
