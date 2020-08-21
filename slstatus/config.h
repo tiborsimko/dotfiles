@@ -63,14 +63,10 @@ static const char unknown_str[] = "n/a";
  */
 static const struct arg args[] = {
 	/* function format          argument */
-	{ cpu_perc, " CPU %s%% ", NULL},
-	{ load_avg, "%s ", NULL},
-	{ ram_perc, "| RAM %s%% ", NULL },
-	{ ram_free, "%s ", NULL },
-	/* { swap_perc, "| SWP %s%% ", NULL }, */
+	{ load_avg, " CPU %s ", NULL},
+	{ ram_free, "| RAM %s ", NULL },
 	/* { swap_free, "%s ", NULL }, */
-	{ disk_perc, "| HDD %s%% ", "/" },
-	{ disk_free, "%s ", "/" },
+	{ disk_free, "| SSD %s ", "/" },
 	{ temp, "| TMP %s ", "/sys/class/thermal/thermal_zone0/temp" },
 	{ run_command, "| FAN %s ", "sensors | grep -i fan | awk -F: '{print $2}' | awk '{print $1}'"},
 	{ run_command, "| VOL %s ", "amixer get Master | tail -1 | awk -F ':|[][]' 'BEGIN {RS=\"\"}{if ($5==\"on\") print $3; else print $3,$7}'" },
@@ -79,5 +75,5 @@ static const struct arg args[] = {
 	{ wifi_perc, "%s%% ", "wlp82s0" },
 	{ battery_perc, "| BAT %s%%", "BAT0" },
 	{ battery_state, "%s ", "BAT0" },
-        { datetime, "| DAY %s", "%F %T" },
+	{ datetime, "| DAY %s", "%F %T" },
 };
