@@ -13,7 +13,7 @@ Xft.lcdfilter: lcddefault
 
 ! Foreground and background colours
 *foreground: #ebdbb2
-*background: #282828
+*background: #1d2021
 
 ! Fonts
 *.font: monospace:size=10

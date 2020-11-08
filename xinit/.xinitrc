@@ -13,7 +13,7 @@ xset r rate 200 60
 xrdb -merge ~/.Xresources
 
 # Set background
-xsetroot -solid '#282828'
+xsetroot -solid '#1d2021'
 
 # Fix Java app troubles in tiling WMs
 export _JAVA_AWT_WM_NONREPARENTING=1

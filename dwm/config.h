@@ -6,9 +6,9 @@ static const unsigned int gappx     = 10;       /* gaps between windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "monospace:size=10" };
-static const char dmenufont[]       = "monospace:size=10";
-static const char col_gray1[]       = "#282828";
+static const char *fonts[]          = { "monospace:size=9" };
+static const char dmenufont[]       = "monospace:size=9";
+static const char col_gray1[]       = "#1d2021";
 static const char col_gray2[]       = "#504945";
 static const char col_gray3[]       = "#928374";
 static const char col_gray4[]       = "#928374";
@@ -131,24 +131,24 @@ static Key keys[] = {
 	TAGKEYS(                        XK_9,                      8)
 	{ MODKEY|ShiftMask,             XK_q,       quit,           {0} },
 	{ MODKEY,                       XK_m,  focusmaster,    {0} },
-	{ 0, XF86XK_AudioMute,	    	spawn,		SHCMD("amixer set Master toggle") },
+	{ 0, XF86XK_AudioMute,		spawn,		SHCMD("amixer set Master toggle") },
 	{ 0, XF86XK_AudioRaiseVolume,	spawn,		SHCMD("amixer set Master 5%+") },
 	{ 0, XF86XK_AudioLowerVolume,	spawn,		SHCMD("amixer set Master 5%-") },
 	{ 0, XF86XK_AudioMicMute,	    spawn,		SHCMD("amixer set Capture toggle") },
 	{ 0, XF86XK_MonBrightnessDown,	spawn,		SHCMD("light -U 5") },
 	{ 0, XF86XK_MonBrightnessUp,	spawn,		SHCMD("light -A 5") },
-        /* Additional configuration for the French AZERTY keyboard */
-        TAGKEYS(                        XK_ampersand,                     0)
-        TAGKEYS(                        XK_eacute,                        1)
-        TAGKEYS(                        XK_quotedbl,                      2)
-        TAGKEYS(                        XK_apostrophe,                    3)
-        TAGKEYS(                        XK_parenleft,                     4)
-        TAGKEYS(                        XK_minus,                         5)
-        TAGKEYS(                        XK_egrave,                        6)
-        TAGKEYS(                        XK_underscore,                    7)
-        TAGKEYS(                        XK_ccedilla,                      8)
-        { MODKEY,                       XK_agrave,      view,           {.ui = ~0 } },
-        { MODKEY|ShiftMask,             XK_agrave,      tag,            {.ui = ~0 } },
+	/* Additional configuration for the French AZERTY keyboard */
+	TAGKEYS(                        XK_ampersand,                     0)
+	TAGKEYS(                        XK_eacute,                        1)
+	TAGKEYS(                        XK_quotedbl,                      2)
+	TAGKEYS(                        XK_apostrophe,                    3)
+	TAGKEYS(                        XK_parenleft,                     4)
+	TAGKEYS(                        XK_minus,                         5)
+	TAGKEYS(                        XK_egrave,                        6)
+	TAGKEYS(                        XK_underscore,                    7)
+	TAGKEYS(                        XK_ccedilla,                      8)
+	{ MODKEY,                       XK_agrave,      view,           {.ui = ~0 } },
+	{ MODKEY|ShiftMask,             XK_agrave,      tag,            {.ui = ~0 } },
 };
 
 /* button definitions */
