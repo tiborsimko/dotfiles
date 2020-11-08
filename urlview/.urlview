@@ -4,7 +4,7 @@
 REGEXP (((http|https|ftp|gopher)|mailto)[.:][^ >"\t]*|www\.[-a-z0-9.]+)[^ .,;\t>">\):]
 
 # command to invoke for selected URL:
-COMMAND /usr/bin/qutebrowser %s
+COMMAND /usr/bin/firefox %s
 
 # quit urlview after launch
 QUITONLAUNCH

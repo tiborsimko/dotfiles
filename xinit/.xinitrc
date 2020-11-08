@@ -35,7 +35,7 @@ autocutsel -selection PRIMARY -fork &
 slstatus &
 
 # Run initial applications
-qutebrowser &
+apulse firefox &
 emacs &
 st &
 

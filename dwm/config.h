@@ -29,6 +29,7 @@ static const Rule rules[] = {
 	 */
 	/* class          instance    title       tags mask     isfloating   monitor */
     { "qutebrowser",  NULL,       NULL,       1,            False,       -1 },
+    { "firefox",      NULL,       NULL,       1,            False,       -1 },
     { "zoom",         NULL,       NULL,       1 << 7,       False,       -1 },
     { "discord",      NULL,       NULL,       1 << 8,       False,       -1 },
 };

@@ -1,7 +1,7 @@
 # Tibor's zprofile.
 
 # Set prefereed programs
-export BROWSER="qutebrowser"
+export BROWSER="firefox"
 export EDITOR="emacsclient"
 export VISUAL="emacsclient"
 export PAGER="less"
