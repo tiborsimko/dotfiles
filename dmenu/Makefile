@@ -21,7 +21,7 @@ build: # Build dmenu executable.
 	make clean dmenu
 
 install: # Install dmenu executable.
-	cd _build && cd dmenu-4.9 && make install
+	cd _build && cd dmenu-4.9 && sudo make install
 
 clean: # Remove build directory.
 	rm -rf _build

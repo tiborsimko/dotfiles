@@ -15,7 +15,7 @@ build: # Build slstatus executable.
 	cd _build/slstatus && cp ../../config.h . && make clean slstatus
 
 install: # Install slstatus executable.
-	cd _build/slstatus && make install
+	cd _build/slstatus && sudo make install
 
 clean: # Remove build directory.
 	rm -rf _build

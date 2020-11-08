@@ -37,9 +37,9 @@ build: # Build st gruvbox dark and light executables.
 
 
 install: # Install st gruvbox dark and light executables.
-	cd _build && cd st-0.8.2 && make install
-	cd _build && cd st-0.8.2 && cp -a st-gruvbox-dark /usr/local/bin
-	cd _build && cd st-0.8.2 && cp -a st-gruvbox-light /usr/local/bin
+	cd _build && cd st-0.8.2 && sudo make install
+	cd _build && cd st-0.8.2 && sudo cp -a st-gruvbox-dark /usr/local/bin
+	cd _build && cd st-0.8.2 && sudo cp -a st-gruvbox-light /usr/local/bin
 
 clean: # Remove build directory.
 	rm -rf _build

@@ -33,7 +33,7 @@ build: # Build dwm executable.
 	make clean dwm
 
 install: # Install dwm executable.
-	cd _build && cd dwm-6.2 && make install
+	cd _build && cd dwm-6.2 && sudo make install
 
 clean: # Remove build directory.
 	rm -rf _build
