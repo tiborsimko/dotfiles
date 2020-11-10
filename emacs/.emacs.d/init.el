@@ -310,12 +310,18 @@
   ;; Reading email
   (setq mu4e-bookmarks
 	'((:name "Unread" :query "flag:unread" :key ?u)
-	  (:name "Inbox" :query "maildir:/INBOX" :key ?i)
-	  (:name "GitHub" :query "maildir:/Github" :key ?g)
-	  (:name "Junk" :query "maildir:/Junk" :key ?j)
-	  (:name "Archive" :query "maildir:/Archive" :key ?a)
-	  (:name "Today" :query "date:today..now" :key ?t)
-	  (:name "Week" :query "date:7d..now" :key ?w)))
+	  (:name "Inbox (unread)" :query "maildir:/INBOX and flag:unread" :key ?i)
+	  (:name "Inbox (all)" :query "maildir:/INBOX" :key ?I)
+	  (:name "GitHub (unread)" :query "maildir:/Github and flag:unread" :key ?g)
+	  (:name "GitHub (all)" :query "maildir:/Github" :key ?G)
+	  (:name "Junk (unread)" :query "maildir:/Junk and flag:unread" :key ?j)
+	  (:name "Junk (all)" :query "maildir:/Junk" :key ?J)
+	  (:name "Archive (unread)" :query "maildir:/Archive and flag:unread" :key ?a)
+	  (:name "Archive (all)" :query "maildir:/Archive" :key ?A)
+	  (:name "Today (unread)" :query "date:today..now and flag:unread not maildir:/Github" :key ?t)
+	  (:name "Today (all)" :query "date:today..now not maildir:/Github" :key ?T)
+	  (:name "Week (unread)" :query "date:7d..now and flag:unread not maildir:/Github" :key ?w)
+	  (:name "Week (all)" :query "date:7d..now not maildir:/Github" :key ?W)))
   ;; UI viewing headers
   (setq mu4e-headers-fields
 	'((:human-date . 9)
