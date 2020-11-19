@@ -53,5 +53,10 @@ export LESS_TERMCAP_so=$'\E[00;47;30m'
 export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
 
+# Nix
+if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
+    . $HOME/.nix-profile/etc/profile.d/nix.sh;
+fi
+
 # Start X11 on tty1 after logging in
 [[ -z $DISPLAY  ]] && [ "$(tty)" = "/dev/tty1" ] && exec startx
