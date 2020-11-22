@@ -1,7 +1,7 @@
 # Tibor's notmuch configuration.
 
 [database]
-path=/home/simko/Local/mbsyncmail
+path=/home/tibor/Local/mbsyncmail
 
 [user]
 name=Tibor Simko
