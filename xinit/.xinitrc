@@ -1,8 +1,5 @@
 # Tibor's xinit configuration file.
 
-# NVIDIA optimus-manager
-/usr/bin/prime-offload
-
 # Modify keys
 xmodmap ~/.Xmodmap
 
@@ -35,9 +32,11 @@ autocutsel -selection PRIMARY -fork &
 slstatus &
 
 # Run initial applications
-apulse firefox &
+firefox &
 emacs &
 st &
 
 # Run window manager
-dwm 2> ~/.cache/dwm/dwm.log
+while true; do
+    dwm 2> ~/.cache/dwm/dwm.log
+done
