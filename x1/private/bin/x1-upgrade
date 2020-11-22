@@ -1,16 +1,20 @@
 #!/bin/sh
 #
-# Tibor's Arch Linux upgrade helper.
+# Tibor's operating system upgrader.
 
-# exit on errors
+# Exit on errors
 set -ex
 
-# upgrade regular packages
-sudo pacman -Syu
+# Upgrade operating system packages
+if [ -e /etc/fedora-release ]; then
+    sudo dnf upgrade -y
+else
+    sudo pacman -Syu
+    sudo paccache -rk2 # remove old versions from pacman cache
+    yay -Syu
+fi
 
-# remove very old versions from pacman cache
-sudo paccache -rk2
-
-# update AUR packages
-yay -Syu
-
+# Upgrade Nix packages
+if [ -e ~/.config/nixpkgs/config.nix ]; then
+    nix-env -u
+fi
