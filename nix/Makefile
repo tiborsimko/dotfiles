@@ -15,7 +15,7 @@ download: # Download Nix sources.
 install: # Install Nix
 	cd _src && sh ./install-nix-2.3.8
 
-postinstall: # Install selected Nix packages
+epilogue: # Install selected Nix packages
 	cd .. && stow --no-folding nix
 	nix-env -i autocutsel
 	nix-env -i clipmenu

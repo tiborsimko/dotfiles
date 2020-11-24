@@ -5,7 +5,7 @@ help: # Print usage help.
 	@echo
 	@grep -E '^[a-zA-Z_-]+:.*?# .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?# "}; {printf "  \033[36m%-17s\033[0m %s\n", $$1, $$2}'
 
-prerequisites: # Install prerequisite system packages
+prologue: # Install prerequisite system packages
 	if [ -e /etc/fedora-release ]; then sudo dnf install -y libev-devel libXfixes-devel libXi-devel asciidoc; fi
 
 download: # Download unclutter sources.
