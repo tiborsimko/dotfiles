@@ -69,6 +69,7 @@ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() 
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, NULL };
 static const char *termcmd[]  = { "st", NULL };
 static const char *clipmenucmd[] = { "clipmenu", "-i", NULL  };
+static const char *passmenucmd[] = { "passmenu", "-i", NULL  };
 static const char *windowmenucmd[] = { "x1-windowmenu", NULL  };
 
 static void focusmaster(const Arg *arg) {
@@ -81,6 +82,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_r,      spawn,          {.v = dmenucmd } },
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_c,      spawn,          {.v = clipmenucmd } },
+	{ MODKEY,                       XK_a,      spawn,          {.v = passmenucmd } },
 	{ MODKEY,                       XK_w,      spawn,          {.v = windowmenucmd } },
 	{ MODKEY|ShiftMask,             XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
