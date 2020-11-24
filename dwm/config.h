@@ -68,6 +68,7 @@ static const Layout layouts[] = {
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, NULL };
 static const char *termcmd[]  = { "st", NULL };
+static const char *emacscmd[]  = { "emacsclient", "-c", "-n", "-a", "emacs", NULL };
 static const char *clipmenucmd[] = { "clipmenu", "-i", NULL  };
 static const char *passmenucmd[] = { "passmenu", "-i", NULL  };
 static const char *windowmenucmd[] = { "x1-windowmenu", NULL  };
@@ -81,6 +82,7 @@ static Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_r,      spawn,          {.v = dmenucmd } },
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
+	{ MODKEY,                       XK_e,      spawn,          {.v = emacscmd } },
 	{ MODKEY,                       XK_c,      spawn,          {.v = clipmenucmd } },
 	{ MODKEY,                       XK_a,      spawn,          {.v = passmenucmd } },
 	{ MODKEY,                       XK_w,      spawn,          {.v = windowmenucmd } },
