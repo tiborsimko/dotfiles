@@ -7,7 +7,3 @@ PATH_EXT=/usr/share/taskopen/scripts
 # open notes in markdown
 NOTES_FOLDER="$HOME/private/tasknotes/"
 NOTES_EXT=".md"
-
-# open emails in mutt
-CUSTOM1_REGEX=Message-[iI][dD]:|message:
-CUSTOM1_CMD="echo "$FILE" | muttjump"

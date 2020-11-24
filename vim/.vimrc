@@ -183,9 +183,6 @@ Plug 'junegunn/limelight.vim'
 Plug 'junegunn/goyo.vim'
     nmap <silent> <Leader>tg :Goyo<CR>
 
-" Email address completion for Mutt/Notmuch
-Plug 'adborden/vim-notmuch-address'
-
 " Initialize plugin system
 call plug#end()
 

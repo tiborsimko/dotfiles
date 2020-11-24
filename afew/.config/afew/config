@@ -1,8 +1,0 @@
-# Tibor's afew configuration.
-
-[MailMover]
-folders = INBOX Github "Junk E-mail"
-rename = True
-INBOX = 'folder:INBOX NOT tag:unread NOT tag:inbox':Archive 'tag:deleted':Trash
-Github = 'tag:deleted':Trash
-Junk E-mail = 'tag:deleted':Trash

@@ -17,19 +17,15 @@ set sort=threads
 set sort_browser=reverse-date
 set sort_aux=last-date-received
 
-# Address book
-set query_command = "echo && notmuch address from:%s"
-set query_format="%4c %t %-70.70a %-70.70n %?e?(%e)?"
-bind editor <Tab> complete-query
-bind editor ^T complete
-
 # HTML mail
 auto_view text/html
 alternative_order text/plain text/enriched text/html
 
 # CERN
 set mbox_type = Maildir
-set folder = ~/Local/mbsyncmail
+set folder = imaps://cernmail-pilot.cern.ch:993
+set imap_user = simko
+set imap_pass = `gpg --quiet --for-your-eyes-only --no-tty --decrypt ~/.gnupg/password-simko-cern.txt.gpg`
 set spoolfile = +INBOX
 set header_cache = ~/.cache/mutt
 set message_cachedir = ~/.cache/mutt
@@ -85,42 +81,3 @@ macro index,pager ,gu  "<change-folder>=INBOX<enter><limit>~U<enter>" "Go to unr
 
 # Key bindings - mail archiving
 macro index,pager ,a ":set confirmappend=no delete=yes auto_tag=yes\n<save-message>=Archive\n<sync-mailbox>:set confirmappend=yes delete=ask-yes\n"
-
-# Key bindings - muttjump
-macro generic ,j "<enter-command>push <pipe-message>muttjump<enter><enter>" "jump to original message"
-
-# Key bindings - taskwarrior
-macro index,pager ,T "<pipe-message>/usr/share/taskopen/scripts/mutt2task<enter>"
-macro index,pager ,m "<pipe-message>/usr/share/taskopen/scripts/mess2task2<enter>"
-macro index,pager ,M "<pipe-message>/usr/share/taskopen/scripts/mess2task<enter>"
-
-# Key bindings - notmuch
-macro index ,s \
-"<enter-command>set my_old_pipe_decode=\$pipe_decode my_old_wait_key=\$wait_key nopipe_decode nowait_key<enter>\
-<shell-escape>notmuch-mutt -r --prompt search<enter>\
-<change-folder-readonly>`echo ${XDG_CACHE_HOME:-$HOME/.cache}/notmuch/mutt/results`<enter>\
-<enter-command>set pipe_decode=\$my_old_pipe_decode wait_key=\$my_old_wait_key<enter>" \
-"notmuch: search mail"
-macro index ,t \
-"<enter-command>set my_old_pipe_decode=\$pipe_decode my_old_wait_key=\$wait_key nopipe_decode nowait_key<enter>\
-<pipe-message>notmuch-mutt -r thread<enter>\
-<change-folder-readonly>`echo ${XDG_CACHE_HOME:-$HOME/.cache}/notmuch/mutt/results`<enter>\
-<enter-command>set pipe_decode=\$my_old_pipe_decode wait_key=\$my_old_wait_key<enter>" \
-"notmuch: reconstruct thread"
-
-# Key bindings - mbsync
-macro index ,x \
-"<enter-command>set my_old_pipe_decode=\$pipe_decode my_old_wait_key=\$wait_key nopipe_decode nowait_key<enter>\
-<shell-escape>x1-mbsync inbox<enter>\
-<enter-command>set pipe_decode=\$my_old_pipe_decode wait_key=\$my_old_wait_key<enter>" \
-"Synchronise inbox folders (fast)"
-macro index ,X \
-"<enter-command>set my_old_pipe_decode=\$pipe_decode my_old_wait_key=\$wait_key nopipe_decode nowait_key<enter>\
-<shell-escape>x1-mbsync inbox archive<enter>\
-<enter-command>set pipe_decode=\$my_old_pipe_decode wait_key=\$my_old_wait_key<enter>" \
-"Synchronise inbox folders and current archive (medium)"
-macro index ,Y \
-"<enter-command>set my_old_pipe_decode=\$pipe_decode my_old_wait_key=\$wait_key nopipe_decode nowait_key<enter>\
-<shell-escape>x1-mbsync all<enter>\
-<enter-command>set pipe_decode=\$my_old_pipe_decode wait_key=\$my_old_wait_key<enter>" \
-"Synchronise inbox folders and all past archives (slow)"
