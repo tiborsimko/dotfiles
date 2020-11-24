@@ -16,8 +16,7 @@ install: # Install Nix
 	cd _src && sh ./install-nix-2.3.8
 
 postinstall: # Install selected Nix packages
-	mkdir -p ~/.config/nixpkgs
-	cd .. && stow nix
+	cd .. && stow --no-folding nix
 	nix-env -i autocutsel
 	nix-env -i clipmenu
 	nix-env -i discord
@@ -25,6 +24,7 @@ postinstall: # Install selected Nix packages
 	nix-env -i helm
 	nix-env -i kind
 	nix-env -i mons
+	nix-env -i scrot
 
 clean: # Remove build directory.
 	rm -rf _src/install-nix-2.3.8 _src/install-nix-2.3.8.asc

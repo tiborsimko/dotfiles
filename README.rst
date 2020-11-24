@@ -8,7 +8,7 @@ About
 This repository contains dotfiles to set up my personal GNU/Linux development
 environment and configure several preferred applications.
 
-- Editor: Vim
+- Editor: Emacs, Vim
 - Multiplexer: Tmux
 - Shell: Zsh
 - System monitor: Slstatus
@@ -21,6 +21,7 @@ Tested on the following platforms:
 - Android Termux
 - Arch Linux
 - CentOS
+- Fedora
 
 Screenshot
 ----------
@@ -73,7 +74,7 @@ Fourth, activate all wanted configurations (such as ``tmux``, ``vim``,
 
 .. code-block:: console
 
-    $ stow tmux vim zsh
+    $ stow --no-folding tmux vim zsh
 
 Fifth, build and install dwm window manager and associated suckless tools; the
 configuration is done during compile-time so don't use ``stow`` for these:
