@@ -8,7 +8,7 @@ SyncState *
 
 # CERN
 IMAPAccount CERN
-Host cernmail.cern.ch
+Host cernmail-pilot.cern.ch
 User simko
 PassCmd "gpg --quiet --for-your-eyes-only --no-tty --decrypt ~/.gnupg/password-simko-cern.txt.gpg"
 Port 993
