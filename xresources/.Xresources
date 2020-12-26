@@ -1,8 +1,5 @@
 ! Tibor`s Xresources.
 
-! Monitor dpi
-Xft.dpi: 109
-
 ! Antialiasing
 Xft.antialias: 1
 Xft.autohint: 1
@@ -11,12 +8,59 @@ Xft.hintstyle: hintfull
 Xft.rgba: rgb
 Xft.lcdfilter: lcddefault
 
-! Foreground and background colours
+! Gruvbox colour theme
+*background: #282828
 *foreground: #ebdbb2
-*background: #1d2021
+*color0: #282828
+*color8: #928374
+*color1: #cc241d
+*color9: #fb4934
+*color2: #98971a
+*color10: #b8bb26
+*color3: #d79921
+*color11: #fabd2f
+*color4: #458588
+*color12: #83a598
+*color5: #b16286
+*color13: #d3869b
+*color6: #689d6a
+*color14: #8ec07c
+*color7: #a89984
+*color15: #ebdbb2
 
-! Fonts
-*.font: monospace:size=10
+! XTerm support for Unicode
+XTerm*utf8: 1
+XTerm*utf8Fonts: always
+XTerm*locale: true
 
-! Emacs X11 internal borders set the same as st terminal internal borders
-Emacs.internalBorder: 10
+! XTerm fonts
+XTerm*faceName: monospace
+XTerm*faceSize: 10
+XTerm*renderFont: true
+XTerm*faceSize1: 7
+XTerm*faceSize2: 8
+XTerm*faceSize3: 9
+XTerm*faceSize4: 12
+XTerm*faceSize5: 16
+XTerm*faceSize6: 24
+
+! XTerm looks
+XTerm*scrollBar: false
+
+! XTerm click on URLs
+XTerm*charClass: 33:48,37-38:48,45-47:48,64:48,58:48,126:48,61:48,63:48,43:48,35:48
+
+! XTerm scrolling buffer
+XTerm*saveLines: 8192
+
+! XTerm shortcuts
+XTerm*translations: #override \
+  Ctrl <Key> minus: smaller-vt-font() \n\
+  Ctrl <Key> plus: larger-vt-font() \n\
+  Ctrl <Key> 0: set-vt-font(d) \n\
+  Meta <Key> o: exec-formatted("xdg-open '%t'", PRIMARY) select-start() select-end() \n\
+  <Key> F11: fullscreen() \n\
+  <Key> F12: spawn-new-terminal() \n
+
+! XTerm to accept EXWM simulation keys
+XTerm*allowSendEvents: true
