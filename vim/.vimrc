@@ -183,6 +183,11 @@ Plug 'junegunn/limelight.vim'
 Plug 'junegunn/goyo.vim'
     nmap <silent> <Leader>tg :Goyo<CR>
 
+" Dumb jump to definition
+Plug 'bounceme/dim-jump'
+    nmap g] :DimJumpPos<CR>
+    nmap <c-]> :DimJumpPos<CR>
+
 " Initialize plugin system
 call plug#end()
 
