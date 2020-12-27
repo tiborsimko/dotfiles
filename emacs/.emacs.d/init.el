@@ -442,6 +442,39 @@
 (use-package dictionary
   :bind ("C-c d" . dictionary-lookup-definition))
 
+;; Eshell
+(use-package eshell
+  :config
+  (defalias 'v 'eshell-exec-visual)
+  (setq eshell-visual-subcommands
+               '("git" "log" "diff" "show")))
+
+;; Eshell richer prompt
+(use-package virtualenvwrapper)
+(use-package eshell-prompt-extras
+  :after virtualenvwrapper
+  :config
+  (with-eval-after-load "esh-opt"
+    (require 'virtualenvwrapper)
+    (venv-initialize-eshell)
+    (autoload 'epe-theme-lambda "eshell-prompt-extras")
+    (setq eshell-highlight-prompt nil
+          eshell-prompt-function 'epe-theme-lambda)))
+
+;; Eshell z
+(use-package eshell-z
+  :config
+  (add-hook 'eshell-mode-hook
+            (defun my-eshell-mode-hook ()
+              (require 'eshell-z))))
+
+;; Eshell completion
+(use-package fish-completion
+  :config
+  (when (and (executable-find "fish")
+             (require 'fish-completion nil t))
+    (global-fish-completion-mode)))
+
 ;; Vterm terminal
 (use-package vterm
   :hook (vterm-mode . (lambda ()
