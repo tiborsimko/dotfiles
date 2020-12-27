@@ -38,6 +38,8 @@ $HOME/private/bin/x1-k
 firefox &
 emacs &
 st &
+# Start SSH agent
+eval $(ssh-agent)
 
 # Run window manager
 while true; do

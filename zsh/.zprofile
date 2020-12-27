@@ -7,7 +7,7 @@ export VISUAL="vim"
 export PAGER="less"
 export TERMINAL="st"
 export OPENER="xdg-open"
-export LANG='en_GB.UTF-8'
+export LANG="en_GB.UTF-8"
 
 # Ensure path arrays do not contain duplicates
 typeset -gU cdpath fpath mailpath path
@@ -57,6 +57,9 @@ export LESS_TERMCAP_us=$'\E[01;32m'
 if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
     . $HOME/.nix-profile/etc/profile.d/nix.sh;
 fi
+
+# Start SSH agent here so that it works for both DWM and EXWM
+export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
 
 # Start X11 on tty1 after logging in
 [[ -z $DISPLAY  ]] && [ "$(tty)" = "/dev/tty1" ] && exec startx

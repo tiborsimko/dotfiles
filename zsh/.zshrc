@@ -42,10 +42,6 @@ if is-at-least 5.5; then
     zinit light olets/zsh-abbr
 fi
 
-# Ssh agent
-zinit ice wait lucid
-zinit snippet PZT::modules/ssh
-
 # Fasd
 eval "$(fasd --init auto)"
 
@@ -176,6 +172,9 @@ prompt_newline='%666v'
 PURE_PROMPT_SYMBOL='$'
 PURE_PROMPT_VICMD_SYMBOL='#'
 PROMPT=" $PROMPT"
+
+# SSH agent
+$(ssh-add -l | grep -q 'The agent has no identities') && ssh-add
 
 # Fuzzy finder (installed via vim, so not using zinit packs)
 [ -f $HOME/.fzf.zsh ] && source $HOME/.fzf.zsh
