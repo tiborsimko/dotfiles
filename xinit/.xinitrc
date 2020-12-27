@@ -3,6 +3,9 @@
 # Set faster keyboard repeat rate
 xset r rate 200 60
 
+# Turn off beep sounds
+xset b off
+
 # Configure X11 resources
 xrdb -merge ~/.Xresources
 
