@@ -497,8 +497,18 @@
 
 ;; Start server
 (use-package server
-  :ensure nil
+   :ensure nil
+   :config
+   (server-start))
+
+;; Password cache
+(use-package password-cache
   :config
-  (server-start))
+  (setq password-cache t)
+  (setq password-cache-expiry 3600))
+
+;; Password manager
+(use-package ivy-pass)
+
 
 ;;; init.el ends here
