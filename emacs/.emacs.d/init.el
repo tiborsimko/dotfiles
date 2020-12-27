@@ -438,6 +438,10 @@
 (use-package rainbow-mode
   :hook (web-mode . rainbow-mode))
 
+;; Dictionary
+(use-package dictionary
+  :bind ("C-c d" . dictionary-lookup-definition))
+
 ;; Vterm terminal
 (use-package vterm
   :hook (vterm-mode . (lambda ()
