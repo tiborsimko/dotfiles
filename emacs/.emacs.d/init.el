@@ -32,10 +32,6 @@
   (fset 'yes-or-no-p 'y-or-n-p)
   (setq visible-bell t))
 
-;; Diminish some modes from mode line
-(use-package diminish
-  :ensure t)
-
 ;; Do not show startup screen
 (use-package "startup"
   :ensure nil
@@ -91,17 +87,29 @@
 
 ;; Gruvbox color scheme
 (use-package gruvbox-theme
-  :ensure t
+  :custom-face
+  (mode-line ((t (:background "#32302f"))))
+  (mode-line-inactive ((t (:foreground "#928374" :background "#32302f"))))
+  (fringe ((t (:background "#282828"))))
+  (internal-border ((t (:background "#282828"))))
+  (line-number ((t (:background "#282828"))))
+  (line-number-current-line ((t (:background "#282828"))))
   :config
-  (custom-set-faces
-   '(mode-line ((t (:background "#32302f"))))
-   '(fringe ((t (:background "#282828"))))
-   '(internal-border ((t (:background "#282828"))))
-   '(line-number ((t (:background "#282828"))))
-   '(line-number-current-line ((t (:background "#282828")))))
   (load-theme 'gruvbox t))
 
-;; Update copyright statements in files
+;; Prettier modeline
+(use-package all-the-icons)
+(use-package battery
+  :config
+  (display-battery-mode 1))
+(use-package time
+  :config
+  (setq display-time-format " %H:%M")
+  (display-time-mode))
+(use-package doom-modeline
+  :init (doom-modeline-mode 1))
+
+;; Configure file behaviour
 (use-package files
   :ensure nil
   :config
