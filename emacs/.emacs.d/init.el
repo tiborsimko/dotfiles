@@ -145,7 +145,6 @@
 
 ;; Show key shortcut help
 (use-package which-key
-  :ensure t
   :config
   (which-key-mode 1))
 
@@ -186,9 +185,6 @@
   :config
   (evil-commentary-mode +1))
 
-;; Vim mode git
-(use-package evil-magit)
-
 ;; Dired jump
 (use-package dired-x
   :ensure nil
@@ -217,27 +213,43 @@
 
 ;; Ivy completion framework
 (use-package ivy
-  :hook (after-init . ivy-mode)
+  :bind (("<s-up>" . ivy-push-view)
+         ("<s-down>" . ivy-switch-view))
   :config
   (setq ivy-use-virtual-buffers t)
-  (setq ivy-count-format "(%d/%d) "))
+  (setq ivy-count-format "(%d/%d) ")
+  (ivy-mode 1))
 
-;; Counsel completion using ivy
+;; Ivy richer selections
+(use-package ivy-rich
+  :init
+  (ivy-rich-mode 1))
+
+;; Counsel enhanced command working with Ivy
 (use-package counsel
-  :hook (ivy-mode . counsel-mode))
+  :bind (("M-x" . counsel-M-x)
+         ("C-x b" . counsel-ibuffer)
+         ("C-x C-f" . counsel-find-file)
+         ("C-M-l" . counsel-imenu)
+         :map minibuffer-local-map
+         ("C-r" . 'counsel-minibufer-history))
+  :config
+  (setq counsel-switch-buffer-preview-virtual-buffers nil)
+  (counsel-mode 1))
 
-;; Councel support for projectile
+;; Counsel support for Projectile
 (use-package counsel-projectile
   :config
   (counsel-projectile-mode +1))
 
-;; Swiper ivy-enhanced search engine
+;; Swiper Ivy-enhanced search
 (use-package swiper
-  :after ivy)
+  :after ivy
+  :bind (("C-s" . swiper)))
+
 
 ;; Expand region
 (use-package expand-region
-  :ensure t
   :bind ("C-=" . er/expand-region))
 
 ;; Edit grep results
@@ -373,8 +385,7 @@
   (pyvenv-mode +1))
 
 ;; Python black code formatter
-(use-package blacken
-  :ensure t)
+(use-package blacken)
 
 ;; Flycheck syntax checks
 (use-package flycheck
@@ -383,24 +394,18 @@
   (setq flycheck-flake8rc "~/.config/flake8"))
 
 ;; Docker
-(use-package docker
-  :ensure t)
-(use-package dockerfile-mode
-  :ensure t)
-(use-package docker-compose-mode
-  :ensure t)
+(use-package docker)
+(use-package dockerfile-mode)
+(use-package docker-compose-mode)
 
 ;; Kubernetes
 (use-package kubernetes
-  :ensure t
   :commands (kubernetes-overview))
 (use-package kubernetes-evil
-  :ensure t
   :after kubernetes)
 
 ;; PDF
-(use-package pdf-tools
-  :ensure t)
+(use-package pdf-tools)
 
 ;; TeX
 (use-package tex
