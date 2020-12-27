@@ -248,6 +248,18 @@
   :bind (("C-s" . swiper)))
 
 
+;; Richer documentation
+(use-package helpful
+  :after counsel
+  :custom
+  (counsel-describe-function-function #'helpful-callable)
+  (counsel-describe-variable-function #'helpful-variable)
+  :bind
+  ([remap describe-command] . helpful-command)
+  ([remap describe-function] . counsel-describe-function)
+  ([remap describe-key] . helpful-key)
+  ([remap describe-variable] . counsel-describe-variable))
+
 ;; Expand region
 (use-package expand-region
   :bind ("C-=" . er/expand-region))
