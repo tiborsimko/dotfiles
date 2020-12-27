@@ -1,8 +1,5 @@
 # Tibor's xinit configuration file.
 
-# Modify keys
-xmodmap ~/.Xmodmap
-
 # Set faster keyboard repeat rate
 xset r rate 200 60
 
@@ -30,6 +27,9 @@ autocutsel -selection PRIMARY -fork &
 
 # Run status bar monitor
 slstatus &
+# Configure keyboard and mouse
+$HOME/private/bin/x1-k
+
 
 # Run initial applications
 firefox &
