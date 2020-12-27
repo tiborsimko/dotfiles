@@ -204,6 +204,22 @@
 ;; Configure git fringe
 (use-package git-gutter-fringe)
 
+;; Ibuffer switching using more comfortable, longer buffer names. Good
+;; for councel-ibuffer in EXWM.
+(use-package ibuffer
+  :config
+  (setq ibuffer-formats
+        '((mark modified read-only " "
+                (name 60 60 :left :elide)
+                " "
+                (size 9 -1 :right)
+                " "
+                (mode 16 16 :left :elide)
+                " " filename-and-process)
+          (mark " "
+                (name 16 -1)
+                " " filename))))
+
 ;; Project management
 (use-package projectile
   :config
@@ -247,6 +263,17 @@
   :after ivy
   :bind (("C-s" . swiper)))
 
+;; Ivy integration with clipmenu
+(use-package ivy-clipmenu)
+
+;; Ivy window positioning for EXWM
+;; (use-package ivy-posframe
+;;   :config
+;;   (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display))
+;;	ivy-posframe-parameters '((parent-frame . nil)
+;;				  (left-fringe . 8)
+;;				  (right-fringe . 8)))
+;;   (ivy-posframe-mode 1))
 
 ;; Richer documentation
 (use-package helpful
@@ -510,5 +537,179 @@
 ;; Password manager
 (use-package ivy-pass)
 
+;; Window movement
+(use-package windmove
+  :config
+  (setq windmove-wrap-around t))
+
+;; Window movement: more
+(use-package windower)
+
+;; Window layout
+(use-package winner
+  :bind (("<s-right>" . winner-redo)
+         ("<s-left>" . winner-undo))
+  :config
+  (winner-mode 1))
+
+;; Window movement: fast switching
+(use-package switch-window)
+
+;; Window automatic resizing: golden ratio
+(use-package golden-ratio)
+
+;; Windows transposer
+(use-package transpose-frame)
+
+;; Window helper buffer placement
+(use-package popwin
+  :config
+  (popwin-mode 1))
+
+
+(use-package desktop-environment
+  :after exwm
+  :config
+  (setq desktop-environment-brightness-get-command "light")
+  (setq desktop-environment-brightness-set-command "light %s")
+  (setq desktop-environment-brightness-get-regexp "^\\([0-9]+\\)")
+  (setq desktop-environment-brightness-normal-increment "-A 8")
+  (setq desktop-environment-brightness-normal-decrement "-U 8")
+  (setq desktop-environment-brightness-small-increment "-A 4")
+  (setq desktop-environment-brightness-small-decrement "-U 4")
+  (setf
+   (alist-get (elt (kbd "s-l") 0) desktop-environment-mode-map nil t)
+   nil)
+  (desktop-environment-mode))
+
+;; EXWM
+(use-package exwm
+  :config
+  (require 'exwm)
+
+  ;; Better X11 window titles for quick EXWM counsel-ibuffer switching
+  (add-hook 'exwm-update-title-hook
+            (lambda ()
+                (exwm-workspace-rename-buffer (format "X11: %s: %s" exwm-class-name exwm-title))))
+
+  ;; Don't isolate workspaces
+  (setq exwm-workspace-show-all-buffers t
+        exwm-layout-show-all-buffers t)
+
+  ;; Multi-monitor support
+  (require 'exwm-randr)
+  (exwm-randr-enable)
+
+  ;; Set keys to always pass through to Emacs
+  (setq exwm-input-prefix-keys
+        '(?\C-\
+          ?\C-\M-j
+          ?\C-h
+          ?\C-u
+          ?\C-w
+          ?\C-x
+          ?\M-&
+          ?\M-:
+          ?\M-`
+          ?\M-x))
+
+  ;; Set focus to follow mouse
+  (setq mouse-autoselect-window t
+        focus-follows-mouse t)
+
+  ;; Set C-q so that the next key is sent to X11 applications directly
+  (define-key exwm-mode-map [?\C-q] 'exwm-input-send-next-key)
+
+  ;; Set up global key bindings regardless of input state
+  (setq exwm-input-global-keys
+        `(
+          ;; s-R reset
+          ([?\s-R] . exwm-reset)
+          ;; s-W switch workspaces
+          ([?\s-W] . exwm-workspace-switch)
+          ;; s-r run X11 applications
+          ([?\s-r] . (lambda (command)
+                       (interactive (list (read-shell-command "$ ")))
+                       (start-process-shell-command command nil command)))
+          ;; s-N workspace switching
+          ,@(mapcar (lambda (i)
+                      `(,(kbd (format "s-%d" i)) .
+                        (lambda ()
+                          (interactive)
+                          (exwm-workspace-switch-create ,i))))
+                    (number-sequence 0 9))))
+
+  ;; s-w switch to last workspace https://github.com/ch11ng/exwm/issues/784
+  (defvar exwm-workspace--switch-history-hack (cons exwm-workspace-current-index '()))
+  (add-hook 'exwm-workspace-switch-hook
+            (lambda ()
+              (setq exwm-workspace--switch-history-hack
+                    (cons exwm-workspace-current-index
+                          (car exwm-workspace--switch-history-hack)))))
+  (defun exwm-workspace-switch-to-last ()
+    (interactive)
+    "Switch to the workspace that was used before current workspace"
+    (exwm-workspace-switch (cdr exwm-workspace--switch-history-hack)))
+  (exwm-input-set-key (kbd "s-w") #'exwm-workspace-switch-to-last)
+
+  ;; s-hjkl Focus between windows
+  (exwm-input-set-key (kbd "s-h") #'evil-window-left)
+  (exwm-input-set-key (kbd "s-l") #'evil-window-right)
+  (exwm-input-set-key (kbd "s-k") #'evil-window-up)
+  (exwm-input-set-key (kbd "s-j") #'evil-window-down)
+
+  ;; s-HJKL Move windows around
+  (exwm-input-set-key (kbd "s-H") #'windower-swap-left)
+  (exwm-input-set-key (kbd "s-L") #'windower-swap-right)
+  (exwm-input-set-key (kbd "s-K") #'windower-swap-above)
+  (exwm-input-set-key (kbd "s-J") #'windower-swap-below)
+
+  ;; s-M-hjkl Resize windows
+  (exwm-input-set-key (kbd "s-M-h") #'evil-window-decrease-width)
+  (exwm-input-set-key (kbd "s-M-l") #'evil-window-increase-width)
+  (exwm-input-set-key (kbd "s-M-k") #'evil-window-decrease-height)
+  (exwm-input-set-key (kbd "s-M-j") #'evil-window-increase-height)
+
+  ;; s-np Focus next/previous windows
+  (exwm-input-set-key (kbd "s-n") #'evil-window-next)
+  (exwm-input-set-key (kbd "s-p") #'evil-window-prev)
+
+  ;; s-t Transpose window layout
+  (exwm-input-set-key (kbd "s-t") #'transpose-frame)
+
+  ;; s-m Maximise window
+  (exwm-input-set-key (kbd "s-m") #'windower-toggle-single)
+
+  ;; s-cC Delete window
+  (exwm-input-set-key (kbd "s-c") #'delete-window)
+  (exwm-input-set-key (kbd "s-C") #'kill-current-buffer)
+
+  ;; s-s Switch to last buffer in the window
+  (exwm-input-set-key (kbd "s-s") #'evil-switch-to-windows-last-buffer)
+
+  ;; s-bB Switch buffers
+  (exwm-input-set-key (kbd "s-b") #'counsel-switch-buffer)
+  (exwm-input-set-key (kbd "s-B") #'counsel-switch-buffer-other-window)
+
+  ; s-g Go to a buffer open in another frame
+  (exwm-input-set-key (kbd "s-g") #'ido-switch-buffer-other-frame)
+
+  ;; s-arrows Switch window layout
+  (exwm-input-set-key (kbd "s-<up>") #'ivy-push-view)
+  (exwm-input-set-key (kbd "s-<down>") #'ivy-switch-view)
+  (exwm-input-set-key (kbd "s-<right>") #'winner-redo)
+  (exwm-input-set-key (kbd "s-<left>") #'winner-undo)
+
+  ;; Enable EXWM
+  (exwm-enable))
+
+;; EXWM edit X11 input boxes in Emacs
+(use-package exwm-edit
+  :after exwm
+  :config
+  (defun tibor/exwm-edit-compose-hook ()
+    "Switch to Markdown mode for EXWM edits."
+    (funcall 'markdown-mode))
+  (add-hook 'exwm-edit-compose-hook 'tibor/exwm-edit-compose-hook))
 
 ;;; init.el ends here
