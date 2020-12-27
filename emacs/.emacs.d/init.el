@@ -113,6 +113,9 @@
 (use-package files
   :ensure nil
   :config
+  ;; Set global backup directory
+  (setq backup-directory-alist `(("." . ,(expand-file-name "backups" user-emacs-directory))))
+  ;; Update copyright statements in files
   (add-hook 'before-save-hook 'copyright-update))
 
 ;; Prefer spaces over tabs
