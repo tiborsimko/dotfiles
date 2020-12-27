@@ -24,7 +24,7 @@
   (package-install 'use-package))
 (eval-and-compile
   (setq use-package-always-ensure t
-	use-package-expand-minimally t))
+        use-package-expand-minimally t))
 
 ;; Use y/n instead of yes/no
 (use-package emacs
@@ -77,8 +77,8 @@
     (when (member "Liberation Mono" (font-family-list))
       (set-face-attribute 'default nil :family "Liberation Mono"))
     (set-face-attribute 'default nil
-			:height 100
-			:weight 'normal))
+                        :height 100
+                        :weight 'normal))
   :ensure nil
   :config
   (blink-cursor-mode -1)
@@ -114,6 +114,9 @@
   :ensure nil
   :config
   (add-hook 'before-save-hook 'copyright-update))
+
+;; Prefer spaces over tabs
+(setq-default indent-tabs-mode nil)
 
 ;; Balance parentheses
 (use-package paren
@@ -187,7 +190,7 @@
 (use-package dired-x
   :ensure nil
   :bind (("C-x d" . dired-jump)
-	 ("C-x 4 d" . dired-jump-other-window))
+         ("C-x 4 d" . dired-jump-other-window))
   :config
   (setq delete-by-moving-to-trash t))
 
@@ -245,31 +248,36 @@
 ;; Org mode
 (use-package org
   :hook ((org-mode . visual-line-mode)
-	 (org-mode . auto-fill-mode)
-	 (org-mode . org-indent-mode)
-	 (org-mode . (lambda () (setq-local evil-auto-indent nil))))
-  :bind (("C-c a" . org-agenda)
-	 ("C-c c" . org-capture))
+         (org-mode . auto-fill-mode)
+         (org-mode . org-indent-mode)
+         (org-mode . (lambda () (setq-local evil-auto-indent nil))))
+  :bind (("C-c a" . org-agenda))
   :config
   (setq org-directory "~/private/org/")
-  (setq org-agenda-files '("~/private/org/"))
+  (setq org-agenda-files '("~/private/org/")))
+
+(use-package org-capture
+  :ensure nil
+  :bind (("C-c c" . org-capture))
+  :config
   (setq org-capture-templates
-	'(("j" "journal" entry (file+olp+datetree "journal.org")
-	   "** %U %?\n")
-	  ("t" "todo" entry (file+headline "todo.org" "Inbox")
-	   "* TODO %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n")
-	  ("e" "email" entry (file+headline "todo.org" "Email")
-	   "* TODO Reply on %a %?\nDEADLINE: %(org-insert-time-stamp (org-read-date nil t \"+2d\"))"))))
+        '(("j" "journal" entry (file+olp+datetree "journal.org")
+           "** %U %?\n")
+          ("t" "todo" entry (file+headline "todo.org" "Inbox")
+           "* TODO %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n")
+          ("e" "email" entry (file+headline "todo.org" "Email")
+           "* TODO Reply on %a %?\nDEADLINE: %(org-insert-time-stamp (org-read-date nil t \"+2d\"))"))))
 
 ;; Org mode bullets
 (use-package org-bullets
   :hook (org-mode . org-bullets-mode))
 
 ;; Mu4e mail system
-(require 'mu4e)
+(require 'mu4e) ;; mu4e comes with maildir-utils system package
 (use-package mu4e
   :ensure nil
   :preface
+
   ;; Buffer switcher
   (defun tibor/switch-to-previous-buffer ()
     "Switch to previously open buffer.
@@ -283,63 +291,72 @@
     "Switch to mu4e headers buffer if it exists, otherwise start m4e."
     (interactive)
     (if (get-buffer "*mu4e-view*")
-	(switch-to-buffer "*mu4e-view*")
+        (switch-to-buffer "*mu4e-view*")
       (if (get-buffer "*mu4e-headers*")
-	  (switch-to-buffer "*mu4e-headers*")
-	(mu4e))))
+          (switch-to-buffer "*mu4e-headers*")
+        (mu4e))))
   :bind (("C-c m" . tibor/switch-to-mu4e)
-	 ("C-x m" . tibor/switch-to-mu4e))
+         ("C-x m" . tibor/switch-to-mu4e))
   :config
+
   ;; Message mode mail sending basic configuration
   (setq user-full-name "Tibor Simko"
-	user-mail-address "tibor.simko@cern.ch"
-	mail-host-address "tiborsimko.org"
-	message-from-style 'angles)
+        user-mail-address "tibor.simko@cern.ch"
+        mail-host-address "tiborsimko.org"
+        message-from-style 'angles)
+
   ;; Folder setup
   (setq mu4e-sent-folder   "/Archive"    ;; folder for sent messages
-	mu4e-drafts-folder "/Drafts"     ;; unfinished messages
-	mu4e-trash-folder  "/Trash"      ;; trashed messages
-	mu4e-refile-folder "/Archive")   ;; saved messages
+        mu4e-drafts-folder "/Drafts"     ;; unfinished messages
+        mu4e-trash-folder  "/Trash"      ;; trashed messages
+        mu4e-refile-folder "/Archive")   ;; saved messages
+
   ;; Fetching mail
   (setq mu4e-get-mail-command "x1-mbsync inbox archive"
-	mu4e-update-interval nil)
+        mu4e-update-interval nil)
   (setq mu4e-change-filenames-when-moving t) ; since I am using mbsync rather than offlineimap
+
   ;; Composing mail
   (remove-hook 'mu4e-compose-mode-hook #'org-mu4e-compose-org-mode)
   (setq mu4e-compose-signature "Best regards,\n\nTibor")
   (setq org-mu4e-convert-to-html nil)
+
   ;; MSMTP - Outging mail
   (setq sendmail-program "/usr/bin/msmtp"
-	send-mail-function 'sendmail-send-it
-	message-send-mail-function 'message-send-mail-with-sendmail
-	message-sendmail-f-is-evil t
-	message-sendmail-extra-arguments '("--read-envelope-from")
-	message-send-mail-function 'message-send-mail-with-sendmail)
+        send-mail-function 'sendmail-send-it
+        message-send-mail-function 'message-send-mail-with-sendmail
+        message-sendmail-f-is-evil t
+        message-sendmail-extra-arguments '("--read-envelope-from")
+        message-send-mail-function 'message-send-mail-with-sendmail)
+
   ;; Reading email
   (setq mu4e-bookmarks
-	'((:name "Unread" :query "flag:unread" :key ?u)
-	  (:name "Inbox (unread)" :query "maildir:/INBOX and flag:unread" :key ?i)
-	  (:name "Inbox (all)" :query "maildir:/INBOX" :key ?I)
-	  (:name "GitHub (unread)" :query "(maildir:/Github or from:notifications@github.com) and flag:unread" :key ?g)
-	  (:name "GitHub (all)" :query "(maildir:/Github or from:notifications@github.com)" :key ?G)
-	  (:name "Junk (unread)" :query "maildir:/Junk and flag:unread" :key ?j)
-	  (:name "Junk (all)" :query "maildir:/Junk" :key ?J)
-	  (:name "Archive (unread)" :query "maildir:/Archive and flag:unread" :key ?a)
-	  (:name "Archive (all)" :query "maildir:/Archive" :key ?A)
-	  (:name "Today (unread)" :query "date:today..now and flag:unread not maildir:/Github not from:notifications@github.com" :key ?t)
-	  (:name "Today (all)" :query "date:today..now not maildir:/Github not from:notifications@github.com" :key ?T)
-	  (:name "Week (unread)" :query "date:7d..now and flag:unread not maildir:/Github not from:notifications@github.com" :key ?w)
-	  (:name "Week (all)" :query "date:7d..now not maildir:/Github not from:notifications@github.com" :key ?W)))
+        '((:name "Unread" :query "flag:unread" :key ?u)
+          (:name "Inbox (unread)" :query "maildir:/INBOX and flag:unread" :key ?i)
+          (:name "Inbox (all)" :query "maildir:/INBOX" :key ?I)
+          (:name "GitHub (unread)" :query "(maildir:/Github or from:notifications@github.com) and flag:unread" :key ?g)
+          (:name "GitHub (all)" :query "(maildir:/Github or from:notifications@github.com)" :key ?G)
+          (:name "Junk (unread)" :query "maildir:/Junk and flag:unread" :key ?j)
+          (:name "Junk (all)" :query "maildir:/Junk" :key ?J)
+          (:name "Archive (unread)" :query "maildir:/Archive and flag:unread" :key ?a)
+          (:name "Archive (all)" :query "maildir:/Archive" :key ?A)
+          (:name "Today (unread)" :query "date:today..now and flag:unread not maildir:/Github not from:notifications@github.com" :key ?t)
+          (:name "Today (all)" :query "date:today..now not maildir:/Github not from:notifications@github.com" :key ?T)
+          (:name "Week (unread)" :query "date:7d..now and flag:unread not maildir:/Github not from:notifications@github.com" :key ?w)
+          (:name "Week (all)" :query "date:7d..now not maildir:/Github not from:notifications@github.com" :key ?W)))
+
   ;; UI viewing headers
   (setq mu4e-headers-fields
-	'((:human-date . 9)
-	  (:flags . 4)
-	  (:maildir . 12)
-	  (:mailing-list . 20)
-	  (:from . 22)
-	  (:subject . nil)))
+        '((:human-date . 9)
+          (:flags . 4)
+          (:maildir . 12)
+          (:mailing-list . 20)
+          (:from . 22)
+          (:subject . nil)))
+
   ;; UI not to show dupes
   (setq mu4e-headers-skip-duplicates t)
+
   ;; UI not to use any fancy Unicode glyphs that are only taking space unnecessarily
   (setq mu4e-use-fancy-chars nil))
 
@@ -394,8 +411,8 @@
 ;; Web mode
 (use-package web-mode
   :mode (("\\.html\\'" . web-mode)
-	 ("\\.css\\'"   . web-mode)
-	 ("\\.json\\'"  . web-mode)))
+         ("\\.css\\'"   . web-mode)
+         ("\\.json\\'"  . web-mode)))
 
 ;; Rainbow mode for colour selection
 (use-package rainbow-mode
@@ -404,8 +421,8 @@
 ;; Vterm terminal
 (use-package vterm
   :hook (vterm-mode . (lambda ()
-			(setq-local global-hl-line-mode nil)
-			(setq-local line-spacing nil))))
+                        (setq-local global-hl-line-mode nil)
+                        (setq-local line-spacing nil))))
 
 ;; Vterm terminal popup
 (use-package vterm-toggle
@@ -416,10 +433,10 @@
     (evil-set-initial-state 'vterm-mode 'emacs))
   (global-set-key (kbd "C-x t") #'vterm-toggle)
   (add-to-list 'display-buffer-alist
-	       '("^v?term.*"
-		 (display-buffer-reuse-window display-buffer-at-bottom)
-		 (reusable-frames . visible)
-		 (window-height . 0.5))))
+               '("^v?term.*"
+                 (display-buffer-reuse-window display-buffer-at-bottom)
+                 (reusable-frames . visible)
+                 (window-height . 0.25))))
 
 ;; Start server
 (use-package server
