@@ -28,20 +28,14 @@ clipmenud &
 autocutsel -selection CLIPBOARD -fork &
 autocutsel -selection PRIMARY -fork &
 
-# Run status bar monitor
-slstatus &
 # Configure keyboard and mouse
 $HOME/private/bin/x1-k
 
+# Run compositor
+picom &
 
-# Run initial applications
-firefox &
-emacs &
-st &
 # Start SSH agent
 eval $(ssh-agent)
 
 # Run window manager
-while true; do
-    dwm 2> ~/.cache/dwm/dwm.log
-done
+exec dbus-launch --exit-with-session emacs -mm --debug-init --eval "(exwm-enable)"

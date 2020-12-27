@@ -9,19 +9,11 @@ This repository contains dotfiles to set up my personal GNU/Linux development
 environment and configure several preferred applications.
 
 - Editor: Emacs, Vim
-- Multiplexer: Tmux
-- Shell: Zsh
-- System monitor: Slstatus
-- Terminal: St
+- Multiplexer: Emacs, Tmux
+- Shell: Eshell, Zsh
+- Terminal: XTerm
 - Theme: Gruvbox
-- Window manager: Dwm
-
-Tested on the following platforms:
-
-- Android Termux
-- Arch Linux
-- CentOS
-- Fedora
+- Window manager: EXWM
 
 Screenshot
 ----------
@@ -63,7 +55,7 @@ Third, install tpm (used for tmux), vim-plug (used for vim), and zinit (used for
     $ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
     $ # install vim-plug (used for vim):
     $ curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-	https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     $ # prepare some vim and zsh directories
     $ mkdir -p ~/.vim/undo ~/.cache/zsh ~/.cache/dwm
     $ # install zinit (used for zsh):
@@ -76,13 +68,13 @@ Fourth, activate all wanted configurations (such as ``tmux``, ``vim``,
 
     $ stow --no-folding tmux vim zsh
 
-Fifth, build and install dwm window manager and associated suckless tools; the
+Fifth, build and install DWM window manager and associated suckless tools; the
 configuration is done during compile-time so don't use ``stow`` for these:
 
 .. code-block:: console
 
     $ for app in dmenu dwm slock slstatus st; do \
-	cd $app && make download clean build install && cd ..; \
+        cd $app && make download clean build install && cd ..; \
       done
 
 Sixth, if necessary, copy system-wide files such as
