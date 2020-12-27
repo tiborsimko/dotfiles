@@ -465,6 +465,13 @@
 (use-package rainbow-mode
   :hook (web-mode . rainbow-mode))
 
+;; Dumb jump to definition working with many programming modes
+(use-package dumb-jump
+  :custom
+  (dumb-jump-selector 'ivy)
+  :config
+  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
+
 ;; Dictionary
 (use-package dictionary
   :bind ("C-c d" . dictionary-lookup-definition))
