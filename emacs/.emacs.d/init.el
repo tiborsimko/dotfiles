@@ -266,6 +266,108 @@
 ;; Helm password manager
 (use-package helm-pass)
 
+;; Helm selector for often used applications
+(use-package helm-selector
+  :after helm
+  :preface
+
+  ;; Helm selector for Discord buffers
+  (defun tibor/helm-selector-discord ()
+    "Helm for `Discord' buffers."
+    (interactive)
+    (helm-selector
+     "Discord"
+     :predicate (lambda (buffer) (with-current-buffer buffer (string-match-p "X11: discord:" (buffer-name buffer))))
+     :make-buffer-fn (lambda (&optional name)
+                       (start-process-shell-command "Discord" nil "Discord"))
+     :use-follow-p t))
+  (defun tibor/helm-selector-discord-other-window ()
+    "Like `tibor/helm-selector-discord' but raise buffer in other window."
+    (interactive)
+    (let ((current-prefix-arg t))
+      (call-interactively #'tibor/helm-selector-discord)))
+
+  ;; Helm selector for Firefox buffers
+  (defun tibor/helm-selector-firefox ()
+    "Helm for `Firefox' buffers."
+    (interactive)
+    (helm-selector
+     "Firefox"
+     :predicate (lambda (buffer) (with-current-buffer buffer (string-match-p "X11: Firefox:" (buffer-name buffer))))
+     :make-buffer-fn (lambda (&optional name)
+                       (start-process-shell-command "firefox" nil "firefox"))
+     :use-follow-p t))
+  (defun tibor/helm-selector-firefox-other-window ()
+    "Like `tibor/helm-selector-firefox' but raise buffer in other window."
+    (interactive)
+    (let ((current-prefix-arg t))
+      (call-interactively #'tibor/helm-selector-firefox)))
+
+  ;; Helm selector for VTerm buffers
+  (defun tibor/helm-selector-vterm ()
+    "Helm for `VTerm' buffers."
+    (interactive)
+    (helm-selector
+     "Vterm"
+     :predicate (helm-selector-major-modes-predicate 'vterm-mode)
+     :make-buffer-fn (lambda (&optional name)
+                       (if name
+                           (vterm (format "vterm<%s>" name))
+                         (vterm)))
+     :use-follow-p t))
+  (defun tibor/helm-selector-vterm-other-window ()
+    "Like `tibor/helm-selector-vterm' but raise buffer in other window."
+    (interactive)
+    (let ((current-prefix-arg t))
+      (call-interactively #'tibor/helm-selector-vterm)))
+
+  ;; Helm selector for XTerm buffers
+  (defun tibor/helm-selector-xterm ()
+    "Helm for `XTerm' buffers."
+    (interactive)
+    (helm-selector
+     "Xterm"
+     :predicate (lambda (buffer) (with-current-buffer buffer (string-match-p "X11: XTerm:" (buffer-name buffer))))
+     :make-buffer-fn (lambda (&optional name)
+                       (start-process-shell-command "xterm" nil "xterm"))
+     :use-follow-p t))
+  (defun tibor/helm-selector-xterm-other-window ()
+    "Like `tibor/helm-selector-xterm' but raise buffer in other window."
+    (interactive)
+    (let ((current-prefix-arg t))
+      (call-interactively #'tibor/helm-selector-xterm)))
+
+  ;; Helm selector for Zoom buffers
+  (defun tibor/helm-selector-zoom ()
+    "Helm for `Zoom' buffers."
+    (interactive)
+    (helm-selector
+     "Zoom"
+     :predicate (lambda (buffer) (with-current-buffer buffer (string-match-p "X11: zoom:" (buffer-name buffer))))
+     :make-buffer-fn (lambda (&optional name)
+                       (start-process-shell-command "zoom" nil "zoom"))
+     :use-follow-p t))
+  (defun tibor/helm-selector-zoom-other-window ()
+    "Like `tibor/helm-selector-zoom' but raise buffer in other window."
+    (interactive)
+    (let ((current-prefix-arg t))
+      (call-interactively #'tibor/helm-selector-zoom)))
+
+  :bind (("C-c d" . tibor/helm-selector-discord)
+         ("C-c D" . tibor/helm-selector-discord-other-window)
+         ("C-c f" . tibor/helm-selector-firefox)
+         ("C-c F" . tibor/helm-selector-firefox-other-window)
+         ("C-c m" . helm-selector-mu4e)
+         ("C-c M" . helm-selector-mu4e-other-window)
+         ("C-c s" . helm-selector-shell)
+         ("C-c S" . helm-selector-shell-other-window)
+         ("C-c v" . tibor/helm-selector-vterm)
+         ("C-c V" . tibor/helm-selector-vterm-other-window)
+         ("C-c x" . tibor/helm-selector-xterm)
+         ("C-c X" . tibor/helm-selector-xterm-other-window)
+         ("C-c z" . tibor/helm-selector-zoom)
+         ("C-c Z" . tibor/helm-selector-zoom-other-window)))
+
 ;; Project management
 (use-package projectile
   :config
@@ -467,8 +569,7 @@
   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
 
 ;; Dictionary
-(use-package dictionary
-  :bind ("C-c d" . dictionary-lookup-definition))
+(use-package dictionary)
 
 ;; Eshell
 (use-package eshell
@@ -695,6 +796,20 @@
   ;; s-arrows Switch window layout
   (exwm-input-set-key (kbd "s-<right>") #'winner-redo)
   (exwm-input-set-key (kbd "s-<left>") #'winner-undo)
+
+  ;; Application selectors
+  (exwm-input-set-key (kbd "s-<return>") #'helm-selector-shell)
+  (exwm-input-set-key (kbd "s-S-<return>") #'helm-selector-shell-other-window)
+  (exwm-input-set-key (kbd "s-d") #'tibor/helm-selector-discord)
+  (exwm-input-set-key (kbd "s-D") #'tibor/helm-selector-discord-other-window)
+  (exwm-input-set-key (kbd "s-f") #'tibor/helm-selector-firefox)
+  (exwm-input-set-key (kbd "s-F") #'tibor/helm-selector-firefox-other-window)
+  (exwm-input-set-key (kbd "s-v") #'tibor/helm-selector-vterm)
+  (exwm-input-set-key (kbd "s-V") #'tibor/helm-selector-vterm-other-window)
+  (exwm-input-set-key (kbd "s-z") #'tibor/helm-selector-zoom)
+  (exwm-input-set-key (kbd "s-Z") #'tibor/helm-selector-zoom-other-window)
+  (exwm-input-set-key (kbd "s-x") #'tibor/helm-selector-xterm)
+  (exwm-input-set-key (kbd "s-X") #'tibor/helm-selector-xterm-other-window)
 
   ;; Enable EXWM
   (exwm-enable))
