@@ -205,7 +205,7 @@
 (use-package git-gutter-fringe)
 
 ;; Ibuffer switching using more comfortable, longer buffer names. Good
-;; for councel-ibuffer in EXWM.
+;; for ibuffer in EXWM.
 (use-package ibuffer
   :config
   (setq ibuffer-formats
@@ -220,72 +220,66 @@
                 (name 16 -1)
                 " " filename))))
 
+;; Helm completion framework
+(use-package helm
+  :bind
+  ("C-c h" . helm-command-prefix)
+  ;("C-c h g" . helm-google-suggest)
+  ;("C-c h o" . helm-occur)
+  ;("C-c h x" . helm-register)
+  ;("C-c h M-:" . helm-eval-expression-with-eldoc)
+  ("C-h SPC" . helm-all-mark-rings)
+  ("C-x C-f" . helm-find-files)
+  ("C-x b" . helm-mini)
+  ("M-y" . helm-show-kill-ring)
+  ("M-x" . helm-M-x)
+  (:map shell-mode-map
+        ("C-c C-l" . helm-comint-input-ring))
+  (:map minibuffer-local-map
+        ("C-c C-l" . helm-minibuffer-history))
+  :config
+  ;; Use current window for Helm sessions; useful for wide 27" external monitors
+  (setq helm-split-window-inside-p t
+        helm-echo-input-in-header-line t)
+  ;; Use Helm for Eshell history
+  (add-hook 'eshell-mode-hook
+            #'(lambda ()
+                (define-key eshell-mode-map (kbd "C-c C-l")  'helm-eshell-history)))
+  ;; Activate Helm
+  (helm-mode 1))
+
+;; Helm for key bindings
+(use-package helm-descbinds
+  :config
+  (helm-descbinds-mode))
+
+;; Helm longer buffer names; good for EXWM buffers with long names such as Firefox
+(use-package helm-buffers
+  :after helm
+  :ensure nil
+  :config
+  (setq helm-buffer-max-length 50))
+
+;; Helm for Projectile
+(use-package helm-projectile)
+
+;; Helm password manager
+(use-package helm-pass)
+
 ;; Project management
 (use-package projectile
   :config
-  (setq projectile-completion-system 'ivy)
+  (setq projectile-completion-system 'helm)
   (projectile-mode +1)
   (define-key projectile-mode-map (kbd "C-c p") #'projectile-command-map))
 
-;; Ivy completion framework
-(use-package ivy
-  :bind (("<s-up>" . ivy-push-view)
-         ("<s-down>" . ivy-switch-view))
-  :config
-  (setq ivy-use-virtual-buffers t)
-  (setq ivy-count-format "(%d/%d) ")
-  (ivy-mode 1))
-
-;; Ivy richer selections
-(use-package ivy-rich
-  :init
-  (ivy-rich-mode 1))
-
-;; Counsel enhanced command working with Ivy
-(use-package counsel
-  :bind (("M-x" . counsel-M-x)
-         ("C-x b" . counsel-ibuffer)
-         ("C-x C-f" . counsel-find-file)
-         ("C-M-l" . counsel-imenu)
-         :map minibuffer-local-map
-         ("C-r" . 'counsel-minibufer-history))
-  :config
-  (setq counsel-switch-buffer-preview-virtual-buffers nil)
-  (counsel-mode 1))
-
-;; Counsel support for Projectile
-(use-package counsel-projectile
-  :config
-  (counsel-projectile-mode +1))
-
-;; Swiper Ivy-enhanced search
-(use-package swiper
-  :after ivy
-  :bind (("C-s" . swiper)))
-
-;; Ivy integration with clipmenu
-(use-package ivy-clipmenu)
-
-;; Ivy window positioning for EXWM
-;; (use-package ivy-posframe
-;;   :config
-;;   (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display))
-;;	ivy-posframe-parameters '((parent-frame . nil)
-;;				  (left-fringe . 8)
-;;				  (right-fringe . 8)))
-;;   (ivy-posframe-mode 1))
-
 ;; Richer documentation
 (use-package helpful
-  :after counsel
-  :custom
-  (counsel-describe-function-function #'helpful-callable)
-  (counsel-describe-variable-function #'helpful-variable)
   :bind
   ([remap describe-command] . helpful-command)
-  ([remap describe-function] . counsel-describe-function)
+  ([remap describe-function] . helpful-callable)
   ([remap describe-key] . helpful-key)
-  ([remap describe-variable] . counsel-describe-variable))
+  ([remap describe-variable] . helpful-variable))
 
 ;; Expand region
 (use-package expand-region
@@ -468,7 +462,7 @@
 ;; Dumb jump to definition working with many programming modes
 (use-package dumb-jump
   :custom
-  (dumb-jump-selector 'ivy)
+  (dumb-jump-selector 'helm)
   :config
   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
 
@@ -541,9 +535,6 @@
   (setq password-cache t)
   (setq password-cache-expiry 3600))
 
-;; Password manager
-(use-package ivy-pass)
-
 ;; Window movement
 (use-package windmove
   :config
@@ -594,7 +585,7 @@
   :config
   (require 'exwm)
 
-  ;; Better X11 window titles for quick EXWM counsel-ibuffer switching
+  ;; Better X11 window titles for quick EXWM ibuffer switching
   (add-hook 'exwm-update-title-hook
             (lambda ()
                 (exwm-workspace-rename-buffer (format "X11: %s: %s" exwm-class-name exwm-title))))
@@ -618,7 +609,8 @@
           ?\M-&
           ?\M-:
           ?\M-`
-          ?\M-x))
+          ?\M-x
+          ?\M-y))
 
   ;; Set focus to follow mouse
   (setq mouse-autoselect-window t
@@ -695,15 +687,12 @@
   (exwm-input-set-key (kbd "s-s") #'evil-switch-to-windows-last-buffer)
 
   ;; s-bB Switch buffers
-  (exwm-input-set-key (kbd "s-b") #'counsel-switch-buffer)
-  (exwm-input-set-key (kbd "s-B") #'counsel-switch-buffer-other-window)
+  (exwm-input-set-key (kbd "s-b") #'helm-buffers-list)
 
   ; s-g Go to a buffer open in another frame
   (exwm-input-set-key (kbd "s-g") #'ido-switch-buffer-other-frame)
 
   ;; s-arrows Switch window layout
-  (exwm-input-set-key (kbd "s-<up>") #'ivy-push-view)
-  (exwm-input-set-key (kbd "s-<down>") #'ivy-switch-view)
   (exwm-input-set-key (kbd "s-<right>") #'winner-redo)
   (exwm-input-set-key (kbd "s-<left>") #'winner-undo)
 
