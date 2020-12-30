@@ -8,69 +8,86 @@
 
 ;;; Code:
 
-;; Define where to get Emacs packages from
-(require 'package)
-(add-to-list 'package-archives '("gnu"   . "https://elpa.gnu.org/packages/"))
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
-(add-to-list 'package-archives '("org"   . "https://orgmode.org/elpa/"))
+;; Bootstrap straight.el package manager
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
 
-;; Load packages and activate them after reading init file
-(setq package-enable-at-startup nil)
-(package-initialize)
+;; Install use-package and bind-key
+(straight-use-package 'use-package)
 
-;; Get use-package
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
-(eval-and-compile
-  (setq use-package-always-ensure t
-        use-package-expand-minimally t))
+;; Configure use-package to install features via packages by default
+(setq straight-use-package-by-default t)
 
-;; Use y/n instead of yes/no
+;; Prefer eager over lazy loading for now
+(setq use-package-always-defer nil)
+
+;; Bind key helper
+(use-package bind-key
+  :demand t)
+
+;; Configure basic things
 (use-package emacs
+  :straight nil
+  :demand t
   :config
+  ;; Do not show startup screen
+  (setq inhibit-startup-screen t)
+  ;; Use y/n instead of yes/no
   (fset 'yes-or-no-p 'y-or-n-p)
+  ;; Prefer spaces over tabs
+  (setq-default indent-tabs-mode nil)
+  ;; Prefer visible rather than audible bell
   (setq visible-bell t))
-
-;; Do not show startup screen
-(use-package "startup"
-  :ensure nil
-  :config
-  (setq inhibit-startup-screen t))
 
 ;; Do not show tool bar
 (use-package tool-bar
-  :ensure nil
+  :straight nil
+  :demand t
   :config
   (tool-bar-mode -1))
 
 ;; Do not show menu bar
 (use-package menu-bar
-  :ensure nil
+  :straight nil
+  :demand t
   :config
   (menu-bar-mode -1))
 
 ;; Do not show scroll bars
 (use-package scroll-bar
-  :ensure nil
+  :straight nil
+  :demand t
   :config
   (scroll-bar-mode -1))
 
 ;; Display column numbers in mode line
 (use-package simple
-  :ensure nil
+  :straight nil
+  :demand t
   :config
   (column-number-mode +1))
 
 ;; Support mouse
 (use-package mwheel
-  :ensure nil
+  :straight nil
   :config
   (setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
   (setq mouse-wheel-progressive-speed nil))
 
 ;; Set font and cursor
 (use-package frame
+  :straight nil
+  :demand t
   :preface
   (defun tibor/set-default-font ()
     (interactive)
@@ -79,7 +96,7 @@
     (set-face-attribute 'default nil
                         :height 100
                         :weight 'normal))
-  :ensure nil
+  :straight nil
   :config
   (blink-cursor-mode -1)
   (setq frame-resize-pixelwise t)
@@ -87,126 +104,87 @@
 
 ;; Gruvbox color scheme
 (use-package gruvbox-theme
-  :custom-face
-  (mode-line ((t (:background "#32302f"))))
-  (mode-line-inactive ((t (:foreground "#928374" :background "#32302f"))))
-  (fringe ((t (:background "#282828"))))
-  (internal-border ((t (:background "#282828"))))
-  (line-number ((t (:background "#282828"))))
-  (line-number-current-line ((t (:background "#282828"))))
+  :demand t
   :config
+  (custom-set-faces
+   '(mode-line ((t (:background "#32302f"))))
+   '(fringe ((t (:background "#282828"))))
+   '(internal-border ((t (:background "#282828"))))
+   '(line-number ((t (:background "#282828"))))
+   '(line-number-current-line ((t (:background "#282828")))))
   (load-theme 'gruvbox t))
 
 ;; Prettier modeline
-(use-package all-the-icons)
 (use-package battery
+  :straight nil
+  :demand t
   :config
   (display-battery-mode 1))
 (use-package time
+  :straight nil
+  :demand t
   :config
   (setq display-time-format " %H:%M")
   (display-time-mode))
+(use-package all-the-icons
+  :demand t)
 (use-package doom-modeline
+  :demand t
   :init (doom-modeline-mode 1))
 
 ;; Configure file behaviour
 (use-package files
-  :ensure nil
+  :straight nil
+  :demand t
   :config
   ;; Set global backup directory
   (setq backup-directory-alist `(("." . ,(expand-file-name "backups" user-emacs-directory))))
   ;; Update copyright statements in files
   (add-hook 'before-save-hook 'copyright-update))
 
-;; Prefer spaces over tabs
-(setq-default indent-tabs-mode nil)
-
 ;; Balance parentheses
 (use-package paren
-  :ensure nil
+  :straight nil
   :config
   (show-paren-mode +1))
 
 ;; Spell checking
 (use-package flyspell
-  :ensure nil
+  :straight nil
   :config
   (add-hook 'text-mode-hook 'flyspell-mode))
 
 ;; Electric pair mode
 (use-package elec-pair
-  :ensure nil
-  :hook (prog-mode . electric-pair-mode))
+  :straight nil
+  :config
+  (add-hook 'prog-mode-hook 'electric-pair-mode))
 
 ;; Delete trailing whitespace before saving
 (use-package whitespace
-  :ensure nil
-  :hook (before-save . whitespace-cleanup))
-
-;; Show key shortcut help
-(use-package which-key
+  :straight nil
   :config
-  (which-key-mode 1))
+  (add-hook 'before-save-hook 'whitespace-cleanup))
 
 ;; Remember file positions
 (use-package saveplace
-  :ensure nil
+  :straight nil
+  :demand t
   :config
   (save-place-mode +1))
 
 ;; Display relative line numbers
 (use-package display-line-numbers
-  :ensure nil
-  :hook (prog-mode . display-line-numbers-mode)
+  :straight nil
+  :demand t
   :config
-  (setq display-line-numbers-type 'relative))
-
-;; Ensure environment variables in Emacs are the same as in shell
-(use-package exec-path-from-shell
-  :config
-  (when (memq window-system '(mac ns x))
-    (exec-path-from-shell-initialize)))
-
-;; Vim mode
-(use-package evil
-  :init
-  (setq evil-want-keybinding nil)
-  :hook (after-init . evil-mode))
-
-;; Vim mode collections
-(use-package evil-collection
-  :after evil
-  :config
-  (evil-collection-init))
-
-;; Vim mode commenting
-(use-package evil-commentary
-  :after evil
-  :config
-  (evil-commentary-mode +1))
-
-;; Dired jump
-(use-package dired-x
-  :ensure nil
-  :bind (("C-x d" . dired-jump)
-         ("C-x 4 d" . dired-jump-other-window))
-  :config
-  (setq delete-by-moving-to-trash t))
-
-;; Git integration
-(use-package magit
-  :bind ("C-x g" . magit-status))
-
-;; Show git status in the gutter
-(use-package git-gutter
-  :hook (prog-mode . git-gutter-mode))
-
-;; Configure git fringe
-(use-package git-gutter-fringe)
+  (setq display-line-numbers-type 'relative)
+  (add-hook 'prog-mode-hook 'display-line-numbers-mode))
 
 ;; Ibuffer switching using more comfortable, longer buffer names. Good
 ;; for ibuffer in EXWM.
 (use-package ibuffer
+  :straight nil
   :config
   (setq ibuffer-formats
         '((mark modified read-only " "
@@ -220,24 +198,85 @@
                 (name 16 -1)
                 " " filename))))
 
+;; Dired jump
+(use-package dired-x
+  :straight nil
+  :config
+  (setq delete-by-moving-to-trash t)
+  (bind-key "C-x d" #'dired-jump)
+  (bind-key "C-x 4 d" #'dired-jump-other-window))
+
+;; Password cache
+(use-package password-cache
+  :straight nil
+  :config
+  (setq password-cache t)
+  (setq password-cache-expiry 3600))
+
+;; Start server
+(use-package server
+   :straight nil
+   :config
+   (server-start))
+
+;; Ensure environment variables in Emacs are the same as in shell
+(use-package exec-path-from-shell
+  :demand t
+  :config
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize)))
+
+;; Show key shortcut help
+(use-package which-key
+  :demand t
+  :config
+  (which-key-mode 1))
+
+;; Vim mode
+(use-package evil
+  :init
+  (setq evil-want-keybinding nil)
+  (add-hook 'after-init-hook 'evil-mode))
+
+;; Vim mode collections
+(use-package evil-collection
+  :after evil
+  :config
+  (evil-collection-init))
+
+;; Vim mode commenting
+(use-package evil-commentary
+  :after evil
+  :config
+  (evil-commentary-mode +1))
+
+;; Git integration
+(use-package magit
+  :commands magit-status
+  :config
+  (bind-key "C-x g" . #'magit-status))
+
+;; Show git status in the gutter
+(use-package git-gutter
+  :config
+  (add-hook 'prog-mode-hook 'git-gutter-mode))
+
+;; Configure git fringe
+(use-package git-gutter-fringe)
+
 ;; Helm completion framework
 (use-package helm
-  :bind
-  ("C-c h" . helm-command-prefix)
-  ;("C-c h g" . helm-google-suggest)
-  ;("C-c h o" . helm-occur)
-  ;("C-c h x" . helm-register)
-  ;("C-c h M-:" . helm-eval-expression-with-eldoc)
-  ("C-h SPC" . helm-all-mark-rings)
-  ("C-x C-f" . helm-find-files)
-  ("C-x b" . helm-mini)
-  ("M-y" . helm-show-kill-ring)
-  ("M-x" . helm-M-x)
-  (:map shell-mode-map
-        ("C-c C-l" . helm-comint-input-ring))
-  (:map minibuffer-local-map
-        ("C-c C-l" . helm-minibuffer-history))
   :config
+  (bind-key "C-c h" #'helm-command-prefix)
+  (bind-key "C-c h g" #'helm-google-suggest)
+  (bind-key "C-c h o" #'helm-occur)
+  (bind-key "C-c h x" #'helm-register)
+  (bind-key "C-c h M-:" #'helm-eval-expression-with-eldoc)
+  (bind-key "C-h SPC" #'helm-all-mark-rings)
+  (bind-key "C-x C-f" #'helm-find-files)
+  (bind-key "C-x b" #'helm-mini)
+  (bind-key "M-y" #'helm-show-kill-ring)
+  (bind-key "M-x" #'helm-M-x)
   ;; Use current window for Helm sessions; useful for wide 27" external monitors
   (setq helm-split-window-inside-p t
         helm-echo-input-in-header-line t)
@@ -250,21 +289,24 @@
 
 ;; Helm for key bindings
 (use-package helm-descbinds
+  :after helm
   :config
   (helm-descbinds-mode))
 
 ;; Helm longer buffer names; good for EXWM buffers with long names such as Firefox
 (use-package helm-buffers
   :after helm
-  :ensure nil
+  :straight nil
   :config
   (setq helm-buffer-max-length 50))
 
 ;; Helm for Projectile
-(use-package helm-projectile)
+(use-package helm-projectile
+  :after (helm projectile))
 
 ;; Helm password manager
-(use-package helm-pass)
+(use-package helm-pass
+  :after helm)
 
 ;; Helm selector for often used applications
 (use-package helm-selector
@@ -353,20 +395,21 @@
     (let ((current-prefix-arg t))
       (call-interactively #'tibor/helm-selector-zoom)))
 
-  :bind (("C-c d" . tibor/helm-selector-discord)
-         ("C-c D" . tibor/helm-selector-discord-other-window)
-         ("C-c f" . tibor/helm-selector-firefox)
-         ("C-c F" . tibor/helm-selector-firefox-other-window)
-         ("C-c m" . helm-selector-mu4e)
-         ("C-c M" . helm-selector-mu4e-other-window)
-         ("C-c s" . helm-selector-shell)
-         ("C-c S" . helm-selector-shell-other-window)
-         ("C-c v" . tibor/helm-selector-vterm)
-         ("C-c V" . tibor/helm-selector-vterm-other-window)
-         ("C-c x" . tibor/helm-selector-xterm)
-         ("C-c X" . tibor/helm-selector-xterm-other-window)
-         ("C-c z" . tibor/helm-selector-zoom)
-         ("C-c Z" . tibor/helm-selector-zoom-other-window)))
+  :config
+  (bind-key "C-c d" #'tibor/helm-selector-discord)
+  (bind-key "C-c D" #'tibor/helm-selector-discord-other-window)
+  (bind-key "C-c f" #'tibor/helm-selector-firefox)
+  (bind-key "C-c F" #'tibor/helm-selector-firefox-other-window)
+  (bind-key "C-c m" #'helm-selector-mu4e)
+  (bind-key "C-c M" #'helm-selector-mu4e-other-window)
+  (bind-key "C-c s" #'helm-selector-shell)
+  (bind-key "C-c S" #'helm-selector-shell-other-window)
+  (bind-key "C-c v" #'tibor/helm-selector-vterm)
+  (bind-key "C-c V" #'tibor/helm-selector-vterm-other-window)
+  (bind-key "C-c x" #'tibor/helm-selector-xterm)
+  (bind-key "C-c X" #'tibor/helm-selector-xterm-other-window)
+  (bind-key "C-c z" #'tibor/helm-selector-zoom)
+  (bind-key "C-c Z" #'tibor/helm-selector-zoom-other-window))
 
 ;; Project management
 (use-package projectile
@@ -377,15 +420,17 @@
 
 ;; Richer documentation
 (use-package helpful
-  :bind
-  ([remap describe-command] . helpful-command)
-  ([remap describe-function] . helpful-callable)
-  ([remap describe-key] . helpful-key)
-  ([remap describe-variable] . helpful-variable))
+  :config
+  (bind-key [remap describe-command] #'helpful-command)
+  (bind-key [remap describe-function] #'helpful-callable)
+  (bind-key [remap describe-key] #'helpful-key)
+  (bind-key [remap describe-variable] #'helpful-variable))
 
 ;; Expand region
 (use-package expand-region
-  :bind ("C-=" . er/expand-region))
+  :commands er/expand-region
+  :config
+  (bind-key "C-=" . #'er/expand-region))
 
 ;; Edit grep results
 (use-package wgrep)
@@ -397,19 +442,19 @@
 
 ;; Org mode
 (use-package org
-  :hook ((org-mode . visual-line-mode)
-         (org-mode . auto-fill-mode)
-         (org-mode . org-indent-mode)
-         (org-mode . (lambda () (setq-local evil-auto-indent nil))))
-  :bind (("C-c a" . org-agenda))
   :config
+  (bind-key "C-c a" #'org-agenda)
   (setq org-directory "~/private/org/")
-  (setq org-agenda-files '("~/private/org/")))
+  (setq org-agenda-files '("~/private/org/"))
+  (add-hook 'org-mode-hook 'visual-line-mode)
+  (add-hook 'org-mode-hook 'auto-fill-mode)
+  (add-hook 'org-mode-hook 'org-indent-mode)
+  (add-hook 'org-mode-hook '(lambda () (setq-local evil-auto-indent nil))))
 
 (use-package org-capture
-  :ensure nil
-  :bind (("C-c c" . org-capture))
+  :straight nil
   :config
+  (bind-key "C-c c" #'org-capture)
   (setq org-capture-templates
         '(("j" "journal" entry (file+olp+datetree "journal.org")
            "** %U %?\n")
@@ -420,33 +465,12 @@
 
 ;; Org mode bullets
 (use-package org-bullets
-  :hook (org-mode . org-bullets-mode))
+  :config
+  (add-hook 'org-mode-hook 'org-bullets-mode))
 
 ;; Mu4e mail system
-(require 'mu4e) ;; mu4e comes with maildir-utils system package
 (use-package mu4e
-  :ensure nil
-  :preface
-
-  ;; Buffer switcher
-  (defun tibor/switch-to-previous-buffer ()
-    "Switch to previously open buffer.
-    Repeated invocations toggle between the two most recently open buffers."
-    (interactive)
-    (switch-to-buffer (other-buffer (current-buffer) 1)))
-  (global-set-key (kbd "C-c s") 'tibor/switch-to-previous-buffer)
-
-  ;; Mu4e buffer switcher
-  (defun tibor/switch-to-mu4e ()
-    "Switch to mu4e headers buffer if it exists, otherwise start m4e."
-    (interactive)
-    (if (get-buffer "*mu4e-view*")
-        (switch-to-buffer "*mu4e-view*")
-      (if (get-buffer "*mu4e-headers*")
-          (switch-to-buffer "*mu4e-headers*")
-        (mu4e))))
-  :bind (("C-c m" . tibor/switch-to-mu4e)
-         ("C-x m" . tibor/switch-to-mu4e))
+  :straight nil
   :config
 
   ;; Message mode mail sending basic configuration
@@ -519,14 +543,17 @@
   (setq pyvenv-mode-line-indicator '(pyvenv-virtual-env-name ("[venv:" pyvenv-virtual-env-name "] ")))
   (pyvenv-mode +1))
 
+;; Python virtualwrapper tools for Eshell
+(use-package virtualenvwrapper)
+
 ;; Python black code formatter
 (use-package blacken)
 
 ;; Flycheck syntax checks
 (use-package flycheck
-  :hook ((prog-mode   . flycheck-mode))
   :config
-  (setq flycheck-flake8rc "~/.config/flake8"))
+  (setq flycheck-flake8rc "~/.config/flake8")
+  (add-hook 'prog-mode-hook 'flycheck-mode))
 
 ;; Docker
 (use-package docker)
@@ -544,7 +571,7 @@
 
 ;; TeX
 (use-package tex
-  :ensure auctex
+  :straight auctex
   :config
   (add-to-list 'TeX-view-program-selection '(output-pdf "Zathura")))
 
@@ -553,18 +580,20 @@
 
 ;; Web mode
 (use-package web-mode
-  :mode (("\\.html\\'" . web-mode)
-         ("\\.css\\'"   . web-mode)
-         ("\\.json\\'"  . web-mode)))
+  :config
+  (add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.css\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.json\\'" . web-mode)))
 
 ;; Rainbow mode for colour selection
 (use-package rainbow-mode
-  :hook (web-mode . rainbow-mode))
+  :config
+  (add-hook 'web-mode-hook 'rainbow-mode))
 
 ;; Dumb jump to definition working with many programming modes
 (use-package dumb-jump
   :custom
-  (dumb-jump-selector 'helm)
+  (dumb-jump-Selector 'helm)
   :config
   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
 
@@ -573,13 +602,13 @@
 
 ;; Eshell
 (use-package eshell
+  :straight nil
   :config
   (defalias 'v 'eshell-exec-visual)
   (setq eshell-visual-subcommands
                '("git" "log" "diff" "show")))
 
 ;; Eshell richer prompt
-(use-package virtualenvwrapper)
 (use-package eshell-prompt-extras
   :after virtualenvwrapper
   :config
@@ -606,13 +635,14 @@
 
 ;; Vterm terminal
 (use-package vterm
-  :hook (vterm-mode . (lambda ()
-                        (setq-local global-hl-line-mode nil)
-                        (setq-local line-spacing nil))))
+  :config
+  (add-hook 'vterm-mode-hook '(lambda ()
+                               (setq-local global-hl-line-mode nil)
+                               (setq-local line-spacing nil))))
 
 ;; Vterm terminal popup
 (use-package vterm-toggle
-  :after evil
+  :after (evil vterm)
   :config
   (setq vterm-toggle-fullscreen-p nil)
   (with-eval-after-load 'evil
@@ -624,31 +654,21 @@
                  (reusable-frames . visible)
                  (window-height . 0.25))))
 
-;; Start server
-(use-package server
-   :ensure nil
-   :config
-   (server-start))
-
-;; Password cache
-(use-package password-cache
-  :config
-  (setq password-cache t)
-  (setq password-cache-expiry 3600))
-
 ;; Window movement
 (use-package windmove
+  :straight nil
   :config
   (setq windmove-wrap-around t))
 
-;; Window movement: more
+;; Window movements: more functionality
 (use-package windower)
 
 ;; Window layout
 (use-package winner
-  :bind (("<s-right>" . winner-redo)
-         ("<s-left>" . winner-undo))
+  :straight nil
   :config
+  (bind-key "<s-right>" #'winner-redo)
+  (bind-key "<s-left>" #'winner-undo)
   (winner-mode 1))
 
 ;; Window movement: fast switching
@@ -665,7 +685,7 @@
   :config
   (popwin-mode 1))
 
-
+;; Desktop tools for sound and brightness
 (use-package desktop-environment
   :after exwm
   :config
@@ -822,5 +842,9 @@
     "Switch to Markdown mode for EXWM edits."
     (funcall 'markdown-mode))
   (add-hook 'exwm-edit-compose-hook 'tibor/exwm-edit-compose-hook))
+
+;; Local Variables:
+;; byte-compile-warnings: (not free-vars unresolved)
+;; End:
 
 ;;; init.el ends here
