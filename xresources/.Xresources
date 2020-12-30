@@ -64,3 +64,9 @@ XTerm*translations: #override \
 
 ! XTerm to accept EXWM simulation keys
 XTerm*allowSendEvents: true
+
+! Emacs disable UI elements
+Emacs.cursorBlink: off
+Emacs.menuBar: off
+Emacs.toolBar: off
+Emacs.verticalScrollBars: off

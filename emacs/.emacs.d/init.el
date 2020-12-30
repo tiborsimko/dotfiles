@@ -47,28 +47,13 @@
   ;; Prefer spaces over tabs
   (setq-default indent-tabs-mode nil)
   ;; Prefer visible rather than audible bell
-  (setq visible-bell t))
-
-;; Do not show tool bar
-(use-package tool-bar
-  :straight nil
-  :demand t
-  :config
-  (tool-bar-mode -1))
-
-;; Do not show menu bar
-(use-package menu-bar
-  :straight nil
-  :demand t
-  :config
-  (menu-bar-mode -1))
-
-;; Do not show scroll bars
-(use-package scroll-bar
-  :straight nil
-  :demand t
-  :config
-  (scroll-bar-mode -1))
+  (setq visible-bell t)
+  ;; Increase process read buffer size
+  (setq read-process-output-max (* 1024 1024))
+  ;; Renew garbage collection threshold after initialisation
+  (add-hook 'emacs-startup-hook
+            (lambda ()
+              (setq gc-cons-threshold (* 100 1024 1024)))))
 
 ;; Display column numbers in mode line
 (use-package simple
@@ -83,24 +68,6 @@
   :config
   (setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
   (setq mouse-wheel-progressive-speed nil))
-
-;; Set font and cursor
-(use-package frame
-  :straight nil
-  :demand t
-  :preface
-  (defun tibor/set-default-font ()
-    (interactive)
-    (when (member "Liberation Mono" (font-family-list))
-      (set-face-attribute 'default nil :family "Liberation Mono"))
-    (set-face-attribute 'default nil
-                        :height 100
-                        :weight 'normal))
-  :straight nil
-  :config
-  (blink-cursor-mode -1)
-  (setq frame-resize-pixelwise t)
-  (tibor/set-default-font))
 
 ;; Gruvbox color scheme
 (use-package gruvbox-theme
