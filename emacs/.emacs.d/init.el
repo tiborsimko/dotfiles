@@ -183,6 +183,7 @@
 ;; Start server
 (use-package server
    :straight nil
+   :if window-system
    :config
    (server-start))
 
