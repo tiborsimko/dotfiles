@@ -35,7 +35,7 @@
 (use-package bind-key
   :demand t)
 
-;; Configure basic things
+;; Configure basic start-up things
 (use-package emacs
   :straight nil
   :demand t
@@ -54,6 +54,20 @@
   (add-hook 'emacs-startup-hook
             (lambda ()
               (setq gc-cons-threshold (* 100 1024 1024)))))
+
+;; Keep ~/.emacs.d clean
+(use-package no-littering
+  :demand t
+  :config
+  ;; Configure recentf littering
+  (require 'recentf)
+  (add-to-list 'recentf-exclude no-littering-var-directory)
+  (add-to-list 'recentf-exclude no-littering-etc-directory)
+  ;; Configure auto-save littering
+  (setq auto-save-file-name-transforms
+        `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
+  ;; Configure saved customisation littering
+  (setq custom-file (no-littering-expand-etc-file-name "custom.el")))
 
 ;; Display column numbers in mode line
 (use-package simple
@@ -99,14 +113,11 @@
   :demand t
   :init (doom-modeline-mode 1))
 
-;; Configure file behaviour
+;; Update copyright statements in files
 (use-package files
   :straight nil
   :demand t
   :config
-  ;; Set global backup directory
-  (setq backup-directory-alist `(("." . ,(expand-file-name "backups" user-emacs-directory))))
-  ;; Update copyright statements in files
   (add-hook 'before-save-hook 'copyright-update))
 
 ;; Balance parentheses
