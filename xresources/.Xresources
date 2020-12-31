@@ -1,5 +1,8 @@
 ! Tibor`s Xresources.
 
+! Set DPI; useful for having comfortable default font size when starting via tty1
+Xft.dpi: 96
+
 ! Antialiasing
 Xft.antialias: 1
 Xft.autohint: 1
