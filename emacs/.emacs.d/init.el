@@ -1,6 +1,6 @@
 ;;; init.el -- Tibor's Emacs configuration.
 
-;; Copyright (C) 2020 Tibor Simko.
+;; Copyright (C) 2020, 2021 Tibor Simko.
 
 ;;; Commentary:
 
@@ -413,6 +413,12 @@
 
 ;; Edit grep results
 (use-package wgrep)
+
+;; Ripgrep integration
+(use-package rg
+  :config
+  (setq rg-keymap-prefix "\C-cr")
+  (rg-enable-default-bindings))
 
 ;; Company completions
 (use-package company
