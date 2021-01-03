@@ -578,7 +578,7 @@
 ;; Dumb jump to definition working with many programming modes
 (use-package dumb-jump
   :custom
-  (dumb-jump-Selector 'helm)
+  (dumb-jump-selector 'helm)
   :config
   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
 
