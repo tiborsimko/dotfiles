@@ -187,7 +187,7 @@
   (bind-key "C-x d" #'dired-jump)
   (bind-key "C-x 4 d" #'dired-jump-other-window))
 
-;; Password cache
+;; Set password cache and expiry time, e.g. useful for eshell sudo commands
 (use-package password-cache
   :straight nil
   :config
@@ -620,6 +620,20 @@
   (when (and (executable-find "fish")
              (require 'fish-completion nil t))
     (global-fish-completion-mode)))
+
+;; Eshell internal vs external commands
+(use-package esh-cmd
+  :straight nil
+  :config
+  ;; Prefer OS functions over Lisp functions in general
+  (setq eshell-prefer-lisp-functions nil))
+
+;; Eshell sudo integration
+(use-package em-tramp
+  :straight nil
+  :config
+  ;; Use Tramp for local sudo commands
+  (add-to-list 'eshell-modules-list 'eshell-tramp))
 
 ;; Vterm terminal
 (use-package vterm
