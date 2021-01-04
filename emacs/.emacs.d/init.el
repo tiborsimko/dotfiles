@@ -111,7 +111,10 @@
   :demand t)
 (use-package doom-modeline
   :demand t
-  :init (doom-modeline-mode 1))
+  :init (doom-modeline-mode 1)
+  :config
+  ;; Slightly taller modeline in order to avoid EXWM window flicker when changing windows rapidly
+  (setq doom-modeline-height 26))
 
 ;; Update copyright statements in files
 (use-package files
