@@ -232,6 +232,19 @@
   :config
   (evil-commentary-mode +1))
 
+;; Vim mode undo/redo
+(use-package undo-fu
+  :after evil
+  :custom
+  (evil-undo-system 'undo-fu))
+
+;; Persistent undo/redo
+(use-package undo-fu-session
+  :after undo-fu
+  :config
+  (setq undo-fu-session-incompatible-files '("/COMMIT_EDITMSG\\'" "/git-rebase-todo\\'"))
+  (global-undo-fu-session-mode))
+
 ;; Git integration
 (use-package magit
   :commands magit-status
