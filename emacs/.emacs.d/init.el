@@ -590,15 +590,46 @@
 
 ;; Eshell
 (use-package eshell
+  :straight nil)
+
+;; Eshell terminals
+(use-package em-term
   :straight nil
+  :after eshell
   :config
+  ;; Destroy eshell visual command buffers automatically when done.
+  ;; Note: allows to press `q` to exit `git ka` for example; however
+  ;; beware of a bug for short-lived processes, see the doctring
+  (setq eshell-destroy-buffer-when-process-dies t)
+  ;; Use leading v for any visual command such as mutt
   (defalias 'v 'eshell-exec-visual)
+  ;; Define some known and frequently used visual commands
+  (add-to-list 'eshell-visual-commands "alsamixer")
+  (add-to-list 'eshell-visual-commands "watch")
+  (add-to-list 'eshell-visual-commands "zsh")
+  ;; Define git subcommands to always run in visual mode
   (setq eshell-visual-subcommands
-               '("git" "log" "diff" "show")))
+        '(("git" "k" "ka" "log" "diff" "show"))))
+
+;; Eshell sudo integration
+(use-package em-tramp
+  :straight nil
+  :after eshell
+  :config
+  ;; Use Tramp for local sudo commands
+  (add-to-list 'eshell-modules-list 'eshell-tramp))
+
+;; Eshell internal vs external commands
+(use-package esh-cmd
+  :straight nil
+  :after eshell
+  :config
+  ;; Prefer OS functions over Lisp functions in general
+  (setq eshell-prefer-lisp-functions nil))
 
 ;; Eshell richer prompt
 (use-package eshell-prompt-extras
-  :after virtualenvwrapper
+  :after (eshell virtualenvwrapper)
   :config
   (with-eval-after-load "esh-opt"
     (require 'virtualenvwrapper)
@@ -609,6 +640,7 @@
 
 ;; Eshell z
 (use-package eshell-z
+  :after eshell
   :config
   (add-hook 'eshell-mode-hook
             (defun my-eshell-mode-hook ()
@@ -616,24 +648,11 @@
 
 ;; Eshell completion
 (use-package fish-completion
+  :after eshell
   :config
   (when (and (executable-find "fish")
              (require 'fish-completion nil t))
     (global-fish-completion-mode)))
-
-;; Eshell internal vs external commands
-(use-package esh-cmd
-  :straight nil
-  :config
-  ;; Prefer OS functions over Lisp functions in general
-  (setq eshell-prefer-lisp-functions nil))
-
-;; Eshell sudo integration
-(use-package em-tramp
-  :straight nil
-  :config
-  ;; Use Tramp for local sudo commands
-  (add-to-list 'eshell-modules-list 'eshell-tramp))
 
 ;; Vterm terminal
 (use-package vterm
