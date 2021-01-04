@@ -687,9 +687,10 @@
 ;; Window layout
 (use-package winner
   :straight nil
+  :after evil
   :config
-  (bind-key "<s-right>" #'winner-redo)
-  (bind-key "<s-left>" #'winner-undo)
+  (bind-key "U" #'winner-redo evil-window-map)
+  (bind-key "u" #'winner-undo evil-window-map)
   (winner-mode 1))
 
 ;; Window movement: fast switching
