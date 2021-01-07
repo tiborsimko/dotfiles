@@ -847,7 +847,7 @@
 
   ;; s-cC Delete window
   (exwm-input-set-key (kbd "s-c") #'delete-window)
-  (exwm-input-set-key (kbd "s-C") #'kill-current-buffer)
+  (exwm-input-set-key (kbd "s-C") #'kill-buffer-and-window)
 
   ;; s-s Switch to last buffer in the window
   (exwm-input-set-key (kbd "s-s") #'evil-switch-to-windows-last-buffer)
