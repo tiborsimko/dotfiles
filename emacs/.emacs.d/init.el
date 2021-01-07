@@ -748,6 +748,9 @@
   :config
   (require 'exwm)
 
+  ;; Preconfigure a number of EXWM workspaces
+  (setq exwm-workspace-number 10)
+
   ;; Better X11 window titles for quick EXWM ibuffer switching
   (add-hook 'exwm-update-title-hook
             (lambda ()
