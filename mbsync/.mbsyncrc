@@ -35,10 +35,10 @@ Channel CERN-Github
 Master :CERN-remote:Github
 Slave :CERN-local:Github
 
-# CERN - Junk
-Channel CERN-Junk
-Master :CERN-remote:"Junk E-mail"
-Slave :CERN-local:Junk
+# CERN - Spam
+Channel CERN-Spam
+Master :CERN-remote:Spam
+Slave :CERN-local:Spam
 
 # CERN - Archive
 Channel CERN-Archive
@@ -49,12 +49,12 @@ Slave :CERN-local:Archive
 Channel CERN-Others
 Master :CERN-remote:
 Slave :CERN-local:
-Patterns * !Inbox !Github !Junk !"Junk E-mail" !Archive !Drafts !Trash
+Patterns * !Inbox !Github !Spam !Archive !Drafts !Trash
 
 # CERN group - all channels
 Group CERN
 Channel CERN-Inbox
 Channel CERN-Github
-Channel CERN-Junk
+Channel CERN-Spam
 Channel CERN-Archive
 Channel CERN-Others

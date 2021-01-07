@@ -18,7 +18,7 @@ needhelp=1
 if [[ "$@" = *"inbox"* ]]; then
   # synchronise only current mail: takes ~3 seconds
   needhelp=0
-  mbsync CERN-Inbox CERN-Github CERN-Junk
+  mbsync CERN-Inbox CERN-Github CERN-Spam
 fi
 if [[ "$@" = *"archive"* ]]; then
   # synchronise only current archive: takes ~3 seconds
