@@ -275,10 +275,8 @@
   ;; Use current window for Helm sessions; useful for wide 27" external monitors
   (setq helm-split-window-inside-p t
         helm-echo-input-in-header-line t)
-  ;; Use Helm for Eshell history
-  (add-hook 'eshell-mode-hook
-            #'(lambda ()
-                (define-key eshell-mode-map (kbd "C-c C-l")  'helm-eshell-history)))
+  ;; Use windows rather than frames for Helm completions
+  (setq helm-show-completion-display-function 'helm-show-completion-default-display-function)
   ;; Activate Helm
   (helm-mode 1))
 
@@ -601,7 +599,13 @@
 
 ;; Eshell
 (use-package eshell
-  :straight nil)
+  :straight nil
+  :after helm
+  :config
+  ;; Use Helm for Eshell history completion
+  (add-hook 'eshell-mode-hook
+            #'(lambda ()
+                (bind-key "M-r" #'helm-eshell-history eshell-mode-map))))
 
 ;; Eshell terminals
 (use-package em-term
