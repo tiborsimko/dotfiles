@@ -262,6 +262,7 @@
 ;; Helm completion framework
 (use-package helm
   :config
+  ;; Bind keys for common commands
   (bind-key "C-c h" #'helm-command-prefix)
   (bind-key "C-c h g" #'helm-google-suggest)
   (bind-key "C-c h o" #'helm-occur)
@@ -272,6 +273,10 @@
   (bind-key "C-x b" #'helm-mini)
   (bind-key "M-y" #'helm-show-kill-ring)
   (bind-key "M-x" #'helm-M-x)
+  ;; Rebind persistent action keys
+  (bind-key "<tab>" #'helm-execute-persistent-action helm-map)
+  (bind-key "C-i" #'helm-execute-persistent-action helm-map)
+  (bind-key "C-z" #'helm-select-action helm-map)
   ;; Use current window for Helm sessions; useful for wide 27" external monitors
   (setq helm-split-window-inside-p t
         helm-echo-input-in-header-line t)
