@@ -76,7 +76,7 @@ macro index,pager ,g7  "<change-folder>=INBOX<enter><limit>~d <1w<enter>" "Go to
 macro index,pager ,ga "<change-folder>=Archive<enter>" "Go to Archive folder"
 macro index,pager ,gg "<change-folder>=Github<enter>" "Go to Github folder"
 macro index,pager ,gi "<change-folder>=INBOX<enter>" "Go to INBOX folder"
-macro index,pager ,gj "<change-folder>=Junk<enter>" "Go to Junk folder"
+macro index,pager ,gs "<change-folder>=Spam<enter>" "Go to Spam folder"
 macro index,pager ,gu  "<change-folder>=INBOX<enter><limit>~U<enter>" "Go to unread"
 
 # Key bindings - mail archiving
