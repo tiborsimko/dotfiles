@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: dear
+# key: <d
+# --
+Dear `(tibor/mu4e-get-names-for-yasnippet)`:
+
+$0

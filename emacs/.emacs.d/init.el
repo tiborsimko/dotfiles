@@ -528,6 +528,33 @@
           (:name "Week (unread)" :query "date:7d..now and flag:unread not maildir:/Github not maildir:/Spam" :key ?w)
           (:name "Week (all)" :query "date:7d..now not maildir:/Github not maildir:/Spam" :key ?W)))
 
+  ;; Composing email snippet helper; adapted from
+  ;; http://pragmaticemacs.com/emacs/email-templates-in-mu4e-with-yasnippet/
+  (defun tibor/mu4e-get-names-for-yasnippet ()
+    "Return comma-separated string of names for an email."
+    (interactive)
+    (let ((email-name "") str email-string email-list email-name2 tmpname)
+      (save-excursion
+        (goto-char (point-min))
+        (setq str (buffer-substring-no-properties (point-min) (point-max))))
+      (when (string-match "^To: \"?\\(.+\\)" str)
+        (setq email-string (match-string 1 str)))
+      (when (string-match "^Cc: \"?\\(.+\\)" str)
+        (setq email-string (concat email-string ", " (match-string 1 str))))
+      (setq email-list (split-string email-string " *, *"))
+      (dolist (tmpstr (sort email-list #'string-lessp))
+        (setq tmpname (car (split-string tmpstr " ")))
+        (setq tmpname (replace-regexp-in-string "[ \"]" "" tmpname))
+        (setq email-name
+              (concat email-name ", " tmpname)))
+      (setq email-name (replace-regexp-in-string "^, " "" email-name))
+      (if (< (length email-list) 2)
+          (when (string-match "^\\([^ ,\n]+\\).+writes:$" str)
+            (progn (setq email-name2 (match-string 1 str))
+                   (when (string-match "@" email-name)
+                     (setq email-name email-name2)))))
+      email-name))
+
   ;; UI viewing headers
   (setq mu4e-headers-fields
         '((:human-date . 9)
