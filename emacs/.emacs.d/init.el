@@ -35,6 +35,11 @@
 (use-package bind-key
   :demand t)
 
+;; Configure garbage collection to happen when idle
+(use-package gcmh
+  :config
+  (setq gcmh-verbose t))
+
 ;; Configure basic start-up things
 (use-package emacs
   :straight nil
@@ -50,10 +55,8 @@
   (setq visible-bell t)
   ;; Increase process read buffer size
   (setq read-process-output-max (* 1024 1024))
-  ;; Renew garbage collection threshold after initialisation
-  (add-hook 'emacs-startup-hook
-            (lambda ()
-              (setq gc-cons-threshold (* 100 1024 1024)))))
+  ;; Reset garbage collection after startup
+  (add-hook 'emacs-startup-hook #'gcmh-mode))
 
 ;; Keep ~/.emacs.d clean
 (use-package no-littering
