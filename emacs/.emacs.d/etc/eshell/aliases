@@ -1,0 +1,7 @@
+alias b $BROWSER $*
+alias e for i in ${eshell-flatten-list $*} {find-file $i}
+alias ee for i in ${eshell-flatten-list $*} {find-file-other-window $i}
+alias l ls -l $*
+alias ll ls -la $*
+alias o xdg-open $*
+alias rm rm -i $*
