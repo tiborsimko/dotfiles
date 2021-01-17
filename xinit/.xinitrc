@@ -12,6 +12,9 @@ xrdb -merge ~/.Xresources
 # Set background
 xsetroot -solid '#1d2021'
 
+# Set pointer
+xsetroot -cursor_name left_ptr
+
 # Fix Java app troubles in tiling WMs
 export _JAVA_AWT_WM_NONREPARENTING=1
 
