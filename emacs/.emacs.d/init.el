@@ -116,6 +116,11 @@
   ;; Slightly taller modeline in order to avoid EXWM window flicker when changing windows rapidly
   (setq doom-modeline-height 26))
 
+;; Global text scaling that operates on all buffers
+(use-package default-text-scale
+  :config
+  (default-text-scale-mode))
+
 ;; Update copyright statements in files
 (use-package files
   :straight nil
