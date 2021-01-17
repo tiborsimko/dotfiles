@@ -140,12 +140,6 @@
   :config
   (add-hook 'text-mode-hook 'flyspell-mode))
 
-;; Electric pair mode
-(use-package elec-pair
-  :straight nil
-  :config
-  (add-hook 'prog-mode-hook 'electric-pair-mode))
-
 ;; Delete trailing whitespace before saving
 (use-package whitespace
   :straight nil
