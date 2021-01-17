@@ -512,14 +512,14 @@
         '((:name "Unread" :query "flag:unread" :key ?u)
           (:name "Inbox (unread)" :query "maildir:/INBOX and flag:unread" :key ?i)
           (:name "Inbox (all)" :query "maildir:/INBOX" :key ?I)
-          (:name "GitHub (cernopendata/reanahub)" :query "maildir:/Github and (cernopendata or reanahub)" :key ?g)
-          (:name "GitHub (all)" :query "maildir:/Github" :key ?G)
-          (:name "Spam (all)" :query "maildir:/Spam" :key ?s)
-          (:name "Archive (all)" :query "maildir:/Archive" :key ?a)
-          (:name "Today (unread)" :query "date:today..now and flag:unread not maildir:/Github" :key ?t)
-          (:name "Today (all)" :query "date:today..now not maildir:/Github" :key ?T)
-          (:name "Week (unread)" :query "date:7d..now and flag:unread not maildir:/Github" :key ?w)
-          (:name "Week (all)" :query "date:7d..now not maildir:/Github" :key ?W)))
+          (:name "GitHub (cernopendata/reanahub)" :query "maildir:/Github and (subject:cernopendata or subject:reanahub)" :key ?g)
+          (:name "GitHub (others)" :query "maildir:/Github not subject:cernopendata not subject:reanahub" :key ?G)
+          (:name "Spam" :query "maildir:/Spam" :key ?s)
+          (:name "Archive" :query "maildir:/Archive" :key ?a)
+          (:name "Today (unread)" :query "date:today..now and flag:unread not maildir:/Github not maildir:/Spam" :key ?t)
+          (:name "Today (all)" :query "date:today..now not maildir:/Github not maildir:/Spam" :key ?T)
+          (:name "Week (unread)" :query "date:7d..now and flag:unread not maildir:/Github not maildir:/Spam" :key ?w)
+          (:name "Week (all)" :query "date:7d..now not maildir:/Github not maildir:/Spam" :key ?W)))
 
   ;; UI viewing headers
   (setq mu4e-headers-fields
