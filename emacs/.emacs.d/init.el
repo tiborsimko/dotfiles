@@ -250,6 +250,14 @@
   (setq undo-fu-session-incompatible-files '("/COMMIT_EDITMSG\\'" "/git-rebase-todo\\'"))
   (global-undo-fu-session-mode))
 
+;; Editing snippets
+(use-package yasnippet
+  :config
+  (yas-global-mode 1))
+
+(use-package yasnippet-snippets
+  :after yasnippet)
+
 ;; Git integration
 (use-package magit
   :commands magit-status
