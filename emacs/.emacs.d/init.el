@@ -925,6 +925,13 @@
     (funcall 'markdown-mode))
   (add-hook 'exwm-edit-compose-hook 'tibor/exwm-edit-compose-hook))
 
+;; EXWM system tray
+(use-package exwm-systemtray
+  :straight nil
+  :after exwm
+  :config
+  (exwm-systemtray-enable))
+
 ;; Local Variables:
 ;; byte-compile-warnings: (not free-vars unresolved)
 ;; End:
