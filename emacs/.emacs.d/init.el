@@ -913,9 +913,9 @@
   (exwm-input-set-key (kbd "s-x") #'tibor/helm-selector-xterm)
   (exwm-input-set-key (kbd "s-X") #'tibor/helm-selector-xterm-other-window)
 
-  ;; Set Zoom intermediate windows to always float
+  ;; Set Zoom intermediate windows to never float
   (setq exwm-manage-configurations '(((string-match-p "Zoom - Licensed Account" exwm-title)
-                                      floating t)))
+                                      floating nil)))
 
   ;; Enable EXWM
   (exwm-enable))
