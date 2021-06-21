@@ -41,6 +41,7 @@ rsync -rlptDvz --no-specials --no-devices -e ssh \
     --exclude '*.core' \
     --exclude '*.pyc' \
     --exclude '*invenio/build' \
+    --exclude 'grive' \
     --exclude 'public/reana' \
     --exclude 'public/cap' \
     --exclude 'Local' \
