@@ -23,7 +23,7 @@ alternative_order text/plain text/enriched text/html
 
 # CERN
 set mbox_type = Maildir
-set folder = imaps://cernmail-pilot.cern.ch:993
+set folder = imaps://cernmail.cern.ch:993
 set imap_user = simko
 set imap_pass = `gpg --quiet --for-your-eyes-only --no-tty --decrypt ~/.gnupg/password-simko-cern.txt.gpg`
 set spoolfile = +INBOX
