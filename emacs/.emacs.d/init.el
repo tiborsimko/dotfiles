@@ -482,6 +482,12 @@
   :config
   (add-hook 'org-mode-hook 'org-bullets-mode))
 
+;; Calendar
+(use-package calendar
+  :straight nil
+  :config
+  (setq calendar-week-start-day 1))
+
 ;; Mu4e mail system
 (use-package mu4e
   :straight nil
