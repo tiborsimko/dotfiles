@@ -895,6 +895,9 @@
   ;; s-s Switch to last buffer in the window
   (exwm-input-set-key (kbd "s-s") #'evil-switch-to-windows-last-buffer)
 
+  ;; s-S Switch to *scratch* buffer
+  (exwm-input-set-key (kbd "s-S") #'(lambda () (interactive) (switch-to-buffer "*scratch*")))
+
   ;; s-bB Switch buffers
   (exwm-input-set-key (kbd "s-b") #'helm-buffers-list)
 
