@@ -6,7 +6,7 @@
 # Example: x1-mirror www # only www and its subdirectories
 
 SOURCEDIR=/home/tibor
-TARGETDIR=lxplus-cloud.cern.ch:
+TARGETDIR=lxplus8.cern.ch:
 
 # analyze arguments:
 if [ "x$1" != "x" ];
