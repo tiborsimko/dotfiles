@@ -1,23 +1,54 @@
 #!/usr/bin/env bash
 
-# A simple dwm/dmenu window selector.
+# Tibor's simple desktop-aware dwm/dmenu window selector.
+#
+# Examples:
+#   $ x1-windowmenu [--current-desktop-only]
+#   $ x1-windowmenu firefox [--current-desktop-only]
+#   $ x1-windowmenu xterm [--current-desktop-only]
+#
+# Bind the above actions in your favourite window manager.
+#
+# Note: Inspired by
 # https://unix.stackexchange.com/questions/50539/inconsistent-behaviour-of-wmctrl-i-a-win
 
+# Are we looking for some program windows only? (e.g. xterm, firefox, zoom)
+program=$1
+if [[ "$program" =~ ^--.* ]]; then
+    program=""
+fi
 
-# get list of all windows, and their count
-wmctrl_output=$(wmctrl -lx)
+# Are we looking only at the current desktop only?
+current_desktop=" "
+if [[ "$*" = *"--current-desktop-only"* ]]; then
+    current_desktop=$(wmctrl -d | grep ' \* ' | cut -d ' ' -f1)
+fi
+
+# Get list of all matching windows
+if [ "$program" == "" ]; then
+    wmctrl_output=$(wmctrl -lx | sort -k 2 | grep " $current_desktop ")
+else
+    if ! hash "$program" 2>/dev/null; then
+        echo "ERROR: $program is not executable. Exiting."
+        exit 1
+    fi
+    wmctrl_output=$(wmctrl -lx | sort -k 2 | grep -i "$program" | grep " $current_desktop ")
+fi
+
+# Select target window from the list of all matching windows
 win_count=$(echo "$wmctrl_output" | wc -l)
+if [ "$win_count" -eq 1 ]; then
+    # One window only, select it automatically
+    target_id=$(echo "$wmctrl_output" | cut -d' ' -f1)
+else
+    # More than one window, select candidate via dmenu
+    hostname=$(uname -n)
+    win_list=$(echo "$wmctrl_output" | \
+        sed -r -e 's/[^@]'"$hostname"'//')
+    target=$(echo "$win_list" | dmenu -b -i -l "$win_count" -p "Switch to: ")
+    target_id=$(echo "$target" | cut -d' ' -f1)
+fi
 
-# get rid of the hostname and the number in the 2nd column
-hostname=$(uname -n)
-win_list=$(echo "$wmctrl_output" | \
-    sed -r -e 's/[^@]'$hostname'//' | \
-    sed -r -e 's/ [0-9][0-9]? / /')
-
-# select a window ($target) and extract its id ($target_id)
-target=$(echo "$win_list" | dmenu -i -l $win_count -p "Switch to: ")
-target_id=$(echo "$target" | cut -d' ' -f1)
-
-# switch to target window
+# Switch to the target window
 cmd="wmctrl -i -a \"$target_id\""
 eval "$cmd"
