@@ -799,9 +799,9 @@
             (lambda ()
                 (exwm-workspace-rename-buffer (format "X11: %s: %s" exwm-class-name exwm-title))))
 
-  ;; Don't isolate workspaces
-  (setq exwm-workspace-show-all-buffers t
-        exwm-layout-show-all-buffers t)
+  ;; Isolate workspaces
+  (setq exwm-workspace-show-all-buffers nil
+        exwm-layout-show-all-buffers nil)
 
   ;; Multi-monitor support
   (require 'exwm-randr)
