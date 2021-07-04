@@ -42,8 +42,7 @@ rsync -rlptDvz --no-specials --no-devices -e ssh \
     --exclude '*.pyc' \
     --exclude '*invenio/build' \
     --exclude 'grive' \
-    --exclude 'public/reana' \
-    --exclude 'public/cap' \
+    --exclude 'public' \
     --exclude 'Local' \
     --exclude 'Dropbox' \
     --exclude 'VirtualBox VMs' \
