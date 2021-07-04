@@ -99,25 +99,11 @@
   (load-theme 'gruvbox t))
 
 ;; Prettier modeline
-(use-package battery
-  :straight nil
-  :demand t
-  :config
-  (display-battery-mode 1))
-(use-package time
-  :straight nil
-  :demand t
-  :config
-  (setq display-time-format " %H:%M")
-  (display-time-mode))
 (use-package all-the-icons
   :demand t)
 (use-package doom-modeline
   :demand t
-  :init (doom-modeline-mode 1)
-  :config
-  ;; Slightly taller modeline in order to avoid EXWM window flicker when changing windows rapidly
-  (setq doom-modeline-height 26))
+  :init (doom-modeline-mode 1))
 
 ;; Global text scaling that operates on all buffers
 (use-package default-text-scale
@@ -165,7 +151,7 @@
   (add-hook 'prog-mode-hook 'display-line-numbers-mode))
 
 ;; Ibuffer switching using more comfortable, longer buffer names. Good
-;; for ibuffer in EXWM.
+;; for ibuffer.
 (use-package ibuffer
   :straight nil
   :config
@@ -301,7 +287,7 @@
   :config
   (helm-descbinds-mode))
 
-;; Helm longer buffer names; good for EXWM buffers with long names such as Firefox
+;; Helm longer buffer names
 (use-package helm-buffers
   :after helm
   :straight nil
@@ -677,192 +663,6 @@
 (use-package popwin
   :config
   (popwin-mode 1))
-
-;; Desktop tools for sound and brightness
-(use-package desktop-environment
-  :after exwm
-  :config
-  (setq desktop-environment-brightness-get-command "light")
-  (setq desktop-environment-brightness-set-command "light %s")
-  (setq desktop-environment-brightness-get-regexp "^\\([0-9]+\\)")
-  (setq desktop-environment-brightness-normal-increment "-A 8")
-  (setq desktop-environment-brightness-normal-decrement "-U 8")
-  (setq desktop-environment-brightness-small-increment "-A 4")
-  (setq desktop-environment-brightness-small-decrement "-U 4")
-  (setf
-   (alist-get (elt (kbd "s-l") 0) desktop-environment-mode-map nil t)
-   nil)
-  (desktop-environment-mode))
-
-;; EXWM
-(use-package exwm
-  :after evil
-  :config
-  (require 'exwm)
-
-  ;; Preconfigure a number of EXWM workspaces
-  (setq exwm-workspace-number 10)
-
-  ;; Better X11 window titles for quick EXWM ibuffer switching
-  (add-hook 'exwm-update-title-hook
-            (lambda ()
-                (exwm-workspace-rename-buffer (format "X11: %s: %s" exwm-class-name exwm-title))))
-
-  ;; Isolate workspaces
-  (setq exwm-workspace-show-all-buffers nil
-        exwm-layout-show-all-buffers nil)
-
-  ;; Multi-monitor support
-  (require 'exwm-randr)
-  (exwm-randr-enable)
-
-  ;; Set keys to always pass through to Emacs
-  (setq exwm-input-prefix-keys
-        '(?\C-\
-          ?\C-\M-j
-          ?\C-h
-          ?\C-u
-          ?\C-w
-          ?\C-x
-          ?\M-&
-          ?\M-:
-          ?\M-`
-          ?\M-x
-          ?\M-y))
-
-  ;; Set focus to follow mouse
-  (setq mouse-autoselect-window t
-        focus-follows-mouse t)
-
-  ;; Set C-q so that the next key is sent to X11 applications directly
-  (define-key exwm-mode-map [?\C-q] 'exwm-input-send-next-key)
-
-  ;; Set up global key bindings regardless of input state
-  (setq exwm-input-global-keys
-        `(
-          ;; s-R reset
-          ([?\s-R] . exwm-reset)
-          ;; s-W switch workspaces
-          ([?\s-W] . exwm-workspace-switch)
-          ;; s-r run X11 applications
-          ([?\s-r] . (lambda (command)
-                       (interactive (list (read-shell-command "$ ")))
-                       (start-process-shell-command command nil command)))
-          ;; s-N workspace switching
-          ,@(mapcar (lambda (i)
-                      `(,(kbd (format "s-%d" i)) .
-                        (lambda ()
-                          (interactive)
-                          (exwm-workspace-switch-create ,i))))
-                    (number-sequence 0 9))))
-
-  ;; s-w switch to last workspace https://github.com/ch11ng/exwm/issues/784
-  (defvar exwm-workspace--switch-history-hack (cons exwm-workspace-current-index '()))
-  (add-hook 'exwm-workspace-switch-hook
-            (lambda ()
-              (setq exwm-workspace--switch-history-hack
-                    (cons exwm-workspace-current-index
-                          (car exwm-workspace--switch-history-hack)))))
-  (defun exwm-workspace-switch-to-last ()
-    (interactive)
-    "Switch to the workspace that was used before current workspace"
-    (exwm-workspace-switch (cdr exwm-workspace--switch-history-hack)))
-  (exwm-input-set-key (kbd "s-w") #'exwm-workspace-switch-to-last)
-
-  ;; s-hjkl Focus between windows
-  (exwm-input-set-key (kbd "s-h") #'evil-window-left)
-  (exwm-input-set-key (kbd "s-l") #'evil-window-right)
-  (exwm-input-set-key (kbd "s-k") #'evil-window-up)
-  (exwm-input-set-key (kbd "s-j") #'evil-window-down)
-
-  ;; s-HJKL Move windows around
-  (exwm-input-set-key (kbd "s-H") #'windower-swap-left)
-  (exwm-input-set-key (kbd "s-L") #'windower-swap-right)
-  (exwm-input-set-key (kbd "s-K") #'windower-swap-above)
-  (exwm-input-set-key (kbd "s-J") #'windower-swap-below)
-
-  ;; s-M-hjkl Resize windows
-  (exwm-input-set-key (kbd "s-M-h") #'evil-window-decrease-width)
-  (exwm-input-set-key (kbd "s-M-l") #'evil-window-increase-width)
-  (exwm-input-set-key (kbd "s-M-k") #'evil-window-decrease-height)
-  (exwm-input-set-key (kbd "s-M-j") #'evil-window-increase-height)
-
-  ;; s-np Focus next/previous windows
-  (exwm-input-set-key (kbd "s-n") #'evil-window-next)
-  (exwm-input-set-key (kbd "s-p") #'evil-window-prev)
-
-  ;; s-t Transpose window layout
-  (exwm-input-set-key (kbd "s-t") #'transpose-frame)
-
-  ;; s-m Maximise window
-  (exwm-input-set-key (kbd "s-m") #'windower-toggle-single)
-
-  ;; s-cC Delete window
-  (exwm-input-set-key (kbd "s-c") #'delete-window)
-  (exwm-input-set-key (kbd "s-C") #'kill-buffer-and-window)
-
-  ;; s-s Switch to last buffer in the window
-  (exwm-input-set-key (kbd "s-s") #'evil-switch-to-windows-last-buffer)
-
-  ;; s-S Switch to *scratch* buffer
-  (exwm-input-set-key (kbd "s-S") #'(lambda () (interactive) (switch-to-buffer "*scratch*")))
-
-  ;; s-bB Switch buffers
-  (exwm-input-set-key (kbd "s-b") #'helm-buffers-list)
-
-  ;; s-RET Open an X11 terminal
-  (exwm-input-set-key (kbd "s-<return>") #'(lambda () (interactive)
-                                            (start-process "xterm" nil "xterm")))
-
-  ; s-g Switch to some X11 window on any workspace
-  (exwm-input-set-key (kbd "s-g") #'(lambda () (interactive)
-                                      (start-process "x1-windowmenu" nil "x1-windowmenu" "--current-desktop-only")))
-  (exwm-input-set-key (kbd "s-G") #'(lambda () (interactive)
-                                      (start-process "x1-windowmenu" nil "x1-windowmenu")))
-
-  ;; s-fxz Switch to most used X11 applications
-  (exwm-input-set-key (kbd "s-f") #'(lambda () (interactive)
-                                      (start-process "x1-windowmenu" nil "x1-windowmenu" "firefox" "--current-desktop-only")))
-  (exwm-input-set-key (kbd "s-F") #'(lambda () (interactive)
-                                      (start-process "x1-windowmenu" nil "x1-windowmenu" "firefox")))
-  (exwm-input-set-key (kbd "s-x") #'(lambda () (interactive)
-                                      (start-process "x1-windowmenu" nil "x1-windowmenu" "xterm" "--current-desktop-only")))
-  (exwm-input-set-key (kbd "s-X") #'(lambda () (interactive)
-                                      (start-process "x1-windowmenu" nil "x1-windowmenu" "xterm")))
-  (exwm-input-set-key (kbd "s-z") #'(lambda () (interactive)
-                                      (start-process "x1-windowmenu" nil "x1-windowmenu" "zoom" "--current-desktop-only")))
-  (exwm-input-set-key (kbd "s-Z") #'(lambda () (interactive)
-                                      (start-process "x1-windowmenu" nil "x1-windowmenu" "zoom")))
-
-  ;; s-arrows Switch window layout
-  (exwm-input-set-key (kbd "s-<right>") #'winner-redo)
-  (exwm-input-set-key (kbd "s-<left>") #'winner-undo)
-
-  ;; Update global bindings
-  (exwm-input--update-global-prefix-keys)
-
-  ;; Set Zoom intermediate windows to never float
-  (setq exwm-manage-configurations '(((string-match-p "Zoom - Licensed Account" exwm-title)
-                                      floating nil)))
-
-  ;; Enable EXWM
-  (exwm-enable))
-
-;; EXWM edit X11 input boxes in Emacs
-(use-package exwm-edit
-  :after exwm
-  :config
-  (defun tibor/exwm-edit-compose-hook ()
-    "Switch to Markdown mode for EXWM edits."
-    (funcall 'markdown-mode))
-  (add-hook 'exwm-edit-compose-hook 'tibor/exwm-edit-compose-hook))
-
-;; EXWM system tray
-(use-package exwm-systemtray
-  :straight nil
-  :after exwm
-  :config
-  (exwm-systemtray-enable))
 
 ;; Local Variables:
 ;; byte-compile-warnings: (not free-vars unresolved)
