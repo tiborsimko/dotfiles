@@ -58,7 +58,7 @@ if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
     . $HOME/.nix-profile/etc/profile.d/nix.sh;
 fi
 
-# Start SSH agent here so that it works for both DWM and EXWM
+# Start SSH agent
 export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
 
 # Start X11 on tty1 after logging in

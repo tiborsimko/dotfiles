@@ -24,6 +24,9 @@ unclutter &
 # Notification system
 dunst &
 
+# Network manager applet
+nm-applet &
+
 # Clipboard manager
 clipmenud &
 
@@ -35,10 +38,23 @@ autocutsel -selection PRIMARY -fork &
 $HOME/private/bin/x1-k
 
 # Run compositor
-picom &
+# picom &
 
 # Start SSH agent
 eval $(ssh-agent)
 
-# Run window manager
-exec dbus-launch --exit-with-session emacs -mm --debug-init --eval "(exwm-enable)"
+# Start X11 applications
+firefox &
+xterm &
+
+# Start Emacs in daemon mode
+emacs --daemon &
+
+# Start hot key daemon
+sxhkd &
+
+# Start bar
+polybar mybar &
+
+# Start window manager
+exec dbus-launch --exit-with-session bspwm

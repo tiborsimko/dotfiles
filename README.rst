@@ -9,11 +9,12 @@ This repository contains dotfiles to set up my personal GNU/Linux development
 environment and configure several preferred applications.
 
 - Editor: Emacs, Vim
-- Multiplexer: Emacs, Tmux
-- Shell: Eshell, Zsh
+- Multiplexer: Tmux
+- Shell: Zsh
+- Status: Polybar
 - Terminal: XTerm
 - Theme: Gruvbox
-- Window manager: EXWM
+- Window manager: Bspwm
 
 Screenshot
 ----------
