@@ -2,8 +2,8 @@
 
 # Set prefereed programs
 export BROWSER="firefox"
-export EDITOR="vim"
-export VISUAL="vim"
+export EDITOR="vimx"
+export VISUAL="vimx"
 export PAGER="less"
 export TERMINAL="st"
 export OPENER="xdg-open"
