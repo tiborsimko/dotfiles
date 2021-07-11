@@ -58,7 +58,7 @@ Third, install tpm (used for tmux), vim-plug (used for vim), and zinit (used for
     $ curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     $ # prepare some vim and zsh directories
-    $ mkdir -p ~/.vim/undo ~/.cache/zsh ~/.cache/dwm
+    $ mkdir -p ~/.vim/undo ~/.cache/zsh
     $ # install zinit (used for zsh):
     $ sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zinit/master/doc/install.sh)"
 
@@ -69,12 +69,12 @@ Fourth, activate all wanted configurations (such as ``tmux``, ``vim``,
 
     $ stow --no-folding tmux vim zsh
 
-Fifth, build and install DWM window manager and associated suckless tools; the
-configuration is done during compile-time so don't use ``stow`` for these:
+Fifth, build and install Nix and Unclutter tools; the configuration is done
+during compile-time so don't use ``stow`` for these:
 
 .. code-block:: console
 
-    $ for app in dmenu dwm slock slstatus st; do \
+    $ for app in nix unclutter; do \
         cd $app && make download clean build install && cd ..; \
       done
 

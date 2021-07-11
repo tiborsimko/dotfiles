@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Tibor's simple desktop-aware dwm/dmenu window selector.
+# Tibor's simple desktop-aware window selector.
 #
 # Examples:
 #   $ x1-windowmenu [--current-desktop-only]
