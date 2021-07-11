@@ -28,10 +28,6 @@ fi
 if [ "$program" == "" ]; then
     wmctrl_output=$(wmctrl -lx | sort -k 2 | grep " $current_desktop ")
 else
-    if ! hash "$program" 2>/dev/null; then
-        echo "ERROR: $program is not executable. Exiting."
-        exit 1
-    fi
     wmctrl_output=$(wmctrl -lx | sort -k 2 | grep -i "$program" | grep " $current_desktop ")
 fi
 
