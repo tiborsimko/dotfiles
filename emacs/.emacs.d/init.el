@@ -91,12 +91,13 @@
   :demand t
   :config
   (custom-set-faces
-   '(mode-line ((t (:background "#32302f"))))
-   '(fringe ((t (:background "#282828"))))
-   '(internal-border ((t (:background "#282828"))))
-   '(line-number ((t (:background "#282828"))))
-   '(line-number-current-line ((t (:background "#282828")))))
-  (load-theme 'gruvbox t))
+   '(mode-line ((t (:background "#282828"))))
+   '(mode-line-inactive ((t (:background "#282828"))))
+   '(fringe ((t (:background "#1d2021"))))
+   '(internal-border ((t (:background "#1d2021"))))
+   '(line-number ((t (:background "#1d2021"))))
+   '(line-number-current-line ((t (:background "#1d2021")))))
+  (load-theme 'gruvbox-dark-hard t))
 
 ;; Prettier modeline
 (use-package all-the-icons
