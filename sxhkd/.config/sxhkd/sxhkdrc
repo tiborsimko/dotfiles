@@ -6,7 +6,7 @@ super + Return
 
 # open program launcher
 super + r
-        dmenu_run
+        dmenu_run -nb '#1d2021' -nf '#bdae93' -sb '#282828' -sf '#fbf1c7'
 
 # open new emacs frame
 super + shift + Return

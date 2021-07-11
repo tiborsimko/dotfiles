@@ -35,13 +35,16 @@ export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*"'
 # Fzf layout
 export FZF_DEFAULT_OPTS='--layout=reverse --height 50%'
 
-# Fzf gruvbox dark medium theme
+# Fzf gruvbox dark theme
 export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
   --color=fg:#ebdbb2,bg:#1d2021,hl:#83a598
   --color=fg+:#ebdbb2,bg+:#3c3836,hl+:#83a598,gutter:#1d2021
   --color=info:#8ec07c,prompt:#7c6f64,pointer:#8ec07c
   --color=marker:#8ec07c,spinner:#8ec07c,header:#665c54
     '
+
+# Dmenu gruvbox dark theme
+export DMENU_DEFAULT_OPTS='-nb #1d2021 -nf #bdae93 -sb #282828 -sf #fbf1c7'
 
 # Less
 export LESS='-F -g -i -M -R -S -w -X -z-4'

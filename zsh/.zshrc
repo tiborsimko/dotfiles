@@ -117,9 +117,13 @@ alias rm='rm -i'
 alias t="task"
 alias to="taskopen"
 
-# Fix gruvbox colours
+# Fix terminal gruvbox colours
 [ -f $HOME/.vim/plugged/gruvbox/gruvbox_256palette.sh ] && \
     source $HOME/.vim/plugged/gruvbox/gruvbox_256palette.sh
+
+# Fix dmenu gruvbox colours
+alias dmenu="dmenu ${DMENU_DEFAULT_OPTS}"
+alias dmenu_run="dmenu_run ${DMENU_DEFAULT_OPTS}"
 
 # Allow '>' redirection to overwrite existing files
 setopt clobber
