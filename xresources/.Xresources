@@ -57,11 +57,11 @@ XTerm*charClass: 33:48,37-38:48,45-47:48,64:48,58:48,126:48,61:48,63:48,43:48,35
 XTerm*saveLines: 8192
 
 ! XTerm shortcuts
-XTerm*translations: #override \
-  Ctrl <Key> minus: smaller-vt-font() \n\
-  Ctrl <Key> plus: larger-vt-font() \n\
-  Ctrl <Key> 0: set-vt-font(d) \n\
-  Meta <Key> o: exec-formatted("xdg-open '%t'", PRIMARY) select-start() select-end() \n\
+XTerm*translations: #override \n\
+  Ctrl <KeyPress>minus: smaller-vt-font() \n\
+  Ctrl <KeyPress>plus: larger-vt-font() \n\
+  Ctrl <KeyPress>0: set-vt-font(d) \n\
+  Meta <KeyPress>o: exec-formatted("xdg-open '%t'", PRIMARY) select-start() select-end() \n\
   <Key> F11: fullscreen() \n\
   <Key> F12: spawn-new-terminal() \n
 
