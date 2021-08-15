@@ -106,6 +106,12 @@
   :demand t
   :init (doom-modeline-mode 1))
 
+;; Disable cursor blinking when running in terminal console
+(setq visible-cursor nil)
+
+;; Disable menu bar when running in terminal console
+(menu-bar-mode -1)
+
 ;; Global text scaling that operates on all buffers
 (use-package default-text-scale
   :config
