@@ -2,10 +2,10 @@
 
 # Set prefereed programs
 export BROWSER="firefox"
-export EDITOR="vimx"
-export VISUAL="vimx"
+export EDITOR="emacsclient -t"
+export VISUAL="emacsclient -t"
 export PAGER="less"
-export TERMINAL="st"
+export TERMINAL="xterm"
 export OPENER="xdg-open"
 export LANG="en_GB.UTF-8"
 

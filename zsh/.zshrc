@@ -106,6 +106,7 @@ unsetopt share_history
 alias b="$BROWSER"
 alias cp='cp -i'
 alias e="$EDITOR"
+alias ee="emacsclient -c -n"
 alias g="git"
 alias k="kubectl"
 alias l="ls -la --color"
@@ -131,7 +132,7 @@ setopt clobber
 # ff = fuzzy file (and edit)
 ff() (
     IFS=$'\n' files=($(fzf-tmux --query="$1" --multi --select-1 --exit-0))
-    [[ -n "$files" ]] && ${EDITOR} "${files[@]}"
+    [[ -n "$files" ]] && $=EDITOR "${files[@]}"
 )
 
 # fs = fuzzy search (string and edit matching files)
@@ -140,7 +141,7 @@ fs() {
     local line
     read -r file line <<<"$(ag --nobreak --noheading $@ | fzf -0 -1 | awk -F: '{print $1, $2}')"
     if [[ -n $file ]]; then
-        ${EDITOR} $file +$line
+        $=EDITOR $file +$line
     fi
 }
 
@@ -161,12 +162,12 @@ o() {
 
 # v (edit argument or most used files in vim; using viminfo)
 v() {
-    [ $# -eq 1 ] && test -e "$1" && ${EDITOR} "$1" && return
+    [ $# -eq 1 ] && test -e "$1" && $=EDITOR "$1" && return
     local files
     files=$(grep '^>' ~/.viminfo | cut -c3- |
         while read line; do
             [ -f "${line/\~/$HOME}" ] && echo "$line"
-        done | fzf-tmux -d -m -q "$*" -1) && ${EDITOR} ${files//\~/$HOME}
+        done | fzf-tmux -d -m -q "$*" -1) && $=EDITOR ${files//\~/$HOME}
 }
 
 # Prompt
