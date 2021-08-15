@@ -41,7 +41,7 @@ else
     hostname=$(uname -n)
     win_list=$(echo "$wmctrl_output" | \
         sed -r -e 's/[^@]'"$hostname"'//')
-    target=$(echo "$win_list" | dmenu ${DMENU_DEFAULT_OPTS} -i -l "$win_count" -p "Switch to: ")
+    target=$(echo "$win_list" | dmenu ${DMENU_DEFAULT_OPTS} -i -l "$win_count")
     target_id=$(echo "$target" | cut -d' ' -f1)
 fi
 
