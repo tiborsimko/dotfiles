@@ -44,7 +44,7 @@ export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
     '
 
 # Dmenu gruvbox dark theme
-export DMENU_DEFAULT_OPTS='-nb #1d2021 -nf #bdae93 -sb #282828 -sf #fbf1c7'
+export DMENU_DEFAULT_OPTS='-nb #111313 -nf #bdae93 -sb #111313 -sf #fbf1c7'
 
 # Less
 export LESS='-F -g -i -M -R -S -w -X -z-4'

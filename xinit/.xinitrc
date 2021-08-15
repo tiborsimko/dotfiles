@@ -10,7 +10,7 @@ xset b off
 xrdb -merge ~/.Xresources
 
 # Set background
-xsetroot -solid '#1d2021'
+xsetroot -solid '#111313'
 
 # Set pointer
 xsetroot -cursor_name left_ptr
