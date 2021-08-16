@@ -146,3 +146,7 @@ XF86Audio{Mute,LowerVolume,RaiseVolume}
 # passmenu
 super + shift + r
         passmenu
+
+# clipmenu
+super + c
+        clipmenu
