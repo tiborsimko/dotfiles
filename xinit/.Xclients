@@ -1,4 +1,4 @@
-# Tibor's xinit configuration file.
+# Tibor's X11 initialisation file.
 
 # Set faster keyboard repeat rate
 xset r rate 200 60
@@ -57,4 +57,4 @@ sxhkd &
 polybar mybar &
 
 # Start window manager
-exec dbus-launch --exit-with-session bspwm
+exec bspwm
