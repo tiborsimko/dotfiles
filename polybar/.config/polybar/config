@@ -8,7 +8,7 @@ margin-bottom = 0
 module-margin-left = 1
 module-margin-right = 1
 modules-left = bspwm xwindow
-modules-right = battery date
+modules-right = alsa battery date
 override-redirect = true
 wm-restack = bspwm
 enable-ipc = true
@@ -57,6 +57,12 @@ ramp-capacity-2 = BAT
 animation-charging-0 = CHG
 animation-charging-1 = CHG
 animation-charging-2 = CHG
+
+[module/alsa]
+type = internal/alsa
+format-volume = <label-volume>
+label-volume = VOL %percentage%%
+label-muted = VOL muted
 
 [module/date]
 type = internal/date
