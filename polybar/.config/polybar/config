@@ -24,7 +24,7 @@ padding-right = 2
 type = internal/bspwm
 pin-workspaces = true
 enable-click = true
-format = <label-state> <label-mode>
+format = <label-state> [<label-mode>]
 label-padding = 1
 label-dimmed-foreground = #504945
 label-dimmed-padding = 0
@@ -36,6 +36,14 @@ label-urgent-foreground = #cc241d
 label-urgent-padding = 0
 label-empty-foreground = #3c3836
 label-empty-padding = 0
+label-monocle = M
+label-tiled = T
+label-fullscreen = F
+label-floating = f
+label-pseudotiled = P
+label-locked = l
+label-sticky = s
+label-private = p
 
 [module/xwindow]
 type = internal/xwindow
