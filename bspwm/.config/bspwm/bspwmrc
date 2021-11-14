@@ -2,6 +2,14 @@
 
 # Tibor's bspwm configuration.
 
+# Start hot key daemon
+pgrep -x sxhkd && pkill -x sxhkd
+sxhkd &
+
+# Start bar
+pgrep -x polybar && pkill -x polybar
+polybar mybar &
+
 # Configure monitors
 bspc config remove_disabled_monitors true
 bspc config remove_unplugged_monitors true

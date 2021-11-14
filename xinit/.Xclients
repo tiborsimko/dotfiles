@@ -37,24 +37,8 @@ autocutsel -selection PRIMARY -fork &
 # Configure keyboard and mouse
 $HOME/private/bin/x1-k
 
-# Run compositor
-# picom &
-
 # Start SSH agent
 eval $(ssh-agent)
 
-# Start X11 applications
-firefox &
-xterm &
-
-# Start Emacs in daemon mode
-emacs --daemon &
-
-# Start hot key daemon
-sxhkd &
-
-# Start bar
-polybar mybar &
-
 # Start window manager
-exec bspwm
+exec dbus-launch --exit-with-session bspwm
