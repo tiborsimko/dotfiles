@@ -659,24 +659,24 @@
 
 ;; Vterm terminal
 (use-package vterm
+  :after evil
   :config
-  (add-hook 'vterm-mode-hook '(lambda ()
-                               (setq-local global-hl-line-mode nil)
-                               (setq-local line-spacing nil))))
-
-;; Vterm terminal popup
-(use-package vterm-toggle
-  :after (evil vterm)
-  :config
-  (setq vterm-toggle-fullscreen-p nil)
-  (with-eval-after-load 'evil
-    (evil-set-initial-state 'vterm-mode 'emacs))
-  (global-set-key (kbd "C-x t") #'vterm-toggle)
-  (add-to-list 'display-buffer-alist
-               '("^v?term.*"
-                 (display-buffer-reuse-window display-buffer-at-bottom)
-                 (reusable-frames . visible)
-                 (window-height . 0.25))))
+  (defun tibor/evil-normal-in-vterm-copy-mode ()
+    (if (bound-and-true-p vterm-copy-mode)
+        (evil-normal-state)
+      (evil-emacs-state)))
+  ;; Switch off evil mode bindings in the shell prompt command line,
+  ;; as they don't work well. The vi mode bindings in shell prompt
+  ;; will be coming via zsh shell configuration
+  (evil-set-initial-state 'vterm-mode 'emacs)
+  ;; Use evil mode bindings in the output copy mode
+  (add-hook 'vterm-copy-mode-hook 'tibor/evil-normal-in-vterm-copy-mode)
+  ;; Switch off highlighting of the current line
+  (add-hook 'vterm-mode-hook #'(lambda ()
+                                 (setq-local global-hl-line-mode nil)
+                                 (setq-local line-spacing nil)))
+  ;; Set nice terminal name with current working directory
+  (setq vterm-buffer-name-string "vterm: %s"))
 
 ;; Window movement
 (use-package windmove
