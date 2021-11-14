@@ -396,7 +396,7 @@
   (add-hook 'org-mode-hook 'visual-line-mode)
   (add-hook 'org-mode-hook 'auto-fill-mode)
   (add-hook 'org-mode-hook 'org-indent-mode)
-  (add-hook 'org-mode-hook '(lambda () (setq-local evil-auto-indent nil))))
+  (add-hook 'org-mode-hook #'(lambda () (setq-local evil-auto-indent nil))))
 
 (use-package org-capture
   :straight nil
