@@ -191,10 +191,11 @@
 
 ;; Start server
 (use-package server
-   :straight nil
-   :if window-system
-   :config
-   (server-start))
+  :straight nil
+  :if window-system
+  :config
+  (unless (server-running-p)
+    (server-start)))
 
 ;; Ensure environment variables in Emacs are the same as in shell
 (use-package exec-path-from-shell
