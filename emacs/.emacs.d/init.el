@@ -318,6 +318,39 @@
 (use-package helm-pass
   :after helm)
 
+;; Helm selector for often used applications
+(use-package helm-selector
+  :after helm
+  :preface
+
+  ;; Helm selector for VTerm buffers
+  (defun tibor/helm-selector-vterm ()
+    "Helm for `VTerm' buffers."
+    (interactive)
+    (helm-selector
+     "Vterm"
+     :predicate (helm-selector-major-modes-predicate 'vterm-mode)
+     :make-buffer-fn (lambda (&optional name)
+                       (if name
+                           (vterm (format "vterm: %s" name))
+                         (vterm)))
+     :use-follow-p t))
+  (defun tibor/helm-selector-vterm-other-window ()
+    "Like `tibor/helm-selector-vterm' but raise buffer in other window."
+    (interactive)
+    (let ((current-prefix-arg t))
+      (call-interactively #'tibor/helm-selector-vterm)))
+
+  :config
+  (bind-key "C-c m" #'helm-selector-mu4e)
+  (bind-key "C-c M" #'helm-selector-mu4e-other-window)
+  (bind-key "C-c o" #'helm-selector-org)
+  (bind-key "C-c O" #'helm-selector-org-other-window)
+  (bind-key "C-c s" #'helm-selector-shell)
+  (bind-key "C-c S" #'helm-selector-shell-other-window)
+  (bind-key "C-c x" #'tibor/helm-selector-vterm)
+  (bind-key "C-c X" #'tibor/helm-selector-vterm-other-window))
+
 ;; Project management
 (use-package projectile
   :config
@@ -391,17 +424,6 @@
 (use-package mu4e
   :straight nil
   :config
-
-  ;; Mu4e buffer switcher
-  (defun tibor/switch-to-mu4e ()
-    "Switch to mu4e headers buffer if it exists, otherwise start m4e."
-    (interactive)
-    (if (get-buffer "*mu4e-view*")
-        (switch-to-buffer "*mu4e-view*")
-      (if (get-buffer "*mu4e-headers*")
-          (switch-to-buffer "*mu4e-headers*")
-        (mu4e))))
-  (bind-key "C-c m" #'tibor/switch-to-mu4e)
 
   ;; Message mode mail sending basic configuration
   (setq user-full-name "Tibor Simko"
