@@ -155,8 +155,9 @@ config.bind(',T', 'spawn --userscript taskadd')
 # Use mpv for videos
 config.bind(',m', 'spawn --userscript view_in_mpv')
 
-# Open URL in Chromium
+# Open URL in Chromium/Firefox
 config.bind(',c', 'spawn -d chromium {url}')
+config.bind(',f', 'spawn -d firefox {url}')
 
 # Search engines
 c.url.searchengines["a"] = "https://arxiv.org/search/?query={}&searchtype=all&source=header"
