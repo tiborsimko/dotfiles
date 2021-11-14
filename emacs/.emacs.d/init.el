@@ -388,6 +388,7 @@
 
 ;; Org mode
 (use-package org
+  :straight nil
   :config
   (bind-key "C-c a" #'org-agenda)
   (setq org-directory "~/private/org/")
