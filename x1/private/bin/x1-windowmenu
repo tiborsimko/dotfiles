@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-
+#
 # Tibor's simple desktop-aware window selector.
 #
 # Examples:
 #   $ x1-windowmenu [--current-desktop-only]
-#   $ x1-windowmenu firefox [--current-desktop-only]
 #   $ x1-windowmenu alacritty [--current-desktop-only]
+#   $ x1-windowmenu qutebrowser [--current-desktop-only]
 #
 # Bind the above actions in your favourite window manager.
 #
@@ -26,9 +26,9 @@ fi
 
 # Get list of all matching windows
 if [ "$program" == "" ]; then
-    wmctrl_output=$(wmctrl -lx | sort -k 2 | grep " $current_desktop ")
+    wmctrl_output=$(wmctrl -lx | sort -k 2 | grep " $current_desktop")
 else
-    wmctrl_output=$(wmctrl -lx | sort -k 2 | grep -i "$program" | grep " $current_desktop ")
+    wmctrl_output=$(wmctrl -lx | sort -k 2 | grep -i "$program" | grep " $current_desktop")
 fi
 
 # Select target window from the list of all matching windows

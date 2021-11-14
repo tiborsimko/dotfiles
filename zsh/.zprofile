@@ -1,9 +1,9 @@
 # Tibor's zprofile.
 
 # Set prefereed programs
-export BROWSER="firefox"
 export EDITOR="emacsclient -t"
 export VISUAL="emacsclient -t"
+export BROWSER="qutebrowser"
 export PAGER="less"
 export TERMINAL="alacritty"
 export OPENER="xdg-open"
