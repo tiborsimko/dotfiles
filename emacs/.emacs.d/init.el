@@ -262,6 +262,15 @@
 ;; Configure git fringe
 (use-package git-gutter-fringe)
 
+;; Tab bar mode
+(use-package tab-bar
+  :straight nil
+  :config
+  (setq tab-bar-close-button-show nil
+        tab-bar-new-button-show nil
+        tab-bar-new-tab-choice "*scratch*"
+        tab-bar-show nil))
+
 ;; Helm completion framework
 (use-package helm
   :config
