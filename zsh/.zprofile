@@ -5,7 +5,7 @@ export BROWSER="firefox"
 export EDITOR="emacsclient -t"
 export VISUAL="emacsclient -t"
 export PAGER="less"
-export TERMINAL="xterm"
+export TERMINAL="alacritty"
 export OPENER="xdg-open"
 export LANG="en_GB.UTF-8"
 

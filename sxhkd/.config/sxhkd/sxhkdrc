@@ -2,7 +2,7 @@
 
 # open new terminal
 super + Return
-        xterm
+        alacritty
 
 # open program launcher
 super + r
@@ -14,7 +14,7 @@ super + shift + Return
 
 # jump around windows
 super + {g, e, f, x, z}
-        x1-windowmenu {_, emacs.Emacs, Navigator.Firefox, xterm.XTerm, zoom.zoom}
+        x1-windowmenu {_, emacs.Emacs, qutebrowser.qutebrowser, Alacritty.Alacritty, zoom.zoom}
 
 # make sxhkd reload its configuration
 super + Escape
