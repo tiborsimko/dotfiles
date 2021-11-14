@@ -513,7 +513,10 @@
   (setq mu4e-use-fancy-chars nil))
 
 ;; Python mode
-(use-package python)
+(use-package python
+  :config
+  (setq python-shell-interpreter "ipython"
+        python-shell-interpreter-args "-i --simple-prompt --InteractiveShell.display_page=True"))
 
 ;; Python vrtual environment support
 (use-package pyvenv
