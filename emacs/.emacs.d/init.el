@@ -547,6 +547,9 @@
 (use-package kubernetes-evil
   :after kubernetes)
 
+;; REST client
+(use-package restclient)
+
 ;; PDF
 (use-package pdf-tools)
 
