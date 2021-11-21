@@ -349,8 +349,8 @@
   (bind-key "C-c O" #'helm-selector-org-other-window)
   (bind-key "C-c s" #'helm-selector-shell)
   (bind-key "C-c S" #'helm-selector-shell-other-window)
-  (bind-key "C-c x" #'tibor/helm-selector-vterm)
-  (bind-key "C-c X" #'tibor/helm-selector-vterm-other-window))
+  (bind-key "C-c v" #'tibor/helm-selector-vterm)
+  (bind-key "C-c V" #'tibor/helm-selector-vterm-other-window))
 
 ;; Project management
 (use-package projectile
