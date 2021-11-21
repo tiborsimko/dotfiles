@@ -40,5 +40,8 @@ $HOME/private/bin/x1-k
 # Start SSH agent
 eval $(ssh-agent)
 
+# Start Emacs daemon
+emacs --daemon &
+
 # Start window manager
 exec dbus-launch --exit-with-session bspwm
