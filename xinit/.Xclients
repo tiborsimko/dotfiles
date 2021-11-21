@@ -44,4 +44,4 @@ eval $(ssh-agent)
 emacs --daemon &
 
 # Start window manager
-exec dbus-launch --exit-with-session bspwm
+exec dbus-launch --exit-with-session herbstluftwm --locked

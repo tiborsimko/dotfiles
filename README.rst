@@ -12,9 +12,9 @@ environment and configure several preferred applications.
 - Multiplexer: Tmux
 - Shell: Zsh
 - Status: Polybar
-- Terminal: XTerm
+- Terminal: Alacritty
 - Theme: Gruvbox
-- Window manager: Bspwm
+- Window manager: HerbstluftWM
 
 Screenshot
 ----------
