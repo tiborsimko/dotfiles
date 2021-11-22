@@ -12,7 +12,7 @@ config.bind('<ctrl+p>', 'tab-prev')
 config.bind('<ctrl+s>', 'tab-focus last')
 
 # Configure tab bar position
-c.tabs.position = 'top'
+c.tabs.position = 'bottom'
 
 # Configure tab width
 c.tabs.max_width = 200
