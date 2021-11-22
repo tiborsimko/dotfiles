@@ -147,7 +147,7 @@ config.bind('<z><u><l>', 'spawn --userscript qute-pass --dmenu-invocation dmenu 
 config.bind('<z><p><l>', 'spawn --userscript qute-pass --dmenu-invocation dmenu --password-only')
 
 # Edit text areas in vim
-c.editor.command = ['st', '-e', 'vim', '{file}']
+c.editor.command = ['emacsclient', '-c', '+{line}:{column}', '{file}']
 
 # Create task for the current web page
 config.bind(',T', 'spawn --userscript taskadd')
