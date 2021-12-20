@@ -7,8 +7,8 @@ env:
 # Set some padding
 window:
   padding:
-    x: 5
-    y: 5
+    x: 2
+    y: 2
 
 # Set font size
 font:
