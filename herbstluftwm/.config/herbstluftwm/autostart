@@ -85,7 +85,7 @@ herbstclient keybind $Mod-bracketright use_index +1 --skip-visible
 herbstclient keybind $Mod-bracketleft  use_index -1 --skip-visible
 
 # Jump to previous tag
-herbstclient keybind $Mod-w use_previous
+herbstclient keybind $Mod-0 use_previous
 
 # Influence frame client layout
 herbstclient keybind $Mod-d remove
@@ -187,7 +187,7 @@ herbstclient keybind XF86MonBrightnessUp spawn light -A 5
 
 # Rofi
 herbstclient keybind $Mod-r spawn rofi -theme gruvbox-dark-hard -show run -font 'Source Code Pro 10'
-herbstclient keybind $Mod-0 spawn rofi -theme gruvbox-dark-hard -show window -font 'Source Code Pro 10'
+herbstclient keybind $Mod-w spawn rofi -theme gruvbox-dark-hard -show window -font 'Source Code Pro 10'
 
 # Jump to apps
 herbstclient keybind $Mod-b spawn ~/.config/herbstluftwm/jumpto.sh class qutebrowser
