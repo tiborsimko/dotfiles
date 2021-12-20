@@ -210,7 +210,7 @@ fi
 
 # Emacs vterm set buffer names after current directory
 autoload -U add-zsh-hook
-add-zsh-hook -Uz chpwd (){ print -Pn "\e]2;%m:%2~\a" }
+add-zsh-hook -Uz chpwd (){ print -Pn "\e]2;%2~\a" }
 
 # Emacs vterm set directory tracking for M-x commands
 vterm_prompt_end() {
