@@ -18,8 +18,8 @@ herbstclient keybind $Mod-Shift-q reload
 herbstclient keybind $Mod-q close
 
 # Application shortcuts
-herbstclient keybind $Mod-Shift-Return spawn emacsclient -c
 herbstclient keybind $Mod-Return spawn xterm
+herbstclient keybind $Mod-Shift-Return spawn emacsclient -nc
 
 # Focus clients
 herbstclient keybind $Mod-Left  or , focus left , focus_edge right
