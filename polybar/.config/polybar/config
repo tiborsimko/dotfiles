@@ -5,6 +5,7 @@ margin-top = 0
 margin-bottom = 0
 
 [bar/mybar]
+height = 24
 module-margin-left = 1
 module-margin-right = 1
 modules-left = xworkspaces xwindow
@@ -13,6 +14,7 @@ override-redirect = true
 enable-ipc = true
 tray-position = right
 tray-padding = 4
+tray-maxsize = 12
 background = #111313
 foreground = #928374
 font-0 = "monospace:size=10"
@@ -25,7 +27,7 @@ pin-workspaces = true
 enable-click = true
 format = <label-state>
 label-padding = 1
-label-active-foreground = #ebdbb2
+label-active-foreground = #fbf1c7
 label-active-padding = 0
 label-occupied-foreground = #928374
 label-occupied-padding = 0
