@@ -170,20 +170,6 @@ v() {
         done | fzf-tmux -d -m -q "$*" -1) && $=EDITOR ${files//\~/$HOME}
 }
 
-# Prompt
-zinit ice pick"async.zsh" src"pure.zsh"
-zinit light sindresorhus/pure
-prompt_newline='%666v'
-PURE_PROMPT_SYMBOL='$'
-PURE_PROMPT_VICMD_SYMBOL='#'
-PROMPT=" $PROMPT"
-
-# SSH agent
-$(ssh-add -l | grep -q 'The agent has no identities') && ssh-add
-
-# Fuzzy finder (installed via vim, so not using zinit packs)
-[ -f $HOME/.fzf.zsh ] && source $HOME/.fzf.zsh
-
 # Emacs vterm helper function
 vterm_printf(){
     if [ -n "$TMUX" ] && ([ "${TERM%%-*}" = "tmux" ] || [ "${TERM%%-*}" = "screen" ] ); then
@@ -229,6 +215,15 @@ vterm_cmd() {
     done
     vterm_printf "51;E$vterm_elisp"
 }
+
+# SSH agent
+# $(ssh-add -l | grep -q 'The agent has no identities') && ssh-add
+
+# Prompt
+eval "$(starship init zsh)"
+
+# Fuzzy finder (installed via vim, so not using zinit packs)
+[ -f $HOME/.fzf.zsh ] && source $HOME/.fzf.zsh
 
 # Load local host customisations
 [ -f $HOME/.zshrc.local ] && source $HOME/.zshrc.local
