@@ -11,7 +11,6 @@ environment and configure several preferred applications.
 - Editor: Emacs, Vim
 - Multiplexer: Tmux
 - Shell: Zsh
-- Status: Polybar
 - Terminal: XTerm
 - Theme: Gruvbox
 - Window manager: AwesomeWM
