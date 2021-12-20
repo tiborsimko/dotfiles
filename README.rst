@@ -48,19 +48,19 @@ your operating system's package manager (such as ``apt``, ``brew``, ``pacman``,
 
     $ sudo pacman -S tmux vim zsh
 
-Third, install tpm (used for tmux), vim-plug (used for vim), and zinit (used for zsh):
+Third, install tpm (used for tmux), vim-plug (used for vim), and prepare
+directories for zsh plugins (used for zsh):
 
 .. code-block:: console
 
-    $ # install tpm (used for tmux):
-    $ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-    $ # install vim-plug (used for vim):
+    $ # zsh: prepare directories
+    $ mkdir -p ~/.zsh/plugged ~/.cache/zsh
+    $ # vim: install vim-plug
+    $ mkdir -p ~/.vim/undo
     $ curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    $ # prepare some vim and zsh directories
-    $ mkdir -p ~/.vim/undo ~/.cache/zsh
-    $ # install zinit (used for zsh):
-    $ sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zinit/master/doc/install.sh)"
+    $ # tmux: install tpm
+    $ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
 Fourth, activate all wanted configurations (such as ``tmux``, ``vim``,
 ``zsh``) via ``stow``:
