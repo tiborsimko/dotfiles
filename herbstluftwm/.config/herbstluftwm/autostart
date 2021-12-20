@@ -18,8 +18,8 @@ herbstclient keybind $Mod-Shift-q reload
 herbstclient keybind $Mod-q close
 
 # Application shortcuts
-herbstclient keybind $Mod-Return spawn alacritty
 herbstclient keybind $Mod-Shift-Return spawn emacsclient -c
+herbstclient keybind $Mod-Return spawn xterm
 
 # Focus clients
 herbstclient keybind $Mod-Left  or , focus left , focus_edge right
@@ -192,7 +192,7 @@ herbstclient keybind $Mod-0 spawn rofi -theme gruvbox-dark-hard -show window -fo
 # Jump to apps
 herbstclient keybind $Mod-b spawn ~/.config/herbstluftwm/jumpto.sh class qutebrowser
 herbstclient keybind $Mod-e spawn ~/.config/herbstluftwm/jumpto.sh class emacs
-herbstclient keybind $Mod-x spawn ~/.config/herbstluftwm/jumpto.sh class alacritty
+herbstclient keybind $Mod-x spawn ~/.config/herbstluftwm/jumpto.sh class xterm
 herbstclient keybind $Mod-z spawn ~/.config/herbstluftwm/jumpto.sh class zoom
 
 # Maximise

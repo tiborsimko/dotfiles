@@ -4,7 +4,7 @@
 #
 # Examples:
 #   $ x1-windowmenu [--current-desktop-only]
-#   $ x1-windowmenu alacritty [--current-desktop-only]
+#   $ x1-windowmenu xterm [--current-desktop-only]
 #   $ x1-windowmenu qutebrowser [--current-desktop-only]
 #
 # Bind the above actions in your favourite window manager.
@@ -12,7 +12,7 @@
 # Note: Inspired by
 # https://unix.stackexchange.com/questions/50539/inconsistent-behaviour-of-wmctrl-i-a-win
 
-# Are we looking for some program windows only? (e.g. alacritty, qutebrowser, zoom)
+# Are we looking for some program windows only? (e.g. xterm, qutebrowser, zoom)
 program=$1
 if [[ "$program" =~ ^--.* ]]; then
     program=""

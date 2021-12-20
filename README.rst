@@ -12,7 +12,7 @@ environment and configure several preferred applications.
 - Multiplexer: Tmux
 - Shell: Zsh
 - Status: Polybar
-- Terminal: Alacritty
+- Terminal: XTerm
 - Theme: Gruvbox
 - Window manager: HerbstluftWM
 

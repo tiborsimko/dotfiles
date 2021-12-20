@@ -5,7 +5,7 @@ export BROWSER="qutebrowser"
 export EDITOR="emacsclient -c"
 export VISUAL="emacsclient -c"
 export PAGER="less"
-export TERMINAL="alacritty"
+export TERMINAL="xterm"
 export OPENER="xdg-open"
 export LANG="en_GB.UTF-8"
 
