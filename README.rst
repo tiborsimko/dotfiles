@@ -14,7 +14,7 @@ environment and configure several preferred applications.
 - Status: Polybar
 - Terminal: XTerm
 - Theme: Gruvbox
-- Window manager: HerbstluftWM
+- Window manager: AwesomeWM
 
 Screenshot
 ----------

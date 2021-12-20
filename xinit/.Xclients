@@ -21,9 +21,6 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 # Hide mouse when not active
 unclutter &
 
-# Notification system
-dunst &
-
 # Network manager applet
 nm-applet &
 
@@ -44,4 +41,4 @@ eval $(ssh-agent)
 emacs --daemon &
 
 # Start window manager
-exec dbus-launch --exit-with-session herbstluftwm --locked
+exec dbus-launch --exit-with-session awesome
