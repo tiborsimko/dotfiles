@@ -193,6 +193,7 @@ herbstclient keybind $Mod-0 spawn rofi -theme gruvbox-dark-hard -show window -fo
 herbstclient keybind $Mod-b spawn ~/.config/herbstluftwm/jumpto.sh class qutebrowser
 herbstclient keybind $Mod-e spawn ~/.config/herbstluftwm/jumpto.sh class emacs
 herbstclient keybind $Mod-x spawn ~/.config/herbstluftwm/jumpto.sh class xterm
+herbstclient keybind $Mod-v spawn ~/.config/herbstluftwm/jumpto.sh name vterm
 herbstclient keybind $Mod-z spawn ~/.config/herbstluftwm/jumpto.sh class zoom
 
 # Maximise
