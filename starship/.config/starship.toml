@@ -1,0 +1,152 @@
+# Tibor's starship configuration.
+
+add_newline = true
+
+[aws]
+symbol = "aws "
+disabled = true
+
+[character]
+success_symbol = "[\\$](purple)"
+error_symbol = "[\\$](red)"
+vicmd_symbol = "[%%](purple)"
+
+[cmake]
+symbol = "cmake "
+disabled = true
+
+[cobol]
+symbol = "cobol "
+disabled = true
+
+[conda]
+symbol = "conda "
+disabled = true
+
+[crystal]
+symbol = "cr "
+disabled = true
+
+[dart]
+symbol = "dart "
+disabled = true
+
+[deno]
+symbol = "deno "
+disabled = true
+
+[directory]
+style = "bold blue"
+read_only = " ro"
+
+[docker_context]
+symbol = "docker "
+
+[dotnet]
+symbol = ".NET "
+disabled = true
+
+[elixir]
+symbol = "exs "
+disabled = true
+
+[elm]
+symbol = "elm "
+disabled = true
+
+[gcloud]
+disabled = true
+
+[git_branch]
+symbol = "git "
+
+[git_commit]
+tag_symbol = " tag "
+
+[git_status]
+ahead = ">"
+behind = "<"
+diverged = "<>"
+renamed = "r"
+deleted = "x"
+
+[golang]
+symbol = "go "
+
+[hg_branch]
+symbol = "hg "
+disabled = true
+
+[java]
+symbol = "java "
+disabled = true
+
+[julia]
+symbol = "jl "
+disabled = true
+
+[kotlin]
+symbol = "kt "
+disabled = true
+
+[nim]
+symbol = "nim "
+disabled = true
+
+[nix_shell]
+symbol = "nix "
+disabled = true
+
+[nodejs]
+symbol = "nodejs "
+disabled = true
+
+[memory_usage]
+symbol = "memory "
+disabled = true
+
+[ocaml]
+symbol = "ml "
+disabled = true
+
+[package]
+symbol = "pkg "
+disabled = true
+
+[perl]
+symbol = "pl "
+disabled = true
+
+[php]
+symbol = "php "
+disabled = true
+
+[pulumi]
+symbol = "pulumi "
+disabled = true
+
+[purescript]
+symbol = "purs "
+disabled = true
+
+[python]
+symbol = "py "
+detect_extensions = []
+detect_files = []
+format = "via [${symbol}${pyenv_prefix}${virtualenv}]($style) "
+
+[ruby]
+symbol = "rb "
+disabled = true
+
+[rust]
+symbol = "rs "
+disabled = true
+
+[scala]
+symbol = "scala "
+disabled = true
+
+[swift]
+symbol = "swift "
+disabled = true
