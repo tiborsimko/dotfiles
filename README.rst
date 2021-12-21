@@ -48,7 +48,7 @@ your operating system's package manager (such as ``apt``, ``brew``, ``pacman``,
     $ sudo pacman -S tmux vim zsh
 
 Third, install tpm (used for tmux), vim-plug (used for vim), and prepare
-directories for zsh plugins (used for zsh):
+directories for zsh plugins (used for zsh) and mutt cache:
 
 .. code-block:: console
 
@@ -60,6 +60,8 @@ directories for zsh plugins (used for zsh):
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     $ # tmux: install tpm
     $ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+    $ # mutt: prepare cache directory
+    $ mkdir -p ~/.cache/mutt
 
 Fourth, activate all wanted configurations (such as ``tmux``, ``vim``,
 ``zsh``) via ``stow``:
