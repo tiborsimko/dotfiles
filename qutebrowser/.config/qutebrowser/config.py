@@ -23,6 +23,9 @@ c.statusbar.position = 'bottom'
 # Configure tab width
 c.tabs.max_width = 200
 
+# Tabs format
+c.tabs.title.format = '{audio}{index} {current_title}'
+
 # Show/hide tabs
 config.bind(',t', 'config-cycle tabs.show never always')
 
