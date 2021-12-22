@@ -14,6 +14,7 @@ Plug 'gruvbox-community/gruvbox'
     " in your shell starting scripts.
     let g:gruvbox_contrast_dark='hard'
     let g:gruvbox_contrast_light='hard'
+    let g:gruvbox_invert_selection = 0
     set background=dark
 
 " Molokai colour scheme
