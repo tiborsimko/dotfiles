@@ -90,13 +90,13 @@ Plug 'junegunn/fzf.vim'
 " Git
 Plug 'tpope/vim-fugitive'
     nnoremap <Leader>ga :Git add %:p<CR><CR>
-    nnoremap <Leader>gb :Gbrowse<CR>
-    nnoremap <Leader>gB :Gblame<CR>
+    nnoremap <Leader>gb :GBrowse<CR>
+    nnoremap <Leader>gB :Git blame<CR>
     nnoremap <Leader>gd :Gdiff<CR>
     nnoremap <Leader>gk :exe ':!cd ' . expand('%:p:h') . '; git k'<CR>
     nnoremap <Leader>gka :exe ':!cd ' . expand('%:p:h') . '; git ka'<CR>
-    nnoremap <Leader>gl :silent! Glog<CR>:bot copen<CR>
-    nnoremap <Leader>gs :Gstatus<CR>
+    nnoremap <Leader>gL :silent! Gclog<CR>rbot copen<CR>
+    nnoremap <Leader>gs :Git<CR>
 Plug 'mhinz/vim-signify'
     let g:signify_sign_show_count = 0
     let g:signify_sign_show_text = 1
