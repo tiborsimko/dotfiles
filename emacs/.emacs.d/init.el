@@ -545,6 +545,27 @@
   (setq flycheck-flake8rc "~/.config/flake8")
   (add-hook 'prog-mode-hook 'flycheck-mode))
 
+;; LSP
+(use-package lsp-mode
+  :config
+  (add-hook 'python-mode-hook 'lsp-mode)
+  (define-key lsp-mode-map (kbd "C-c l") lsp-command-map))
+
+;; LSP UI
+(use-package lsp-ui
+  :after lsp-mode
+  :custom
+  (lsp-ui-doc-position 'top)
+  :config
+  (add-hook 'lsp-mode-hook 'lsp-ui-mode))
+
+;; LSP pyright
+(use-package lsp-pyright
+  :after lsp-mode
+  :hook (python-mode . (lambda ()
+                         (require 'lsp-pyright)
+                         (lsp))))
+
 ;; Docker
 (use-package docker)
 (use-package dockerfile-mode)
