@@ -97,6 +97,7 @@
    '(mode-line-inactive ((t (:foreground "#928374" :background "#32302f" :box nil))))
    '(fringe ((t (:background "#1d2021"))))
    '(internal-border ((t (:background "#1d2021"))))
+   '(hl-line ((t (:background "#282828"))))
    '(line-number ((t (:background "#1d2021"))))
    '(line-number-current-line ((t (:background "#1d2021")))))
   (load-theme 'gruvbox-dark-hard t))
@@ -108,6 +109,11 @@
   (setq doom-modeline-icon nil
         doom-modeline-height 1))
 
+;; Do not highlight current line (besides line number)
+(use-package hl-line
+  :straight nil
+  :config
+  (global-hl-line-mode -1))
 
 ;; Disable cursor blinking when running in terminal console
 (setq visible-cursor nil)
