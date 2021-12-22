@@ -687,7 +687,9 @@
   (setq windmove-wrap-around t))
 
 ;; Window movements: more functionality
-(use-package windower)
+(use-package windower
+  :config
+  (bind-key "m" #'windower-toggle-single evil-window-map))
 
 ;; Window layout
 (use-package winner
