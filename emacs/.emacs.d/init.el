@@ -95,6 +95,9 @@
   (custom-set-faces
    '(mode-line ((t (:background "#3c3836" :box nil))))
    '(mode-line-inactive ((t (:foreground "#928374" :background "#32302f" :box nil))))
+   '(tab-bar ((t (:foreground "#928374" :background "#1d2021"))))
+   '(tab-bar-tab ((t (:foreground "#ebdbb2" :background "#3c3836"))))
+   '(tab-bar-tab-inactive ((t (:foreground "#928374" :background "#1d2021"))))
    '(fringe ((t (:background "#1d2021"))))
    '(internal-border ((t (:background "#1d2021"))))
    '(hl-line ((t (:background "#282828"))))
@@ -277,10 +280,17 @@
 (use-package tab-bar
   :straight nil
   :config
+  (bind-key "M-[" #'tab-previous)
+  (bind-key "M-]" #'tab-next)
   (setq tab-bar-close-button-show nil
         tab-bar-new-button-show nil
         tab-bar-new-tab-choice "*scratch*"
-        tab-bar-show nil))
+        tab-bar-show 1
+        tab-bar-format '(tab-bar-format-tabs-groups tab-bar-format-align-right tab-bar-format-global)
+        tab-bar-tab-hints t
+        tab-bar-select-tab-modifiers '(meta))
+  (tab-bar-mode 1)
+  (tab-bar-history-mode 1))
 
 ;; Repeat mode for quickly jump to other windows (C-x o o o) or other tabs (C-x t o o o) and more
 (use-package repeat
