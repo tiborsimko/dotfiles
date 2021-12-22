@@ -7,9 +7,12 @@ config.load_autoconfig(False)
 c.auto_save.session = True
 
 # Bind some shortcuts
-config.bind('<ctrl+n>', 'tab-next')
 config.bind('<ctrl+p>', 'tab-prev')
+config.bind('<alt+[>', 'tab-prev')
+config.bind('<ctrl+n>', 'tab-next')
+config.bind('<alt+]>', 'tab-next')
 config.bind('<ctrl+s>', 'tab-focus last')
+config.bind('<alt+0>', 'tab-focus last')
 
 # Configure tab bar position
 c.tabs.position = 'bottom'
