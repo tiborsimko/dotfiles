@@ -315,7 +315,10 @@
 
 ;; Helm for Projectile
 (use-package helm-projectile
-  :after (helm projectile))
+  :after (helm projectile)
+  :config
+  (setq projectile-completion-system 'helm)
+  (helm-projectile-on))
 
 ;; Helm password manager
 (use-package helm-pass
@@ -357,7 +360,6 @@
 ;; Project management
 (use-package projectile
   :config
-  (setq projectile-completion-system 'helm)
   (projectile-mode +1)
   (define-key projectile-mode-map (kbd "C-c p") #'projectile-command-map))
 
