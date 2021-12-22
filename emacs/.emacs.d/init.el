@@ -678,7 +678,7 @@
                                  (setq-local global-hl-line-mode nil)
                                  (setq-local line-spacing nil)))
   ;; Set nice terminal name with current working directory
-  (setq vterm-buffer-name-string "vterm: %s"))
+  (setq vterm-buffer-name-string "vterm %s"))
 
 ;; Window movement
 (use-package windmove
