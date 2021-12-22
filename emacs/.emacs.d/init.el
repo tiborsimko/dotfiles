@@ -260,9 +260,10 @@
 
 ;; Git integration
 (use-package magit
-  :commands magit-status
+  :custom
+  (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
   :config
-  (bind-key "C-x g" . #'magit-status))
+  (bind-key "C-x g" #'magit-status)
 
 ;; Show git status in the gutter
 (use-package git-gutter
