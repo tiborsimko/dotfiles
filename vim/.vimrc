@@ -8,7 +8,7 @@ let maplocalleader = ' '
 call plug#begin('~/.vim/plugged')
 
 " Gruvbox colour scheme
-Plug 'morhetz/gruvbox'
+Plug 'gruvbox-community/gruvbox'
     " Note: if gruvbox colours don't look quite right, don't forget to
     " source $HOME/.vim/plugged/gruvbox/gruvbox_256palette.sh
     " in your shell starting scripts.
