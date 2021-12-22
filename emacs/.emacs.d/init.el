@@ -47,6 +47,8 @@
   :config
   ;; Do not show startup screen
   (setq inhibit-startup-screen t)
+  ;; Use fully empty scratch buffer
+  (setq initial-scratch-message "")
   ;; Use y/n instead of yes/no
   (fset 'yes-or-no-p 'y-or-n-p)
   ;; Prefer spaces over tabs
