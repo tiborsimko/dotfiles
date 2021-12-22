@@ -93,20 +93,21 @@
   :demand t
   :config
   (custom-set-faces
-   '(mode-line ((t (:background "#282828"))))
-   '(mode-line-inactive ((t (:background "#282828"))))
+   '(mode-line ((t (:background "#3c3836" :box nil))))
+   '(mode-line-inactive ((t (:foreground "#928374" :background "#32302f" :box nil))))
    '(fringe ((t (:background "#1d2021"))))
    '(internal-border ((t (:background "#1d2021"))))
    '(line-number ((t (:background "#1d2021"))))
    '(line-number-current-line ((t (:background "#1d2021")))))
   (load-theme 'gruvbox-dark-hard t))
 
-;; Prettier modeline
-(use-package all-the-icons
-  :demand t)
+;; Complete but compact mode line
 (use-package doom-modeline
-  :demand t
-  :init (doom-modeline-mode 1))
+  :init (doom-modeline-mode 1)
+  :config
+  (setq doom-modeline-icon nil
+        doom-modeline-height 1))
+
 
 ;; Disable cursor blinking when running in terminal console
 (setq visible-cursor nil)
