@@ -744,6 +744,17 @@
   :config
   (popwin-mode 1))
 
+;; Helper to set windows dedicated
+(defun tibor/toggle-window-dedicated ()
+  "Toggle window dedication flag. Useful for vterm buffers."
+  (interactive)
+  (message
+   (if (let (window (get-buffer-window (current-buffer)))
+         (set-window-dedicated-p window (not (window-dedicated-p window))))
+       "%s is dedicated"
+     "%s is not dedicated")
+   (current-buffer)))
+
 ;; Local Variables:
 ;; byte-compile-warnings: (not free-vars unresolved)
 ;; End:
