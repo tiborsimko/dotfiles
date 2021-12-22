@@ -274,6 +274,12 @@
         tab-bar-new-tab-choice "*scratch*"
         tab-bar-show nil))
 
+;; Repeat mode for quickly jump to other windows (C-x o o o) or other tabs (C-x t o o o) and more
+(use-package repeat
+  :straight nil
+  :config
+  (repeat-mode))
+
 ;; Helm completion framework
 (use-package helm
   :config
