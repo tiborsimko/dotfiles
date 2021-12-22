@@ -56,8 +56,13 @@ XTerm*charClass: 33:48,37-38:48,45-47:48,64:48,58:48,126:48,61:48,63:48,43:48,35
 ! XTerm scrolling buffer
 XTerm*saveLines: 8192
 
+! XTerm selections
+xterm*selectToClipboard: true
+
 ! XTerm shortcuts
 XTerm*translations: #override \n\
+  Ctrl Shift <KeyPress>C: select-end(SELECT, CLIPBOARD) \n\
+  Ctrl Shift <KeyPress>V: insert-selection(SELECT, CLIPBOARD) \n\
   Ctrl <KeyPress>minus: smaller-vt-font() \n\
   Ctrl <KeyPress>plus: larger-vt-font() \n\
   Ctrl <KeyPress>0: set-vt-font(d) \n\
