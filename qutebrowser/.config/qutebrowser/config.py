@@ -24,8 +24,7 @@ config.bind(',t', 'config-cycle tabs.show never always')
 config.bind(',s', 'config-cycle statusbar.show never always')
 
 # Use dark theme
-c.colors.webpage.bg = "#1d2021"
-c.colors.webpage.darkmode.enabled = False
+#c.colors.webpage.darkmode.enabled = False
 
 # Gruvbox dark colours
 gruvbox_bg0_hard = "#1d2021"
