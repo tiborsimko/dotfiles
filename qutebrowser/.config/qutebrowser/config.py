@@ -15,7 +15,10 @@ config.bind('<ctrl+s>', 'tab-focus last')
 config.bind('<alt+0>', 'tab-focus last')
 
 # Configure tab bar position
-c.tabs.position = 'bottom'
+c.tabs.position = 'top'
+
+# Configure status bar position
+c.statusbar.position = 'bottom'
 
 # Configure tab width
 c.tabs.max_width = 200
