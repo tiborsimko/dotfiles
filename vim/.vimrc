@@ -200,8 +200,13 @@ set termguicolors
 " Show line numbers
 set number relativenumber
 
-" Do not highlight cursor line
-set nocursorline
+" Highlight cursor line only in active window
+set cursorline
+augroup CursorLine
+    au!
+    au VimEnter,WinEnter,BufWinEnter * setlocal cursorline
+    au WinLeave * setlocal nocursorline
+augroup END
 
 " Break lines at word (requires Wrap lines)
 set linebreak
