@@ -38,6 +38,7 @@ config.bind(',s', 'config-cycle statusbar.show never always')
 # Gruvbox dark colours
 gruvbox_bg0_hard = "#1d2021"
 gruvbox_bg0 = "#282828"
+gruvbox_bg0_soft = "#32302f"
 gruvbox_bg1 = "#3c3836"
 gruvbox_bg2 = "#504945"
 gruvbox_bg3 = "#665c54"
@@ -122,21 +123,21 @@ c.colors.tabs.bar.bg = gruvbox_bg0_hard
 c.colors.tabs.even.bg = gruvbox_bg0_hard
 c.colors.tabs.even.fg = gruvbox_grey
 c.colors.tabs.indicator.error = gruvbox_red
-c.colors.tabs.indicator.start = gruvbox_bg0
-c.colors.tabs.indicator.stop = gruvbox_bg0
+c.colors.tabs.indicator.start = gruvbox_bg1
+c.colors.tabs.indicator.stop = gruvbox_bg1
 c.colors.tabs.odd.bg = gruvbox_bg0_hard
 c.colors.tabs.odd.fg = gruvbox_grey
 c.colors.tabs.pinned.even.bg = gruvbox_bg0_hard
 c.colors.tabs.pinned.even.fg = gruvbox_grey
 c.colors.tabs.pinned.odd.bg = gruvbox_bg0_hard
 c.colors.tabs.pinned.odd.fg = gruvbox_grey
-c.colors.tabs.pinned.selected.even.bg = gruvbox_bg0_hard
+c.colors.tabs.pinned.selected.even.bg = gruvbox_bg1
 c.colors.tabs.pinned.selected.even.fg = gruvbox_fg1
-c.colors.tabs.pinned.selected.odd.bg = gruvbox_bg0_hard
+c.colors.tabs.pinned.selected.odd.bg = gruvbox_bg1
 c.colors.tabs.pinned.selected.odd.fg = gruvbox_fg1
-c.colors.tabs.selected.even.bg = gruvbox_bg0
+c.colors.tabs.selected.even.bg = gruvbox_bg1
 c.colors.tabs.selected.even.fg = gruvbox_fg1
-c.colors.tabs.selected.odd.bg = gruvbox_bg0
+c.colors.tabs.selected.odd.bg = gruvbox_bg1
 c.colors.tabs.selected.odd.fg = gruvbox_fg1
 
 # Spell check languages
