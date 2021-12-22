@@ -706,8 +706,11 @@
 ;; Window automatic resizing: golden ratio
 (use-package golden-ratio)
 
-;; Windows transposer
-(use-package transpose-frame)
+;; Window transposer
+(use-package transpose-frame
+  :after evil
+  :config
+  (bind-key "t" #'transpose-frame evil-window-map))
 
 ;; Window helper buffer placement
 (use-package popwin
