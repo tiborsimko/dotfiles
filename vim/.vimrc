@@ -283,21 +283,19 @@ set backspace=indent,eol,start
 " Always show status line
 set laststatus=2
 
-" Simple non-obtrusive status line
+" Simple non-obtrusive emacs-like status line
 function! s:statusline_expr()
-    let mod = "%{&modified ? '[+] ' : !&modifiable ? '[x] ' : ''}"
-    let ro  = "%{&readonly ? '[RO] ' : ''}"
+    let mode  = '  <'."%{toupper(mode())}".'> '
+    let ro  = "%{&readonly ? '%' : ' '}"
+    let mod = "%{&modified ? '*' : !&modifiable ? 'x' : ' '}"
+    let pos = '%(%l:%c%) '
+    let pct = '%P'
+    let sep = '%= '
     let ft  = "%{len(&filetype) ? '['.&filetype.'] ' : ''}"
     let fug = "%{exists('g:loaded_fugitive') ? fugitive#statusline() : ''}"
-    let sep = '%='
-    let pos = '%-12(L%l_C%c%V%)'
-    let pct = '%P'
-  return '[%n] %F %<'.mod.ro.ft.fug.sep.pos.pct
+  return mode.ro.mod.' %f    %<'.pos.'%*'.pct.sep.ft.fug
 endfunction
 let &statusline = s:statusline_expr()
-
-" Status line fill characters
-set fillchars=stl:_,stlnc:.,vert:\|,fold:-,diff:-
 
 " Do not join spaces when reformatting paragraphs
 set nojoinspaces
@@ -346,11 +344,20 @@ autocmd BufRead,BufNewFile /tmp/mutt-* :Goyo
 " Tune down gruvbox theme
 function! MyGruvbox() abort
     highlight clear SignColumn
-    highlight SignifySignAdd cterm=NONE ctermfg=green ctermbg=NONE gui=NONE guifg=#b8bb26 guibg=NONE
-    highlight SignifySignDelete cterm=NONE ctermfg=red ctermbg=NONE gui=NONE guifg=#fb4934 guibg=NONE
-    highlight SignifySignChange cterm=NONE ctermfg=yellow ctermbg=NONE gui=NONE guifg=#fabd2f guibg=NONE
-    highlight StatusLine cterm=NONE ctermfg=245 gui=NONE guifg=#928374 guibg=NONE
-    highlight StatusLineNC cterm=NONE ctermfg=245 gui=NONE guifg=#928374 guibg=NONE
+    highlight GruvboxAquaSign guibg=#1d2021
+    highlight GruvboxBlueSign guibg=#1d2021
+    highlight GruvboxGreenSign guibg=#1d2021
+    highlight GruvboxOrangeSign guibg=#1d2021
+    highlight GruvboxPurpleSign guibg=#1d2021
+    highlight GruvboxRedSign guibg=#1d2021
+    highlight GruvboxYellowSign guibg=#1d2021
+    highlight StatusLine cterm=NONE ctermfg=245 gui=NONE guifg=#d5c4a1 guibg=#3c3836
+    highlight StatusLineNC cterm=NONE ctermfg=245 gui=NONE guifg=#928374 guibg=#32302f
+    highlight CursorLine cterm=NONE ctermfg=NONE ctermbg=245 gui=NONE guifg=NONE guibg=#1d2021
+    highlight CursorLineNR cterm=NONE ctermfg=NONE ctermbg=245 gui=NONE guifg=#fe8019 guibg=#1d2021
+    highlight TabLine gui=NONE guifg=#928374 guibg=#1d2021
+    highlight TabLineFill gui=NONE guifg=#928374 guibg=#1d2021
+    highlight TabLineSel gui=NONE guifg=#ebdbb2 guibg=#3c3836
 endfunction
 
 " Tune down colours whenever a colour scheme is changed
