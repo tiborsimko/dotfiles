@@ -300,6 +300,10 @@
   ;; Activate Helm
   (helm-mode 1))
 
+;; Helm ripgrep
+(use-package helm-rg
+  :after helm)
+
 ;; Helm for key bindings
 (use-package helm-descbinds
   :after helm
