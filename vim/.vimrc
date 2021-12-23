@@ -316,7 +316,7 @@ set undofile
 set mouse=a
 
 " Use system clipboard
-set clipboard=unnamed
+set clipboard=unnamedplus
 
 " Shorter mapped key sequence wait time limit
 set timeoutlen=500
