@@ -111,6 +111,7 @@ alias rg='rg --hidden --glob !.git'
 alias rm='rm -i'
 alias t="task"
 alias to="taskopen"
+alias vim="vimx"
 alias zsh_setup_kubectl_autocompletion="source <(kubectl completion zsh)"
 
 # ff = fuzzy file (and edit)
