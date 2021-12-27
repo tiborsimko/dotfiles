@@ -63,7 +63,7 @@ Plug 'junegunn/fzf.vim'
     " Fuzzy finder basic mappings
     nnoremap <silent> <Leader>f :FZF -m<CR>
     nnoremap <silent> <Leader>b :Buffers<CR>
-    nnoremap <silent> <Leader>s :Lines<CR>
+    nnoremap <silent> <Leader>l :call fzf#vim#lines("'".expand('<cword>')):<CR>
     nnoremap <silent> <Leader>r :Rg<CR>
     " Fuzzy finder selecting mappings
     nmap <leader><tab> <plug>(fzf-maps-n)
