@@ -1,0 +1,7 @@
+# Tibor's bat configuration.
+
+# Set theme
+--theme="ansi"
+
+# Use plain style without line numbers or decorations
+--style=plain
