@@ -160,6 +160,9 @@ Plug 'w0rp/ale'
 " Snippets
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
+    let g:UltiSnipsExpandTrigger="<c-tab>"
+    let g:UltiSnipsJumpForwardTrigger="<c-b>"
+    let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
 " Quickfix, location, spell check and other jumps
 Plug 'tpope/vim-unimpaired'
