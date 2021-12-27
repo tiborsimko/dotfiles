@@ -46,20 +46,20 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
     " Set fzf colours to match the gruvbox colorscheme
     let g:fzf_colors = {
-      \ 'fg':      ['fg', 'GruvboxFg3'],
-      \ 'bg':      ['fg', 'GruvboxBg0'],
-      \ 'hl':      ['fg', 'GruvboxBlue'],
-      \ 'fg+':     ['fg', 'GruvboxFg1'],
-      \ 'bg+':     ['fg', 'GruvboxBg1'],
-      \ 'hl+':     ['fg', 'GruvboxBlue'],
-      \ 'info':    ['fg', 'GruvboxAqua'],
-      \ 'prompt':  ['fg', 'GruvboxFg4'],
-      \ 'pointer': ['fg', 'GruvboxAqua'],
-      \ 'marker':  ['fg', 'GruvboxAqua'],
-      \ 'spinner': ['fg', 'GruvboxAqua'],
-      \ 'header':  ['fg', 'GruvboxBg3'],
-      \ 'gutter':  ['fg', 'GruvboxBg0']
-      \ }
+        \ 'fg':      ['fg', 'GruvboxFg3'],
+        \ 'bg':      ['fg', 'GruvboxBg0'],
+        \ 'hl':      ['fg', 'GruvboxBlue'],
+        \ 'fg+':     ['fg', 'GruvboxFg1'],
+        \ 'bg+':     ['fg', 'GruvboxBg1'],
+        \ 'hl+':     ['fg', 'GruvboxBlue'],
+        \ 'info':    ['fg', 'GruvboxAqua'],
+        \ 'prompt':  ['fg', 'GruvboxFg4'],
+        \ 'pointer': ['fg', 'GruvboxAqua'],
+        \ 'marker':  ['fg', 'GruvboxAqua'],
+        \ 'spinner': ['fg', 'GruvboxAqua'],
+        \ 'header':  ['fg', 'GruvboxBg3'],
+        \ 'gutter':  ['fg', 'GruvboxBg0']
+        \ }
     " Fuzzy finder basic mappings
     nnoremap <silent> <Leader>f :FZF -m<CR>
     nnoremap <silent> <Leader>b :Buffers<CR>
@@ -372,8 +372,8 @@ colorscheme gruvbox
 
 " Set cursor shape based on mode
 if &term =~ "xterm"
-  let &t_SI .= "\<Esc>[6 q"
-  let &t_EI .= "\<Esc>[2 q"
+    let &t_SI .= "\<Esc>[6 q"
+    let &t_EI .= "\<Esc>[2 q"
 endif
 
 " Remove netrw banner
