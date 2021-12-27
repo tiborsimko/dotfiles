@@ -315,14 +315,6 @@ set updatetime=100
 " Always show sign column to keep the same visual width
 set signcolumn=yes
 
-" Location
-nnoremap <Leader>l :lnext<cr>zz
-nnoremap <Leader>L :lprev<cr>zz
-
-" Quickfix
-nnoremap <Leader>q :cnext<cr>zz
-nnoremap <Leader>Q :cprev<cr>zz
-
 " Jump to last editing position
 autocmd BufReadPost *
     \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
