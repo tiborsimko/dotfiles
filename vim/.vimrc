@@ -61,8 +61,8 @@ Plug 'junegunn/fzf.vim'
         \ 'gutter':  ['fg', 'GruvboxBg0']
         \ }
     " Fuzzy finder basic mappings
-    nnoremap <silent> <Leader>f :FZF -m<CR>
     nnoremap <silent> <Leader>b :Buffers<CR>
+    nnoremap <silent> <Leader>f :Files<CR>
     nnoremap <silent> <Leader>l :call fzf#vim#lines("'".expand('<cword>')):<CR>
     nnoremap <silent> <Leader>r :Rg<CR>
     " Fuzzy finder selecting mappings
