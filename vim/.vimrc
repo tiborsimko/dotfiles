@@ -139,23 +139,46 @@ Plug 'benmills/vimux'
     map <Leader>vz :VimuxZoomRunner<CR>
 
 " Ale
-Plug 'w0rp/ale'
-    " Use only flake8 linter for Python for now
+Plug 'dense-analysis/ale'
+    " Define linters
     let g:ale_linters = {
         \ 'python': ['flake8'],
         \ }
+    " Define fixers
     let g:ale_fixers = {
         \ 'javascript': ['prettier'],
         \ 'python': ['black'],
         \ '*': ['remove_trailing_lines', 'trim_whitespace'],
         \ }
-    let g:ale_lint_delay = 1000
+    " Integrate nicely with CoC
+    let g:ale_disable_lsp = 1
+    " Use quickfix list instead of location list
+    let g:ale_set_loclist = 0
+    let g:ale_set_quickfix = 1
+    " Show quickfix list for findings
     let g:ale_open_list = 1
+    " Lint less frequently to save power
+    let g:ale_lint_delay = 2000
     let g:ale_lint_on_save = 1
-    let g:ale_lint_on_text_changed = 0
+    let g:ale_lint_on_text_changed = 'never'
+    let g:ale_lint_on_insert_leave = 1
+    " Fix on save only when asked via manual ALEFix calls
+    let g:ale_fix_on_save = 0
+    " Shortcuts
     nmap <Leader>ta :ALEToggle<CR>
     nmap <Leader>an <Plug>(ale_next_wrap)
     nmap <Leader>ap <Plug>(ale_previous_wrap)
+    " Helper function for status line info
+    function! AleStatusInfo() abort
+        let l:counts = ale#statusline#Count(bufnr(''))
+        let l:all_errors = l:counts.error + l:counts.style_error
+        let l:all_non_errors = l:counts.total - l:all_errors
+        return l:counts.total == 0 ? '[OK]' : printf(
+        \   '[%dW %dE]',
+        \   all_non_errors,
+        \   all_errors
+        \)
+    endfunction
 
 " Snippets
 Plug 'SirVer/ultisnips'
@@ -416,7 +439,8 @@ function! s:statusline_expr()
     let sep = '%= '
     let ft  = "%{len(&filetype) ? '['.&filetype.'] ' : ''}"
     let fug = "%{exists('g:loaded_fugitive') ? fugitive#statusline() : ''}"
-  return mode.ro.mod.' %f    %<'.pos.'%*'.pct.sep.ft.fug
+    let ale = ' %{AleStatusInfo()}'
+    return mode.ro.mod.' %f    %<'.pos.'%*'.pct.sep.ft.fug.ale
 endfunction
 let &statusline = s:statusline_expr()
 
