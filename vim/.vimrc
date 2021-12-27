@@ -74,14 +74,6 @@ Plug 'junegunn/fzf.vim'
     imap <c-x><c-f> <plug>(fzf-complete-path)
     imap <c-x><c-j> <plug>(fzf-complete-file-ag)
     imap <c-x><c-l> <plug>(fzf-complete-line)
-    " Fuzzy open files in horizontal split
-    nnoremap <silent> <Leader>eh :call fzf#run({
-    \   'down': '40%',
-    \   'sink': 'botright split' })<CR>
-    " Fuzzy open files in vertical horizontal split
-    nnoremap <silent> <Leader>ev :call fzf#run({
-    \   'right': winwidth('.') / 2,
-    \   'sink':  'vertical botright split' })<CR>
 
 " Git
 Plug 'tpope/vim-fugitive'
