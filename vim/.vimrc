@@ -34,7 +34,10 @@ Plug 'editorconfig/editorconfig-vim'
 " Undo tree
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
     let g:undotree_WindowLayout = 2
-    nmap <Leader>u :UndotreeToggle<CR>
+    " Undotree toggle shortcut in vim-unimpaired style
+    nmap [ot :UndotreeShow<CR>
+    nmap ]ot :UndotreeHide<CR>
+    nmap yot :UndotreeToggle<CR>
 
 " Jumping around
 Plug 'justinmk/vim-sneak'
@@ -164,10 +167,10 @@ Plug 'dense-analysis/ale'
     let g:ale_lint_on_insert_leave = 1
     " Fix on save only when asked via manual ALEFix calls
     let g:ale_fix_on_save = 0
-    " Shortcuts
-    nmap <Leader>ta :ALEToggle<CR>
-    nmap <Leader>an <Plug>(ale_next_wrap)
-    nmap <Leader>ap <Plug>(ale_previous_wrap)
+    " Shortcuts in a vim-unimpaired style
+    nmap [oa :ALEEnableBuffer<CR>
+    nmap ]oa :ALEDisableBuffer<CR>
+    nmap yoa :ALEToggleBuffer<CR>
     " Helper function for status line info
     function! AleStatusInfo() abort
         let l:counts = ale#statusline#Count(bufnr(''))
