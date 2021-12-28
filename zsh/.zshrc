@@ -45,8 +45,13 @@ source $ZSHPLUGGED/z/z.sh
 # cd (changyuheng/zsh-interactive-cd)
 source $ZSHPLUGGED/zsh-interactive-cd/zsh-interactive-cd.plugin.zsh
 
-# vi mode with some emacs bindings
-set -o vi
+# Use vi bindings
+bindkey -v
+
+# Enter normal mode from insert mode faster
+export KEYTIMEOUT=1
+
+# Add some emacs-like bindings to vi mode
 bindkey '^A' vi-beginning-of-line
 bindkey -M viins '^A' vi-beginning-of-line
 bindkey -M vicmd '^A' vi-beginning-of-line
