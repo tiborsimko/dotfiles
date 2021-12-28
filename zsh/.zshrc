@@ -68,6 +68,21 @@ bindkey '^W' vi-backward-kill-word
 bindkey -M viins '^W' vi-backward-kill-word
 bindkey -M vicmd '^W' vi-backward-kill-word
 
+# Change cursor based on vi mode
+zle-keymap-select () {
+    if [ $KEYMAP = vicmd ]; then
+        printf "\033[2 q"
+    else
+        printf "\033[6 q"
+    fi
+}
+zle -N zle-keymap-select
+zle-line-init () {
+    zle -K viins
+    printf "\033[6 q"
+}
+zle -N zle-line-init
+
 # Shortcuts for some directories
 setopt autonamedirs
 r=$HOME/private/project/reana/src
