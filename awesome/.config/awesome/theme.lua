@@ -9,7 +9,7 @@ local themes_path = gfs.get_themes_dir()
 
 local theme = {}
 
-theme.font          = "sans 8"
+theme.font          = "monospace 9"
 
 theme.bg_normal     = "#1d2021"
 theme.bg_focus      = "#3c3836"
