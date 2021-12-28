@@ -372,12 +372,6 @@ augroup SpellLang
     autocmd FileType gitcommit,mail,markdown,plaintext,rst,tex setlocal spell spelllang=en_gb
 augroup END
 
-" Toggle spell checking
-nmap <Leader>ts :setlocal spell! spelllang=en_gb<CR>
-
-" Toggle paste
-nmap <Leader>tp :setlocal paste!<CR>
-
 " Use visual bell (no beeping)
 set visualbell
 
