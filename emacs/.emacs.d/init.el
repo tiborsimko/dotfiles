@@ -280,8 +280,9 @@
 (use-package tab-bar
   :straight nil
   :config
-  (bind-key "M-[" #'tab-previous)
-  (bind-key "M-]" #'tab-next)
+  (when (display-graphic-p)
+    (bind-key "M-[" #'tab-previous)
+    (bind-key "M-]" #'tab-next))
   (setq tab-bar-close-button-show nil
         tab-bar-new-button-show nil
         tab-bar-new-tab-choice "*scratch*"
