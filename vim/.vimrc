@@ -513,10 +513,9 @@ augroup END
 colorscheme gruvbox
 
 " Set cursor shape based on mode
-if &term =~ "xterm"
-    let &t_SI .= "\<Esc>[6 q"
-    let &t_EI .= "\<Esc>[2 q"
-endif
+let &t_SI .= "\<Esc>[6 q"
+let &t_SR .= "\<Esc>[4 q"
+let &t_EI .= "\<Esc>[2 q"
 
 " Remove netrw banner
 let g:netrw_banner=0
