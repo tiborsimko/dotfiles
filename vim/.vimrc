@@ -364,9 +364,15 @@ set textwidth=0
 " Highlight matching brace
 set showmatch
 
-" Enable spell-checking
-set spell
-set spell spelllang=en_gb
+" Enable spell-checking automatically for certain file types
+set spelllang=en_gb
+augroup SpellLang
+    autocmd!
+    " Spell check some file types automatically
+    autocmd FileType gitcommit,mail,markdown,plaintext,rst,tex setlocal spell spelllang=en_gb
+augroup END
+
+" Toggle spell checking
 nmap <Leader>ts :setlocal spell! spelllang=en_gb<CR>
 
 " Toggle paste
@@ -483,17 +489,18 @@ autocmd BufRead,BufNewFile /tmp/mutt-* :Goyo
 " Tune down gruvbox theme
 function! MyGruvbox() abort
     highlight clear SignColumn
+    highlight CursorLine cterm=NONE ctermfg=NONE ctermbg=245 gui=NONE guifg=NONE guibg=#1d2021
+    highlight CursorLineNR cterm=NONE ctermfg=NONE ctermbg=245 gui=NONE guifg=#fe8019 guibg=#1d2021
     highlight GruvboxAquaSign guibg=#1d2021
     highlight GruvboxBlueSign guibg=#1d2021
     highlight GruvboxGreenSign guibg=#1d2021
     highlight GruvboxOrangeSign guibg=#1d2021
     highlight GruvboxPurpleSign guibg=#1d2021
     highlight GruvboxRedSign guibg=#1d2021
+    highlight GruvboxRedUnderline cterm=underline ctermfg=167
     highlight GruvboxYellowSign guibg=#1d2021
     highlight StatusLine cterm=NONE ctermfg=245 gui=NONE guifg=#d5c4a1 guibg=#3c3836
     highlight StatusLineNC cterm=NONE ctermfg=245 gui=NONE guifg=#928374 guibg=#32302f
-    highlight CursorLine cterm=NONE ctermfg=NONE ctermbg=245 gui=NONE guifg=NONE guibg=#1d2021
-    highlight CursorLineNR cterm=NONE ctermfg=NONE ctermbg=245 gui=NONE guifg=#fe8019 guibg=#1d2021
     highlight TabLine gui=NONE guifg=#928374 guibg=#1d2021
     highlight TabLineFill gui=NONE guifg=#928374 guibg=#1d2021
     highlight TabLineSel gui=NONE guifg=#ebdbb2 guibg=#3c3836
