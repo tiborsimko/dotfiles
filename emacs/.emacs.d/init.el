@@ -276,6 +276,15 @@
 ;; Configure git fringe
 (use-package git-gutter-fringe)
 
+;; Show time in the global tab bar
+(use-package time
+  :straight nil
+  :demand t
+  :config
+  (setq display-time-format " %H:%M"
+        display-time-default-load-average nil)
+  (display-time-mode))
+
 ;; Tab bar mode
 (use-package tab-bar
   :straight nil
