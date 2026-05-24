@@ -1,0 +1,30 @@
+# Debian apt packages installed by `install.sh base-gui`.
+# One package per line; blank lines and `#`-prefixed comments are ignored.
+acpi
+alacritty
+autocutsel
+chromium
+chromium-l10n
+dunst
+feh
+firefox-esr-l10n-en-gb
+firefox-esr-l10n-fr
+firefox-esr-l10n-sk
+flameshot
+gimp
+hsetroot
+i3
+light
+lxappearance
+maim
+parcellite
+picom
+rofi
+suckless-tools
+sxiv
+unclutter
+vlc
+vym
+wmctrl
+xinput
+zathura
