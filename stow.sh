@@ -18,7 +18,7 @@ packages=(
   # gnupg
   # helix
   # i3
-  # inputrc
+  inputrc
   # lazygit
   # mbsync
   # mimeapps

@@ -1,3 +1,15 @@
+# Avoid beeps
 set bell-style none
+
+# Richer autocompletion
 set show-all-if-ambiguous on
-set editing-mode vi
+
+# Use emacs mode in prompt
+set editing-mode emacs
+
+# Complete command history by up/down arrows
+"\e[A": history-search-backward
+"\e[B": history-search-forward
+
+# Treat Alacritty Shift+Return (ESC CR) as normal Enter in readline apps
+"\e\C-m": accept-line
