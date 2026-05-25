@@ -9,7 +9,7 @@ set -o errexit
 set -o nounset
 
 packages=(
-  # alacritty
+  alacritty
   bash
   # dunst
   # flake8

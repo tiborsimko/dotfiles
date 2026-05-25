@@ -1,0 +1,248 @@
+# Tibor's Alacritty configuration.
+
+[general]
+import = ["~/.config/alacritty/theme-light.toml"]
+
+[env]
+TERM = "alacritty"
+LANG = "en_GB.UTF-8"
+LC_ALL = "en_GB.UTF-8"
+
+[font]
+size = 18
+# normal = { family = "JetBrainsMono Nerd Font", style = "Medium" }
+# normal = { family = "FiraCode Nerd Font", style = "Regular" }
+# normal = { family = "AporeticSansMonoNerdFont", style = "Regular" }
+normal = { family = "IosevkaTerm Nerd Font", style = "Regular" }
+# normal = { family = "CaskaydiaMono Nerd Font", style = "Regular" }
+# normal = { family = "MesloLGS Nerd Font Mono", style = "Regular" }
+bold = { style = "Bold" }
+italic = { style = "Italic" }
+bold_italic = { style = "Bold Italic" }
+
+[hints]
+alphabet = "htnsid;aoeucrlpyfwq"
+
+[[hints.enabled]]
+regex = """(https:|http:)[^\u0000-\u001F\u007F-\u009F<>\"\\s{-}\\^⟨⟩`]+"""
+hyperlinks = true
+command = "open"
+post_processing = true
+mouse = { enabled = true }
+binding = { key = "U", mods = "Control|Shift" }
+
+[[hints.enabled]]
+regex = "[a-f0-9]{40}|[a-f0-9]{7,8}"
+action = "Select"
+binding = { key = "H", mods = "Control|Shift" }
+
+[[hints.enabled]]
+regex = """[^ ]+"""
+action = "Select"
+binding = { key = "W", mods = "Control|Shift" }
+
+[[hints.enabled]]
+regex = """([^ ]+\\.(rs|py|js|ts|go|java|c|cpp|h|rb|php|sh|vim|lua|md|txt|toml|yaml|yml|json)):(\\d+)"""
+action = "Select"
+binding = { key = "F", mods = "Control|Shift" }
+
+[[hints.enabled]]
+regex = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+action = "Select"
+binding = { key = "V", mods = "Control|Shift" }
+
+# Send a distinct Shift+Return sequence for terminal apps that support
+# modified keys, including Codex's `shift-enter` keymap.
+[[keyboard.bindings]]
+key = "Return"
+mods = "Shift"
+chars = "\u001b[13;2u"
+
+# Make Yanking to also immediately exit Vi mode
+[[keyboard.bindings]]
+action = "Copy"
+key = "Y"
+mode = "Vi"
+
+[[keyboard.bindings]]
+action = "ClearSelection"
+key = "Y"
+mode = "Vi"
+
+[[keyboard.bindings]]
+action = "ToggleViMode"
+key = "Y"
+mode = "Vi"
+
+# Tmux helper: switch to last session
+[[keyboard.bindings]]
+chars = "\u0000s"
+key = "S"
+mods = "Command"
+
+# Tmux helper: switch to any session (Cmd-P, like Mattermost/Slack quick switcher)
+[[keyboard.bindings]]
+chars = "\u0000g"
+key = "P"
+mods = "Command"
+
+# Tmux helper: focus pane up (Cmd-k -> C-Space k)
+[[keyboard.bindings]]
+chars = "\u0000k"
+key = "K"
+mods = "Command"
+
+# Tmux helper: create new tab
+[[keyboard.bindings]]
+chars = "\u0000t"
+key = "T"
+mods = "Command"
+
+# Tmux helper: focus window 1
+[[keyboard.bindings]]
+chars = "\u00001"
+key = "Key1"
+mods = "Command"
+
+# Tmux helper: focus window 2
+[[keyboard.bindings]]
+chars = "\u00002"
+key = "Key2"
+mods = "Command"
+
+# Tmux helper: focus window 3
+[[keyboard.bindings]]
+chars = "\u00003"
+key = "Key3"
+mods = "Command"
+
+# Tmux helper: focus window 4
+[[keyboard.bindings]]
+chars = "\u00004"
+key = "Key4"
+mods = "Command"
+
+# Tmux helper: focus window 5
+[[keyboard.bindings]]
+chars = "\u00005"
+key = "Key5"
+mods = "Command"
+
+# Tmux helper: focus window 6
+[[keyboard.bindings]]
+chars = "\u00006"
+key = "Key6"
+mods = "Command"
+
+# Tmux helper: focus window 7
+[[keyboard.bindings]]
+chars = "\u00007"
+key = "Key7"
+mods = "Command"
+
+# Tmux helper: focus window 8
+[[keyboard.bindings]]
+chars = "\u00008"
+key = "Key8"
+mods = "Command"
+
+# Tmux helper: focus window 9
+[[keyboard.bindings]]
+chars = "\u00009"
+key = "Key9"
+mods = "Command"
+
+# Tmux helper: previous session
+[[keyboard.bindings]]
+chars = "\u0000("
+key = "LBracket"
+mods = "Command"
+
+# Tmux helper: next session
+[[keyboard.bindings]]
+chars = "\u0000)"
+key = "RBracket"
+mods = "Command"
+
+# Tmux helper: previous window
+[[keyboard.bindings]]
+chars = "\u0000N"
+key = "{"
+mods = "Command|Shift"
+
+# Tmux helper: next window
+[[keyboard.bindings]]
+chars = "\u0000n"
+key = "}"
+mods = "Command|Shift"
+
+# Tmux helper: split pane side-by-side (Cmd-d -> prefix |)
+[[keyboard.bindings]]
+chars = "\u0000|"
+key = "D"
+mods = "Command"
+
+# Tmux helper: split pane stacked (Cmd-Shift-d -> prefix -)
+[[keyboard.bindings]]
+chars = "\u0000-"
+key = "D"
+mods = "Command|Shift"
+
+# Tmux helper: focus pane left (Cmd-h, via Karabiner F18 remap; sends raw C-h for smart routing)
+[[keyboard.bindings]]
+chars = "\u0008"
+key = "F18"
+
+# Tmux helper: focus pane down (Cmd-j, sends raw C-j for smart routing)
+[[keyboard.bindings]]
+chars = "\u000a"
+key = "J"
+mods = "Command"
+
+# Tmux helper: focus pane right (Cmd-l, sends raw C-l for smart routing)
+[[keyboard.bindings]]
+chars = "\u000c"
+key = "L"
+mods = "Command"
+
+# Tmux helper: switch to any pane (or create a new session)
+[[keyboard.bindings]]
+chars = "\u0000w"
+key = "W"
+mods = "Command"
+
+# Tmux helper: zoom pane (Cmd-Z -> C-Space z)
+[[keyboard.bindings]]
+chars = "\u0000z"
+key = "Z"
+mods = "Command"
+
+# Tmux helper: enter copy mode (search/scroll/yank)
+[[keyboard.bindings]]
+chars = "\u0000f"
+key = "F"
+mods = "Command"
+
+# Disable quitting terminal by mistake
+[[keyboard.bindings]]
+action = "None"
+key = "Q"
+mods = "Command"
+
+[cursor]
+thickness = 0.22
+
+[cursor.style]
+shape = "Beam"
+
+[selection]
+save_to_clipboard = true
+
+[window]
+decorations = "Transparent"
+dynamic_padding = true
+option_as_alt = "Both"
+
+[window.padding]
+y = 2
+x = 2
