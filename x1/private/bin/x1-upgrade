@@ -13,8 +13,3 @@ else
     sudo paccache -rk2 # remove old versions from pacman cache
     yay -Syu
 fi
-
-# Upgrade Nix packages
-if [ -e ~/.config/nixpkgs/config.nix ]; then
-    nix-env -u
-fi
