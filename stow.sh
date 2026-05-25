@@ -37,6 +37,7 @@ packages=(
   # xmodmap
   # xresources
   # zathura
+  zsh
 )
 
 stow --no-folding "${packages[@]}"

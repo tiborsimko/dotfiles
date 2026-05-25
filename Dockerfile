@@ -44,7 +44,11 @@ RUN ./install.sh locales
 # At runtime the bind mount overlays this so relative symlinks stay valid
 # and host edits propagate without rebuild.
 COPY --chown=tibor:tibor . /home/tibor/.dotfiles
-RUN stow --no-folding bash starship
+RUN stow --no-folding bash starship zsh
 
 # Set runtime default cwd to $HOME so interactive sessions feel like an ssh login
 WORKDIR /home/tibor
+
+# Tail staging area: packages being validated before folding into
+# debian-packages-cli.txt. Remove each line once promoted.
+RUN sudo apt-get install -y zsh

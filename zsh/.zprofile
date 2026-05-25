@@ -1,13 +1,18 @@
 # Tibor's zprofile.
 
-# Set prefereed programs
-export BROWSER="qutebrowser"
-export EDITOR="vimx"
-export VISUAL="vimx"
-export PAGER="less"
-export TERMINAL="xterm"
-export OPENER="xdg-open"
-export LANG="en_GB.UTF-8"
+# Use brew (cached for faster startup) - macOS only
+if [[ -x /opt/homebrew/bin/brew ]]; then
+    _brew_shellenv_cache="$HOME/.cache/zsh/brew-shellenv.zsh"
+    if [[ ! -f "$_brew_shellenv_cache" ]] || [[ /opt/homebrew/bin/brew -nt "$_brew_shellenv_cache" ]]; then
+        mkdir -p "${_brew_shellenv_cache:h}"
+        /opt/homebrew/bin/brew shellenv > "$_brew_shellenv_cache"
+    fi
+    source "$_brew_shellenv_cache"
+    unset _brew_shellenv_cache
+fi
+
+# Set system-level programs
+export TERMINAL="alacritty"
 
 # Ensure path arrays do not contain duplicates
 typeset -gU cdpath fpath mailpath path
@@ -17,6 +22,9 @@ path=(
   /usr/local/{bin,sbin}
   $path
 )
+
+# Enrich path to Nvim/Mason for Helix to use the same LSP servers, and Cargo and Go paths
+export PATH=$HOME/.local/share/nvim/mason/bin:$HOME/.cargo/bin:$GOPATH/bin:/usr/local/go/bin:$PATH
 
 # Private PATH additions
 [ -d $HOME/private/bin ] && \
@@ -29,40 +37,9 @@ path=(
 [ -d $HOME/public/lxplus7/lib ] && \
     export LD_LIBRARY_PATH=$HOME/public/lxplus7/lib:$LD_LIBRARY_PATH
 
-# Fzf with rg
-export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*"'
-
-# Fzf layout
-export FZF_DEFAULT_OPTS='--layout=reverse --height 50%'
-
-# Fzf gruvbox dark theme
-export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
-  --color=fg:#ebdbb2,bg:#1d2021,hl:#83a598
-  --color=fg+:#ebdbb2,bg+:#3c3836,hl+:#83a598,gutter:#1d2021
-  --color=info:#8ec07c,prompt:#7c6f64,pointer:#8ec07c
-  --color=marker:#8ec07c,spinner:#8ec07c,header:#665c54
-    '
-
-# Dmenu gruvbox dark theme
-export DMENU_DEFAULT_OPTS='-nb #111313 -nf #bdae93 -sb #111313 -sf #fbf1c7'
-
-# Less
-export LESS='-F -g -i -M -R -S -w -X -z-4'
-export LESS_TERMCAP_mb=$'\E[01;31m'
-export LESS_TERMCAP_md=$'\E[01;31m'
-export LESS_TERMCAP_me=$'\E[0m'
-export LESS_TERMCAP_se=$'\E[0m'
-export LESS_TERMCAP_so=$'\E[00;47;30m'
-export LESS_TERMCAP_ue=$'\E[0m'
-export LESS_TERMCAP_us=$'\E[01;32m'
-
-# Nix
-if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
-    . $HOME/.nix-profile/etc/profile.d/nix.sh;
-fi
-
 # Start SSH agent
-export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+export SSH_AUTH_SOCK
 
-# Start X11 on tty1 after logging in
+# Start WM on tty1 after logging in
 [[ -z $DISPLAY  ]] && [ "$(tty)" = "/dev/tty1" ] && exec startx
