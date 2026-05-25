@@ -31,7 +31,7 @@ packages=(
   # ssh
   starship
   # taskwarrior
-  # tmux
+  tmux
   # x1
   # xinit
   # xmodmap
