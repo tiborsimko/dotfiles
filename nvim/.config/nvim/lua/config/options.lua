@@ -1,0 +1,2 @@
+-- Do not yank things to system clipboard by default (use +y instead)
+-- vim.opt.clipboard = ""

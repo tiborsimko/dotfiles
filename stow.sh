@@ -25,7 +25,7 @@ packages=(
   # msmtp
   # neomutt
   # notmuch
-  # nvim
+  nvim
   # oauth2
   # picom
   # ssh
