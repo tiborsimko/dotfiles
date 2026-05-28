@@ -53,7 +53,7 @@ install_mise_tools() {
   mise trust ~/.config/mise/config.toml
   mise install
   mise exec -- helm plugin list 2>/dev/null | grep -q '^diff' \
-    || mise exec -- helm plugin install https://github.com/databus23/helm-diff
+    || mise exec -- helm plugin install --verify=false https://github.com/databus23/helm-diff
 }
 
 install_backports() {
