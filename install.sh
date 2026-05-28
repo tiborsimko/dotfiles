@@ -6,21 +6,7 @@
 
 # Define desired versions of custom software
 ALACRITTY=v0.15.1
-CR=v1.7.0
-DELTA=0.18.2
-HELIX=25.01.1
-HELM=v3.17.2
-KIND=v0.27.0
-KUBECTL=v1.32.3
-LAZYGIT=v0.48.0
 NERDFONTS=v3.3.0
-NVIM=v0.10.4
-PY310=3.10.16
-PY312=3.12.9
-PY313=3.13.2
-PY38=3.8.20
-PY39=3.9.21
-STARSHIP=v1.22.1
 
 set -o errexit
 set -o nounset
@@ -63,6 +49,13 @@ install_mise() {
   sudo apt install -y mise
 }
 
+install_mise_tools() {
+  mise trust ~/.config/mise/config.toml
+  mise install
+  mise exec -- helm plugin list 2>/dev/null | grep -q '^diff' \
+    || mise exec -- helm plugin install https://github.com/databus23/helm-diff
+}
+
 install_backports() {
   # Add backports repository
   if [ ! -f /etc/apt/sources.list.d/bookworm-backports.list ]; then
@@ -83,30 +76,6 @@ install_backports() {
     curl -O http://ftp.fr.debian.org/debian/pool/non-free-firmware/f/firmware-nonfree/firmware-iwlwifi_20241210-1_all.deb
   fi
   sudo dpkg -i ./firmware-iwlwifi_20241210-1_all.deb
-}
-
-install_nvim() {
-  sudo apt -y build-dep neovim
-  if [ -d ~/Downloads/neovim ]; then
-    cd ~/Downloads/neovim
-    git fetch origin
-    git reset --hard origin/master
-  else
-    git clone https://github.com/neovim/neovim ~/Downloads/neovim
-  fi
-  cd ~/Downloads/neovim
-  git reset --hard ${NVIM}
-  git clean -d -ff -x
-  make CMAKE_BUILD_TYPE=RelWithDebInfo
-  cd build && cpack -G DEB
-  sudo dpkg -i nvim-linux-x86_64.deb
-}
-
-clean_nvim() {
-  rm -rf ~/.cache/nvim
-  rm -rf ~/.config/nvim
-  rm -rf ~/.local/share/nvim
-  rm -rf ~/.local/state/nvim
 }
 
 install_nerdfonts() {
@@ -142,21 +111,6 @@ install_alacritty() {
   git clean -d -ff -x
   cargo build --release
   sudo install ./target/release/alacritty /usr/local/bin
-}
-
-install_delta() {
-  if [ -d ~/Downloads/delta ]; then
-    cd ~/Downloads/delta
-    git fetch origin
-    git reset --hard origin/main
-  else
-    git clone https://github.com/dandavison/delta ~/Downloads/delta
-  fi
-  cd ~/Downloads/delta
-  git reset --hard ${DELTA}
-  git clean -d -ff -x
-  cargo build --release
-  sudo install ./target/release/delta /usr/local/bin
 }
 
 install_mons() {
@@ -197,113 +151,6 @@ install_gtktheme() {
   if [ ! -d ~/.icons/gruvbox-dark-icons-gtk ]; then
     git clone https://github.com/jmattheis/gruvbox-dark-icons-gtk ~/.icons/gruvbox-dark-icons-gtk
   fi
-}
-
-install_starship() {
-  [ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
-  if [ -d ~/Downloads/starship ]; then
-    cd ~/Downloads/starship
-    git fetch origin
-    git reset --hard origin/master
-  else
-    git clone https://github.com/starship/starship ~/Downloads/starship
-  fi
-  cd ~/Downloads/starship
-  git reset --hard ${STARSHIP}
-  git clean -d -ff -x
-  cargo build --release
-  sudo install ./target/release/starship /usr/local/bin
-}
-
-install_helix() {
-  if [ -d ~/Downloads/helix ]; then
-    cd ~/Downloads/helix
-    git fetch origin
-    git reset --hard origin/master
-  else
-    git clone https://github.com/helix-editor/helix ~/Downloads/helix
-  fi
-  cd ~/Downloads/helix
-  git reset --hard ${HELIX}
-  git clean -d -ff -x
-  cargo-deb -- --locked
-  sudo dpkg -i ./target/debian/helix_25.1.1-1_amd64.deb
-}
-
-install_helm() {
-  cd ~/Downloads
-  rm -f helm-${HELM}-linux-amd64.tar.gz
-  rm -f helm-${HELM}-linux-amd64.tar.gz.sha256sum
-  curl -O https://get.helm.sh/helm-${HELM}-linux-amd64.tar.gz
-  curl -O https://get.helm.sh/helm-${HELM}-linux-amd64.tar.gz.sha256sum
-  sha256sum -c helm-${HELM}-linux-amd64.tar.gz.sha256sum
-  tar xvfz helm-${HELM}-linux-amd64.tar.gz linux-amd64/helm
-  sudo install ./linux-amd64/helm /usr/local/bin
-  rm -f linux-amd64/helm
-  rmdir linux-amd64
-  rm -f helm-${HELM}-linux-amd64.tar.gz
-  rm -f helm-${HELM}-linux-amd64.tar.gz.sha256sum
-  # Install also Helm diff plugin
-  if helm plugin list | grep -qc diff; then
-    helm plugin update diff
-  else
-    helm plugin install https://github.com/databus23/helm-diff
-  fi
-}
-
-install_kubectl() {
-  # install system kubectl version (useful for e.g. bash autocompletion)
-  sudo apt-get install kubernetes-client
-  # install custom kubectl version (useful for development)
-  cd ~/Downloads
-  rm -f kubectl
-  rm -f kubectl.sha256
-  curl -LO https://dl.k8s.io/release/${KUBECTL}/bin/linux/amd64/kubectl
-  curl -LO https://dl.k8s.io/release/${KUBECTL}/bin/linux/amd64/kubectl.sha256
-  echo "$(cat kubectl.sha256)  kubectl" | sha256sum -c
-  sudo install ./kubectl /usr/local/bin
-  rm -f kubectl
-  rm -f kubectl.sha256
-}
-
-install_cr() {
-  if [ -d ~/Downloads/chart-releaser ]; then
-    cd ~/Downloads/chart-releaser
-    git fetch origin
-    git reset --hard origin/main
-  else
-    git clone https://github.com/helm/chart-releaser ~/Downloads/chart-releaser
-  fi
-  cd ~/Downloads/chart-releaser
-  git reset --hard ${CR}
-  git clean -d -ff -x
-  cd cr
-  go mod download
-  go install ./...
-}
-
-install_lazygit() {
-  go install github.com/jesseduffield/lazygit@${LAZYGIT}
-}
-
-install_kind() {
-  go install sigs.k8s.io/kind@${KIND}
-}
-
-install_python() {
-  VERSION=$1
-  sudo apt build-dep -y python3.11
-  cd ~/Downloads
-  rm -f "Python-${VERSION}.tgz"
-  sudo rm -rf "Python-${VERSION}"
-  curl -O "https://www.python.org/ftp/python/${VERSION}/Python-${VERSION}.tgz"
-  tar xvfz "Python-${VERSION}.tgz"
-  cd "Python-${VERSION}"
-  ./configure --enable-optimizations
-  make -j 4
-  sudo make altinstall
-  rm -f "Python-${VERSION}.tgz"
-  sudo rm -rf "Python-${VERSION}"
 }
 
 install_thinkfan() {
@@ -595,36 +442,23 @@ help() {
   echo "  base-cli      Install CLI base packages"
   echo "  base-gui      Install GUI base packages"
   echo "  backports     Install backports packages"
+  echo "  mise          Install mise"
+  echo "  mise-tools    Install all tools declared in ~/.config/mise/config.toml"
   echo "  rustup        Install rustup"
   echo "  alacritty     Install alacritty"
-  echo "  cr            Install chart-releaser"
-  echo "  delta         Install delta"
   echo "  dwm           Install dwm"
   echo "  gtktheme      Install GTK theme"
-  echo "  lazygit       Install lazygit"
   echo "  mons          Install mons"
   echo "  nerdfonts     Install nerdfonts"
-  echo "  nvim          Install nvim"
   echo "  slstatus      Install slstatus"
-  echo "  starship      Install starship"
   echo "Targets (apps):"
   echo "  docker        Install docker"
-  echo "  helm          Install helm"
-  echo "  kind          Install kind"
-  echo "  kubectl       Install kubectl"
   echo "  latex         Install LaTeX (texlive)"
   echo "  locales       Install and generate en_GB.UTF-8 locale"
-  echo "  mise          Install mise"
-  echo "  python3.8     Install python3.8"
-  echo "  python3.9     Install python3.9"
-  echo "  python3.10    Install python3.10"
-  echo "  python3.12    Install python3.12"
-  echo "  python3.13    Install python3.13"
   echo "Targets (optional):"
   echo "  brave         Install brave"
   echo "  firefox       Configure firefox"
   echo "  floorp        Install floorp"
-  echo "  helix         Install helix"
   echo "  librewolf     Install librewolf"
   echo "  oc            Install oc"
   echo "  thinkfan      Install thinkfan"
@@ -647,34 +481,21 @@ backports) install_backports ;;
 base-cli) install_base_cli ;;
 base-gui) install_base_gui ;;
 brave) install_brave ;;
-cr) install_cr ;;
-delta) install_delta ;;
 docker) install_docker ;;
 dwm) install_dwm ;;
 firefox) configure_firefox ;;
 floorp) install_floorp ;;
 gtktheme) install_gtktheme ;;
-helix) install_helix ;;
-helm) install_helm ;;
-kind) install_kind ;;
-kubectl) install_kubectl ;;
 latex) install_latex ;;
-lazygit) install_lazygit ;;
 librewolf) install_librewolf ;;
 locales) install_locales ;;
 mise) install_mise ;;
+mise-tools) install_mise_tools ;;
 mons) install_mons ;;
 nerdfonts) install_nerdfonts ;;
-nvim) install_nvim ;;
 oc) install_oc ;;
-python3.10) install_python ${PY310} ;;
-python3.12) install_python ${PY312} ;;
-python3.13) install_python ${PY313} ;;
-python3.8) install_python ${PY38} ;;
-python3.9) install_python ${PY39} ;;
 rustup) install_rustup ;;
 slstatus) install_slstatus ;;
-starship) install_starship ;;
 thinkfan) install_thinkfan ;;
 tlp) install_tlp ;;
 ufw) install_ufw ;;

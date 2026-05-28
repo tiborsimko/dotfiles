@@ -33,7 +33,6 @@ On Debian 12, you can use the `install.sh` helper script to provision software:
 ./install.sh base-gui   # GUI packages (optional)
 ./install.sh mise       # Runtime version manager
 ./install.sh rustup     # Rust toolchain
-./install.sh starship   # Shell prompt
 ...                     # etc
 ```
 
@@ -52,6 +51,15 @@ Alternatively, to activate a single package by hand:
 
 ```console
 stow --no-folding tmux
+```
+
+### 4. Install mise-managed toolchain
+
+Once the dotfiles are linked, install the development tools managed by Mise,
+i.e. helm, kubectl, lazygit, nvim, several Python versions, etc:
+
+```console
+./install.sh mise-tools
 ```
 
 ## Testing

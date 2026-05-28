@@ -26,4 +26,4 @@ docker-test: # Run smoke tests in the Docker container (batch mode).
 	  --hostname dotfiles-test \
 	  -v $(PWD):/home/tibor/.dotfiles \
 	  $(IMAGE) \
-	  bash -c 'err=$$(bash -lic true 2>&1 1>/dev/null | grep -vE "cannot set terminal process group|no job control in this shell"); [ -z "$$err" ] && echo OK || { echo "FAIL: $$err"; exit 1; }'
+	  bash -c 'err=$$(bash -lic true 2>&1 1>/dev/null | grep -vE "cannot set terminal process group|no job control in this shell"); [ -z "$$err" ] && echo OK || { echo "FAIL: $$err"; exit 1; }; bash -lic "set -e; nvim --version | head -1; starship --version; helm version --short; kubectl version --client 2>/dev/null | head -1; kind version; hx --version | head -1; delta --version; lazygit --version | head -1; cr version | head -1; for v in 3.13 3.12 3.10 3.9 3.8; do python\$$v --version; done"'

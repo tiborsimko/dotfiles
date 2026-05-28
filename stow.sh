@@ -22,6 +22,7 @@ packages=(
   # lazygit
   # mbsync
   # mimeapps
+  mise
   # msmtp
   # neomutt
   # notmuch

@@ -31,8 +31,12 @@ RUN sudo apt-get update \
 # Provision the rest via install.sh, mirroring bare-metal Debian setup
 COPY --chown=tibor:tibor install.sh ./install.sh
 RUN ./install.sh mise
-RUN ./install.sh rustup
-RUN ./install.sh starship
+
+# Pre-stage mise config so the mise-install layer is keyed on config.toml,
+# not on every dotfile edit. The stow step further down replaces it with a symlink.
+RUN mkdir -p /home/tibor/.config/mise
+COPY --chown=tibor:tibor mise/.config/mise/config.toml /home/tibor/.config/mise/config.toml
+RUN ./install.sh mise-tools
 
 # Drop /etc/skel-derived rc files so stow won't conflict at runtime
 RUN rm -f /home/tibor/.bashrc /home/tibor/.bash_logout /home/tibor/.profile
@@ -44,7 +48,8 @@ RUN ./install.sh locales
 # At runtime the bind mount overlays this so relative symlinks stay valid
 # and host edits propagate without rebuild.
 COPY --chown=tibor:tibor . /home/tibor/.dotfiles
-RUN ./stow.sh
+# Drop the pre-staged mise config so stow can place a symlink in its stead.
+RUN rm -f /home/tibor/.config/mise/config.toml && ./stow.sh
 
 # Set runtime default cwd to $HOME so interactive sessions feel like an ssh login
 WORKDIR /home/tibor

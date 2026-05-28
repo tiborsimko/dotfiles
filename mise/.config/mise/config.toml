@@ -1,0 +1,17 @@
+# Tibor's mise configuration.
+
+[settings]
+# Python 3.8 is EOL and has no GitHub artifact attestations; skip the check.
+python.github_attestations = false
+
+[tools]
+python = ["3.13.2", "3.12.9", "3.10.16", "3.9.21", "3.8.20"]
+neovim = "0.10.4"
+starship = "1.22.1"
+helm = "3.17.2"
+kubectl = "1.32.3"
+kind = "0.27.0"
+helix = "25.01.1"
+delta = "0.18.2"
+lazygit = "0.48.0"
+"aqua:helm/chart-releaser" = "1.7.0"
