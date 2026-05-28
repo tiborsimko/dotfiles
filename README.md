@@ -69,12 +69,18 @@ touching the host:
 
 ```console
 make docker-build    # Build the test image
-make docker-test     # Smoke test: stowed configs load cleanly
+make docker-test     # Run dotfiles verification inside the container
 make docker-run      # Open an interactive shell in the container
 ```
 
 The repo is bind-mounted into the container, so host edits are visible
 without rebuilds.
+
+The same verification can be run directly on the host:
+
+```console
+./test.sh
+```
 
 ## License
 

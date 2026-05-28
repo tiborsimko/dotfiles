@@ -71,3 +71,4 @@ virtualenvwrapper
 w3m-img
 xrootd-client
 zoxide
+zsh

@@ -25,8 +25,8 @@ WORKDIR /home/tibor/.dotfiles
 # (kept independent of install.sh so install.sh edits don't invalidate this slow layer)
 COPY --chown=tibor:tibor debian-packages-cli.txt /tmp/debian-packages-cli.txt
 RUN sudo apt-get update \
- && sudo apt-get install -y $(grep -vE '^[[:space:]]*(#|$)' /tmp/debian-packages-cli.txt) \
- && sudo apt-file update
+  && sudo apt-get install -y $(grep -vE '^[[:space:]]*(#|$)' /tmp/debian-packages-cli.txt) \
+  && sudo apt-file update
 
 # Provision the rest via install.sh, mirroring bare-metal Debian setup
 COPY --chown=tibor:tibor install.sh ./install.sh
@@ -53,7 +53,3 @@ RUN rm -f /home/tibor/.config/mise/config.toml && ./stow.sh
 
 # Set runtime default cwd to $HOME so interactive sessions feel like an ssh login
 WORKDIR /home/tibor
-
-# Tail staging area: packages being validated before folding into
-# debian-packages-cli.txt. Remove each line once promoted.
-RUN sudo apt-get install -y zsh
