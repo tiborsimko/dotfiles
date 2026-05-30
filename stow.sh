@@ -20,6 +20,7 @@ packages=(
   # helix
   # i3
   inputrc
+  karabiner
   # lazygit
   # mbsync
   # mimeapps
