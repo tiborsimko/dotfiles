@@ -9,6 +9,7 @@ set -o errexit
 set -o nounset
 
 packages=(
+  aerospace
   alacritty
   bash
   # dunst
