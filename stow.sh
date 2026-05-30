@@ -15,7 +15,7 @@ packages=(
   # dunst
   # flake8
   # fontconfig
-  # git
+  git
   # gnupg
   # helix
   # i3
