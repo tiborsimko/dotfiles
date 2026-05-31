@@ -14,7 +14,7 @@ packages=(
   bash
   dunst
   # flake8
-  # fontconfig
+  fontconfig
   git
   # gnupg
   # helix
