@@ -21,7 +21,7 @@ packages=(
   i3
   inputrc
   karabiner
-  # lazygit
+  lazygit
   # mbsync
   mimeapps
   mise
