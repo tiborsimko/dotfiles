@@ -36,7 +36,7 @@ packages=(
   # taskwarrior
   tmux
   # x1
-  # xinit
+  xinit
   # xmodmap
   # xresources
   # zathura
