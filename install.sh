@@ -189,198 +189,6 @@ install_ufw() {
   sudo ufw status verbose
 }
 
-install_slstatus() {
-  sudo apt build-dep -y dwm
-  if [ -d ~/Downloads/slstatus ]; then
-    cd ~/Downloads/slstatus
-    git fetch origin
-    git reset --hard origin/master
-  else
-    git clone --recursive git://git.suckless.org/slstatus ~/Downloads/slstatus
-  fi
-  cp slstatus/config.h ~/Downloads/slstatus/
-  cd ~/Downloads/slstatus
-  sudo make install
-}
-
-install_dwm() {
-  if [ -d ~/Downloads/dwm-flexipatch ]; then
-    cd ~/Downloads/dwm-flexipatch
-    git fetch origin
-    git reset --hard origin/master
-  else
-    git clone https://github.com/bakkeby/dwm-flexipatch ~/Downloads/dwm-flexipatch
-  fi
-
-  cd ~/Downloads/dwm-flexipatch
-
-  # 1) Select patches
-
-  cp patches.def.h patches.h
-
-  for patch in \
-    ALWAYSCENTER_PATCH \
-    BAR_SYSTRAY_PATCH \
-    BAR_HIDEVACANTTAGS_PATCH \
-    BSTACK_LAYOUT \
-    CENTEREDFLOATINGMASTER_LAYOUT \
-    CENTEREDMASTER_LAYOUT \
-    CFACTS_PATCH \
-    CYCLELAYOUTS_PATCH \
-    DECK_LAYOUT \
-    DWMC_PATCH \
-    FOCUSDIR_PATCH \
-    FOCUSONNETACTIVE_PATCH \
-    GRIDMODE_LAYOUT \
-    LOSEFULLSCREEN_PATCH \
-    NET_CLIENT_LIST_STACKING_PATCH \
-    NOBORDER_PATCH \
-    NO_TRANSPARENT_BORDERS_PATCH \
-    RESTARTSIG_PATCH \
-    SEAMLESS_RESTART_PATCH \
-    STACKER_PATCH \
-    TOGGLEFULLSCREEN_PATCH \
-    WINVIEW_PATCH; do
-    sed -i "s|#define ${patch} 0|#define ${patch} 1|g" patches.h
-  done
-
-  # 2) Configure dwm
-
-  # Copy default configuration
-  cp config.def.h config.h
-
-  # Use Super key
-  sed -i "s|#define MODKEY Mod1Mask|#define MODKEY Mod4Mask|g" config.h
-
-  # Terminal is Alacritty
-  sed -i "s|\"st\"|\"alacritty\"|g" config.h
-
-  # Configure next/previous
-  sed -i 's| XK_j,| XK_n,|g' config.h
-  sed -i 's| XK_k,| XK_p,|g' config.h
-
-  # Configure gaps
-  sed -i 's|int gappih         = 20;|int gappih         = 8;|g' config.h
-  sed -i 's|int gappiv         = 10;|int gappiv         = 4;|g' config.h
-  sed -i 's|int gappoh         = 10;|int gappoh         = 4;|g' config.h
-  sed -i 's|int gappov         = 30;|int gappov         = 8;|g' config.h
-  sed -i 's|int smartgaps_fact          = 1;|int smartgaps_fact          = 1;|g' config.h
-
-  # Configure program runner
-  sed -i 's|XK_p,          spawn,                  {.v = dmenucmd } }|XK_r,          spawn,                  {.v = dmenucmd } }|g' config.h
-
-  # Resize with Control
-  sed -i 's|MODKEY,                       XK_h,          setmfact,|MODKEY\|ControlMask,           XK_h,          setmfact,|g' config.h
-  sed -i 's|MODKEY,                       XK_l,          setmfact,|MODKEY\|ControlMask,           XK_l,          setmfact,|g' config.h
-  sed -i 's|MODKEY\|ShiftMask,             XK_h,          setcfact,|MODKEY\|ControlMask,            XK_j,          setcfact,|g' config.h
-  sed -i 's|MODKEY\|ShiftMask,             XK_l,          setcfact,|MODKEY\|ControlMask,            XK_k,          setcfact,|g' config.h
-
-  # Toggle fullscreen
-  sed -i 's|XK_y,          togglefullscreen,|XK_z,          togglefullscreen,|g' config.h
-
-  # Toggle bar
-  sed -i 's|MODKEY,                       XK_b,          togglebar,|MODKEY\|ShiftMask,             XK_b,          togglebar,|g' config.h
-
-  # Switch off toggling gaps on Super-0
-  sed -i 's|{ MODKEY\|Mod4Mask,              XK_0,          togglegaps,             {0} },|// { MODKEY\|Mod4Mask,              XK_0,          togglegaps,             {0} },|g' config.h
-  sed -i 's|{ MODKEY\|Mod4Mask\|ShiftMask,    XK_0,          defaultgaps,            {0} },|// { MODKEY\|Mod4Mask\|ShiftMask,    XK_0,          defaultgaps,            {0} },|g' config.h
-
-  # Jump around clients
-  sed -i 's|MOD, XK_w,     ACTION##stack, {.i = 0 }|MOD, XK_a,     ACTION##stack, {.i = 0 }|g' config.h
-  sed -i 's|MOD, XK_e,     ACTION##stack, {.i = 1 }|MOD, XK_b,     ACTION##stack, {.i = 1 }|g' config.h
-  sed -i 's|MOD, XK_a,     ACTION##stack, {.i = 2 }|MOD, XK_c,     ACTION##stack, {.i = 2 }|g' config.h
-  sed -i 's|MOD, XK_z,     ACTION##stack, {.i = -1 }|MOD\|ShiftMask, XK_a,     ACTION##stack, {.i = -1 }|g' config.h
-
-  # Modify shortcut for the floating layout
-  sed -i 's|{ MODKEY,                       XK_f,          setlayout,              {.v = &layouts\[1\]} }|{ MODKEY\|ShiftMask,             XK_f,          setlayout,              {.v = \&layouts\[1\]} }|g' config.h
-
-  # Configure master-stack area proportions
-  sed -i 's|mfact     = 0.55;|mfact     = 0.55;|g' config.h
-
-  # Window rules
-  sed -i 's|RULE(.class = "Gimp", .tags = 1 << 4)|// RULE(.class = "Gimp", .tags = 1 << 4)|g' config.h
-  sed -i 's|RULE(.class = "Firefox", .tags = 1 << 7)| // RULE(.class = "Firefox", .tags = 1 << 7)|g' config.h
-
-  # Configure colours: gruvbox theme
-  # (generate list via `grep 'color.*#' config.def.h | awk '{print $NF}' | sort -u`)
-  sed -i 's|#000033|#000003|g' config.h
-  sed -i 's|#000044|#000044|g' config.h
-  sed -i 's|#003300|#003300|g' config.h
-  sed -i 's|#003333|#003333|g' config.h
-  sed -i 's|#004400|#004400|g' config.h
-  sed -i 's|#004444|#004444|g' config.h
-  sed -i 's|#005500|#005500|g' config.h
-  sed -i 's|#005555|#005555|g' config.h
-  sed -i 's|#005577|#000000|g' config.h # 3b4439 32302f
-  sed -i 's|#115577|#115577|g' config.h
-  sed -i 's|#116688|#116688|g' config.h
-  sed -i 's|#117799|#117799|g' config.h
-  sed -i 's|#212171|#212171|g' config.h
-  sed -i 's|#222222|#000000|g' config.h #000000 #282828
-  sed -i 's|#227799|#227799|g' config.h
-  sed -i 's|#330000|#330000|g' config.h
-  sed -i 's|#330033|#330033|g' config.h
-  sed -i 's|#333300|#333300|g' config.h
-  sed -i 's|#440000|#440000|g' config.h
-  sed -i 's|#440044|#440044|g' config.h
-  sed -i 's|#444400|#444400|g' config.h
-  sed -i 's|#444444|#3a3735|g' config.h
-  sed -i 's|#506600|#506600|g' config.h
-  sed -i 's|#507711|#507711|g' config.h
-  sed -i 's|#508822|#508822|g' config.h
-  sed -i 's|#550000|#550000|g' config.h
-  sed -i 's|#550055|#550055|g' config.h
-  sed -i 's|#555500|#555500|g' config.h
-  sed -i 's|#664C67|#664C67|g' config.h
-  sed -i 's|#77547E|#d3869b|g' config.h
-  sed -i 's|#894B9F|#894B9F|g' config.h
-  sed -i 's|#b96600|#b96600|g' config.h
-  sed -i 's|#b97711|#b97711|g' config.h
-  sed -i 's|#b98822|#b98822|g' config.h
-  sed -i 's|#bbbbbb|#928374|g' config.h
-  sed -i 's|#db8fd9|#db8fd9|g' config.h
-  sed -i 's|#eeeeee|#89b482|g' config.h
-  sed -i 's|#ff0000|#ea6962|g' config.h
-  sed -i 's|#FFF7D4|#ddc7a1|g' config.h
-
-  # Fix some colours after general replacement
-  sed -i 's|selbordercolor\[\]             = "#......";|selbordercolor[]             = "#6d9068";|g' config.h # 5f6e5c 6d9068
-  sed -i 's|tagsselfgcolor\[\]             = "#......";|tagsselfgcolor[]             = "#89b482";|g' config.h
-  sed -i 's|tagsselbgcolor\[\]             = "#......";|tagsselbgcolor[]             = "#000000";|g' config.h
-  sed -i 's|titleselfgcolor\[\]            = "#......";|titleselfgcolor[]            = "#89b482";|g' config.h
-  sed -i 's|titleselbgcolor\[\]            = "#......";|titleselbgcolor[]            = "#000000";|g' config.h
-
-  # Configure multimedia key, directional keys, application keys, layout keys
-  sed -i "1i #include <X11/XF86keysym.h> \n" config.h
-  sed -i "2i static const char *windowmenucmd[] = { \"x1-windowmenu\", NULL};\n" config.h
-  sed -i "3i static const char *windowmenubrowsercmd[] = { \"x1-windowmenu\", \"firefox\", \"--select-first\", NULL};\n" config.h
-  sed -i "4i static const char *windowmenuterminalcmd[] = { \"x1-windowmenu\", \"Alacritty\", \"--select-first\", NULL};\n" config.h
-  sed -i "/^static const Key keys\[\] = {/a \    \
-    { 0, XF86XK_AudioMute,          spawn,          SHCMD(\"amixer set Master toggle\") }, \n    \
-    { 0, XF86XK_AudioRaiseVolume,   spawn,          SHCMD(\"amixer set Master 5%+\") }, \n    \
-    { 0, XF86XK_AudioLowerVolume,   spawn,          SHCMD(\"amixer set Master 5%-\") }, \n    \
-    { 0, XF86XK_AudioMicMute,       spawn,          SHCMD(\"amixer set Capture toggle\") }, \n    \
-    { 0, XF86XK_MonBrightnessDown,  spawn,          SHCMD(\"light -U 5\") }, \n    \
-    { 0, XF86XK_MonBrightnessUp,    spawn,          SHCMD(\"light -A 5\") }, \n    \
-    { MODKEY,                       XK_h,          focusdir,               {.i = 0 } }, \n    \
-    { MODKEY,                       XK_l,          focusdir,               {.i = 1 } }, \n    \
-    { MODKEY,                       XK_k,          focusdir,               {.i = 2 } }, \n    \
-    { MODKEY,                       XK_j,          focusdir,               {.i = 3 } }, \n    \
-    { MODKEY,                       XK_w,          spawn,                  {.v = windowmenucmd } }, \n    \
-    { MODKEY,                       XK_f,          spawn,                  {.v = windowmenubrowsercmd } }, \n    \
-    { MODKEY,                       XK_x,          spawn,                  {.v = windowmenuterminalcmd } }, \n    \
-    { MODKEY|ShiftMask,             XK_t,          setlayout,              {.v = &layouts[3]} }, // bstack \n    \
-    { MODKEY,                       XK_y,          setlayout,              {.v = &layouts[4]} }, // centeredmaster \n    \
-    { MODKEY|ShiftMask,             XK_y,          setlayout,              {.v = &layouts[5]} }, // centeredfloatingmaster \n    \
-    { MODKEY,                       XK_e,          setlayout,              {.v = &layouts[6]} }, // deck \n    \
-    { MODKEY,                       XK_g,          setlayout,              {.v = &layouts[7]} }, // grid \n    \
-    " config.h
-
-  make clean
-  sudo make install
-  kill -HUP "$(pidof dwm)"
-}
-
 configure_firefox() {
   echo "Install the following extensions:"
   echo
@@ -446,11 +254,9 @@ help() {
   echo "  mise-tools    Install all tools declared in ~/.config/mise/config.toml"
   echo "  rustup        Install rustup"
   echo "  alacritty     Install alacritty"
-  echo "  dwm           Install dwm"
   echo "  gtktheme      Install GTK theme"
   echo "  mons          Install mons"
   echo "  nerdfonts     Install nerdfonts"
-  echo "  slstatus      Install slstatus"
   echo "Targets (apps):"
   echo "  docker        Install docker"
   echo "  latex         Install LaTeX (texlive)"
@@ -482,7 +288,6 @@ base-cli) install_base_cli ;;
 base-gui) install_base_gui ;;
 brave) install_brave ;;
 docker) install_docker ;;
-dwm) install_dwm ;;
 firefox) configure_firefox ;;
 floorp) install_floorp ;;
 gtktheme) install_gtktheme ;;
@@ -495,7 +300,6 @@ mons) install_mons ;;
 nerdfonts) install_nerdfonts ;;
 oc) install_oc ;;
 rustup) install_rustup ;;
-slstatus) install_slstatus ;;
 thinkfan) install_thinkfan ;;
 tlp) install_tlp ;;
 ufw) install_ufw ;;
