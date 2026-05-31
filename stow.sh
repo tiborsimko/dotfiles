@@ -38,7 +38,7 @@ packages=(
   # x1
   xinit
   xmodmap
-  # xresources
+  xresources
   # zathura
   zsh
 )
