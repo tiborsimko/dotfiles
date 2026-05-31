@@ -30,7 +30,7 @@ packages=(
   # notmuch
   nvim
   # oauth2
-  # picom
+  picom
   # ssh
   starship
   # taskwarrior
