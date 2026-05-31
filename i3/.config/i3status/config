@@ -1,0 +1,46 @@
+# Tibor's i3status configuration.
+
+general {
+  output_format = "i3bar"
+  colors = true
+  color_good = "#689d6a"
+  color_degraded = "#fabd26"
+  color_bad = "#fb4934"
+  separator = ""
+  interval = 30
+}
+
+order += "load"
+order += "cpu_temperature 0"
+order += "memory"
+order += "battery all"
+order += "tztime local"
+
+load {
+  format = "CPU %1min %5min %15min"
+  max_threshold = 5
+}
+
+cpu_temperature 0 {
+  format = "· TMP %degrees°C"
+  path = "/sys/devices/platform/thinkpad_hwmon/hwmon/hwmon5/temp1_input"
+	max_threshold = 80
+}
+
+memory {
+  format = "· RAM %percentage_used (%used)"
+  threshold_degraded = "30%"
+  threshold_critical = "10%"
+}
+
+battery all {
+  format = "· %status %percentage (%remaining %consumption)"
+  format_percentage = "%.00f%s"
+  threshold_type = percentage
+  low_threshold = 20
+  last_full_capacity = true
+}
+
+tztime local {
+  format = "· %a %b %d %H:%M"
+}

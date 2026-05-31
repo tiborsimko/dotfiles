@@ -18,7 +18,7 @@ packages=(
   git
   # gnupg
   # helix
-  # i3
+  i3
   inputrc
   karabiner
   # lazygit
