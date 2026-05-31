@@ -12,7 +12,7 @@ packages=(
   aerospace
   alacritty
   bash
-  # dunst
+  dunst
   # flake8
   # fontconfig
   git
