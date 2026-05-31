@@ -154,32 +154,34 @@ install_gtktheme() {
 }
 
 install_thinkfan() {
-  if [ "$(hostname)" == "p1" ]; then
-    sudo apt install -y thinkfan
-    if [ ! -f /etc/modprobe.d/thinkpad_acpi.conf ]; then
-      echo "options thinkpad_acpi fan_control=1" | sudo tee /etc/modprobe.d/thinkpad_acpi.conf
-    fi
-    sudo modprobe -rv thinkpad_acpi
-    sudo modprobe -v thinkpad_acpi
-    sudo cp -a "thinkfan/$(hostname)/thinkfan.conf" /etc/
-    sudo systemctl enable --now thinkfan.service
-    sudo systemctl restart thinkfan.service
-  else
-    echo "[ERROR] Unknown machine $(hostname)."
+  local conf
+  conf="thinkfan/$(hostname)/thinkfan.conf"
+  if [ ! -f "$conf" ]; then
+    echo "[ERROR] No thinkfan config for $(hostname) (expected $conf)."
     exit 1
   fi
+  sudo apt install -y thinkfan
+  if [ ! -f /etc/modprobe.d/thinkpad_acpi.conf ]; then
+    echo "options thinkpad_acpi fan_control=1" | sudo tee /etc/modprobe.d/thinkpad_acpi.conf
+  fi
+  sudo modprobe -rv thinkpad_acpi
+  sudo modprobe -v thinkpad_acpi
+  sudo cp -a "$conf" /etc/
+  sudo systemctl enable --now thinkfan.service
+  sudo systemctl restart thinkfan.service
 }
 
 install_tlp() {
-  if [ "$(hostname)" == "p1" ]; then
-    sudo apt install -y tlp
-    sudo cp -a "tlp/$(hostname)/tlp.conf" /etc/
-    sudo systemctl enable --now tlp.service
-    sudo systemctl restart tlp.service
-  else
-    echo "[ERROR] Unknown machine $(hostname)."
+  local conf
+  conf="tlp/$(hostname)/tlp.conf"
+  if [ ! -f "$conf" ]; then
+    echo "[ERROR] No tlp config for $(hostname) (expected $conf)."
     exit 1
   fi
+  sudo apt install -y tlp
+  sudo cp -a "$conf" /etc/
+  sudo systemctl enable --now tlp.service
+  sudo systemctl restart tlp.service
 }
 
 install_ufw() {
