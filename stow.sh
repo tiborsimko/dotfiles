@@ -23,7 +23,7 @@ packages=(
   karabiner
   # lazygit
   # mbsync
-  # mimeapps
+  mimeapps
   mise
   # msmtp
   # neomutt
