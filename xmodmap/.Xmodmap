@@ -19,11 +19,11 @@ clear mod4
 keycode 66 = Escape
 
 ! Swap Control_L and Alt_L
-keycode 64 = Control_L
-keycode 37 = Alt_L Meta_L
+!keycode 64 = Control_L
+!keycode 37 = Alt_L Meta_L
 
-! Set PrtScr as Control_R
-keycode 107 = Control_R
+! Set PrtScr as Super_R
+keycode 107 = Super_R
 
 ! Add ack modifiers and control
 add mod1 = Alt_L Meta_L

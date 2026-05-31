@@ -37,7 +37,7 @@ packages=(
   tmux
   # x1
   xinit
-  # xmodmap
+  xmodmap
   # xresources
   # zathura
   zsh
