@@ -1,48 +1,48 @@
 #!/usr/bin/env bash
 #
-# Tibor's simple desktop-aware window selector.
+# Tibor's window selector helper script.
 #
 # Examples:
-#   $ x1-windowmenu [--current-desktop-only]
-#   $ x1-windowmenu xterm [--current-desktop-only]
-#   $ x1-windowmenu qutebrowser [--current-desktop-only]
+#   $ x1-windowmenu
+#   $ x1-windowmenu firefox
+#   $ x1-windowmenu alacritty --select-first
 #
 # Bind the above actions in your favourite window manager.
 #
-# Note: Inspired by
+# Inspired by
 # https://unix.stackexchange.com/questions/50539/inconsistent-behaviour-of-wmctrl-i-a-win
 
-# Are we looking for some program windows only? (e.g. xterm, qutebrowser, zoom)
+dmenu="dmenu -fn monospace:size=10 -nb #000000 -nf #928374 -sb #000000 -sf #89b482"
+
+# Are we looking for some program windows only? (e.g. alacritty, firefox)
 program=$1
 if [[ "$program" =~ ^--.* ]]; then
-    program=""
-fi
-
-# Are we looking only at the current desktop only?
-current_desktop=" "
-if [[ "$*" = *"--current-desktop-only"* ]]; then
-    current_desktop=$(wmctrl -d | grep ' \* ' | cut -d ' ' -f1)
+  program=""
 fi
 
 # Get list of all matching windows
 if [ "$program" == "" ]; then
-    wmctrl_output=$(wmctrl -lx | sort -k 2 | grep " $current_desktop")
+  wmctrl_output=$(wmctrl -lx | sort -k 2)
 else
-    wmctrl_output=$(wmctrl -lx | sort -k 2 | grep -i "$program" | grep " $current_desktop")
+  wmctrl_output=$(wmctrl -lx | sort -k 2 | grep -i "$program")
 fi
 
 # Select target window from the list of all matching windows
 win_count=$(echo "$wmctrl_output" | wc -l)
 if [ "$win_count" -eq 1 ]; then
-    # One window only, select it automatically
-    target_id=$(echo "$wmctrl_output" | cut -d' ' -f1)
+  # One window only, select it automatically
+  target_id=$(echo "$wmctrl_output" | cut -d' ' -f1)
 else
-    # More than one window, select candidate via dmenu
+  # More than one window found; pick first or select candidate via dmenu
+  if [[ "$*" = *"--select-first"* ]]; then
+    target_id=$(echo "$wmctrl_output" | cut -d' ' -f1)
+  else
     hostname=$(uname -n)
-    win_list=$(echo "$wmctrl_output" | \
-        sed -r -e 's/[^@]'"$hostname"'//')
-    target=$(echo "$win_list" | dmenu ${DMENU_DEFAULT_OPTS} -i -l "$win_count")
+    win_list=$(echo "$wmctrl_output" |
+      sed -r -e 's/[^@]'"$hostname"'//')
+    target=$(echo "$win_list" | ${dmenu} -i -l "$win_count")
     target_id=$(echo "$target" | cut -d' ' -f1)
+  fi
 fi
 
 # Switch to the target window
