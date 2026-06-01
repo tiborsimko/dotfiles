@@ -5,17 +5,16 @@
 # Example: x1-mirror # everything interesting
 # Example: x1-mirror www # only www and its subdirectories
 
-SOURCEDIR=/home/tibor
-TARGETDIR=lxplus8.cern.ch:
+SOURCEDIR=$HOME
+TARGETDIR=lxplus.cern.ch:
 
 # analyze arguments:
-if [ "x$1" != "x" ];
-then
-    SOURCEDIR="${SOURCEDIR}/$1"
-    TARGETDIR="${TARGETDIR}$1"
+if [ "x$1" != "x" ]; then
+  SOURCEDIR="${SOURCEDIR}/$1"
+  TARGETDIR="${TARGETDIR}$1"
 else
-    SOURCEDIR="${SOURCEDIR}/private"
-    TARGETDIR="${TARGETDIR}private"
+  SOURCEDIR="${SOURCEDIR}/private"
+  TARGETDIR="${TARGETDIR}private"
 fi
 
 # remove trailing slashes:
@@ -33,31 +32,31 @@ echo
 
 # rsync files:
 rsync -rlptDvz --no-specials --no-devices -e ssh \
-    --exclude '*~' \
-    --exclude '*.fas' \
-    --exclude '*.fasl' \
-    --exclude '*.x86f' \
-    --exclude '*.mem' \
-    --exclude '*.core' \
-    --exclude '*.pyc' \
-    --exclude '*invenio/build' \
-    --exclude 'grive' \
-    --exclude 'public' \
-    --exclude 'Local' \
-    --exclude 'Dropbox' \
-    --exclude 'VirtualBox VMs' \
-    --exclude 'Desktop' \
-    --exclude 'Documents' \
-    --exclude 'Downloads' \
-    --exclude 'Music' \
-    --exclude 'Pictures' \
-    --exclude 'Public' \
-    --exclude 'Templates' \
-    --exclude 'Videos' \
-    --exclude '*.egg' \
-    --exclude 'cernbox' \
-    --exclude 'project/opendata/src/data-curation/cms-YYYY-simulated-datasets/cache' \
-    --delete \
-    ${SOURCEDIR}/ ${TARGETDIR} # trailing slash in the source dir is important!
+  --exclude '*~' \
+  --exclude '*.fas' \
+  --exclude '*.fasl' \
+  --exclude '*.x86f' \
+  --exclude '*.mem' \
+  --exclude '*.core' \
+  --exclude '*.pyc' \
+  --exclude '*invenio/build' \
+  --exclude 'grive' \
+  --exclude 'public' \
+  --exclude 'Local' \
+  --exclude 'Dropbox' \
+  --exclude 'VirtualBox VMs' \
+  --exclude 'Desktop' \
+  --exclude 'Documents' \
+  --exclude 'Downloads' \
+  --exclude 'Music' \
+  --exclude 'Pictures' \
+  --exclude 'Public' \
+  --exclude 'Templates' \
+  --exclude 'Videos' \
+  --exclude '*.egg' \
+  --exclude 'cernbox' \
+  --exclude 'project/opendata/src/data-curation/cms-YYYY-simulated-datasets/cache' \
+  --delete \
+  ${SOURCEDIR}/ ${TARGETDIR} # trailing slash in the source dir is important!
 
 # end of file
