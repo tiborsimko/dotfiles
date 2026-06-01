@@ -2,15 +2,23 @@
 #
 # Tibor's keyboard and mouse configuration script.
 
-# quit on errors
+# Quit on errors
 set -o errexit
 
-# quit on unbound symbols
+# Quit on unbound symbols
 set -o nounset
 
-# Modify internal laptop keyboard
-deviceid=$(xinput list | grep "AT Translated Set 2 keyboard" | sed -n 's/.*id=\([0-9]\+\).*/\1/p')
-setxkbmap -device "${deviceid}" -option caps:escape -option ctrl:swap_lalt_lctl -option ctrl:swap_rwin_rctl -option altwin:prtsc_rwin
+# Read arguments
+arg=""
+if [ $# -gt 0 ]; then
+  arg="$1"
+fi
+
+# Modify old keyboard
+if [ "$arg" == "--old" ]; then
+  deviceid=$(xinput list | grep "HID 05f3:0007    " | sed -n 's/.*id=\([0-9]\+\).*/\1/p')
+  setxkbmap -device "${deviceid}" -option caps:escape -option altwin:prtsc_rwin
+fi
 
 # Set faster keyboard repeat rate
 xset r rate 200 60
