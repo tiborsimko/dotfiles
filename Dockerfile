@@ -49,7 +49,7 @@ RUN ./install.sh locales
 # and host edits propagate without rebuild.
 COPY --chown=tibor:tibor . /home/tibor/.dotfiles
 # Drop the pre-staged mise config so stow can place a symlink in its stead.
-RUN rm -f /home/tibor/.config/mise/config.toml && ./stow.sh
+RUN rm -f /home/tibor/.config/mise/config.toml && ./stow.sh all
 
 # Set runtime default cwd to $HOME so interactive sessions feel like an ssh login
 WORKDIR /home/tibor

@@ -8,6 +8,47 @@
 set -o errexit
 set -o nounset
 
+help() {
+  echo "Usage: $0 [options] <target>..."
+  echo "Options:"
+  echo "  --help        Show this help [default]"
+  echo "Targets:"
+  echo "  all           Stow all enabled packages"
+  echo "  <package>     Stow one or more named packages"
+  echo "Packages:"
+  printf '  %s\n' "${packages[@]}"
+}
+
+detect_os() {
+  case "$(uname -s)" in
+    Darwin)
+      echo macos
+      ;;
+    Linux)
+      echo linux
+      ;;
+    *)
+      echo "Unsupported OS: $(uname -s)" >&2
+      exit 1
+      ;;
+  esac
+}
+
+stow_package() {
+  local package=$1
+  local target_dir=$2
+
+  stow --no-folding --target="$target_dir" "$package"
+}
+
+stow_variant_package() {
+  local package=$1
+  local variant=$2
+  local target_dir=$3
+
+  stow --no-folding --dir="$package" --target="$target_dir" "$variant"
+}
+
 packages=(
   aerospace
   alacritty
@@ -16,7 +57,7 @@ packages=(
   # flake8
   fontconfig
   git
-  # gnupg
+  gnupg
   # helix
   i3
   inputrc
@@ -43,4 +84,33 @@ packages=(
   zsh
 )
 
-stow --no-folding "${packages[@]}"
+if [ $# -eq 0 ]; then
+  help
+  exit 0
+fi
+
+case "$1" in
+  --help)
+    help
+    exit 0
+    ;;
+  all)
+    ;;
+  *)
+    packages=("$@")
+    ;;
+esac
+
+os=$(detect_os)
+target_dir=${STOW_TARGET:-$(dirname "$PWD")}
+
+for package in "${packages[@]}"; do
+  case "$package" in
+    gnupg)
+      stow_variant_package "$package" "$os" "$target_dir"
+      ;;
+    *)
+      stow_package "$package" "$target_dir"
+      ;;
+  esac
+done

@@ -41,16 +41,16 @@ native package manager.
 
 ### 3. Configure software
 
-Run `./stow.sh` to link the dotfiles:
+Run `./stow.sh all` to link the enabled dotfiles:
 
 ```console
-./stow.sh
+./stow.sh all
 ```
 
 Alternatively, to activate a single package by hand:
 
 ```console
-stow --no-folding tmux
+./stow.sh tmux
 ```
 
 ### 4. Install mise-managed toolchain
