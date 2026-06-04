@@ -46,6 +46,9 @@ stow_variant_package() {
   local variant=$2
   local target_dir=$3
 
+  if [ -d "$package/common" ]; then
+    stow --no-folding --dir="$package" --target="$target_dir" common
+  fi
   stow --no-folding --dir="$package" --target="$target_dir" "$variant"
 }
 
@@ -102,6 +105,7 @@ case "$1" in
 esac
 
 os=$(detect_os)
+# STOW_TARGET overrides the default home directory; useful for temp-target test runs.
 target_dir=${STOW_TARGET:-$(dirname "$PWD")}
 
 for package in "${packages[@]}"; do
