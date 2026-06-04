@@ -77,7 +77,7 @@ packages=(
   picom
   # ssh
   starship
-  # taskwarrior
+  taskwarrior
   tmux
   # x1
   xinit
@@ -110,7 +110,7 @@ target_dir=${STOW_TARGET:-$(dirname "$PWD")}
 
 for package in "${packages[@]}"; do
   case "$package" in
-    gnupg)
+    gnupg|taskwarrior)
       stow_variant_package "$package" "$os" "$target_dir"
       ;;
     *)

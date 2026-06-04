@@ -1,0 +1,9 @@
+# Tibor's taskopenrc configuration on macOS.
+
+# general
+TASKBIN='task'
+PATH_EXT=/opt/homebrew/share/taskopen/scripts
+
+# open notes in markdown
+NOTES_FOLDER="$HOME/private/tasknotes/"
+NOTES_EXT=".md"
