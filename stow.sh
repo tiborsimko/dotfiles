@@ -63,7 +63,6 @@ packages=(
   fontconfig
   git
   gnupg
-  # helix
   i3
   inputrc
   karabiner
