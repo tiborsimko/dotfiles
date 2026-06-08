@@ -10,9 +10,20 @@ NERDFONTS=v3.3.0
 set -o errexit
 set -o nounset
 
+# Wrap apt install so the caller's `DEBIAN_FRONTEND` propagates through
+# `sudo`, which resets env by default. Bare-metal callers stay interactive;
+# set `DEBIAN_FRONTEND=noninteractive` in the calling context (e.g. a
+# `Dockerfile` `RUN`) to silence debconf. `apt-get` is the scripting-stable
+# interface.
+apt_install() {
+  # shellcheck disable=SC2086  # intentional: empty expansion if VAR is unset
+  sudo env ${DEBIAN_FRONTEND:+DEBIAN_FRONTEND="$DEBIAN_FRONTEND"} \
+    apt-get install -y "$@"
+}
+
 install_base_cli() {
   # shellcheck disable=SC2046
-  sudo apt install -y $(grep -vE '^[[:space:]]*(#|$)' debian-packages-cli.txt)
+  apt_install $(grep -vE '^[[:space:]]*(#|$)' debian-packages-cli.txt)
   sudo apt-file update
 }
 
@@ -24,7 +35,7 @@ install_base_gui() {
     sudo apt-add-repository -y -c "$component"
   done
   # shellcheck disable=SC2046
-  sudo apt install -y $(grep -vE '^[[:space:]]*(#|$)' debian-packages-gui.txt)
+  apt_install $(grep -vE '^[[:space:]]*(#|$)' debian-packages-gui.txt)
   # Prefer text console login
   sudo systemctl set-default multi-user.target
   # Prefer Firefox ESR browser
@@ -32,14 +43,14 @@ install_base_gui() {
 }
 
 install_latex() {
-  sudo apt install -y \
+  apt_install \
     latexmk \
     texlive-extra-utils \
     texlive-latex-extra
 }
 
 install_locales() {
-  sudo apt install -y locales
+  apt_install locales
   sudo sed -i 's/^# *en_GB.UTF-8 UTF-8/en_GB.UTF-8 UTF-8/' /etc/locale.gen
   sudo locale-gen
 }
@@ -49,7 +60,7 @@ install_mise() {
   curl -fSs https://mise.jdx.dev/gpg-key.pub | sudo tee /etc/apt/keyrings/mise-archive-keyring.asc 1>/dev/null
   echo "deb [signed-by=/etc/apt/keyrings/mise-archive-keyring.asc] https://mise.jdx.dev/deb stable main" | sudo tee /etc/apt/sources.list.d/mise.list
   sudo apt update -y
-  sudo apt install -y mise
+  apt_install mise
 }
 
 install_mise_tools() {
@@ -87,7 +98,7 @@ install_docker() {
   for pkg in \
     docker.io docker-doc docker-compose podman-docker containerd runc; do sudo apt-get -y remove $pkg; done
   sudo apt-get update -y
-  sudo apt-get install -y ca-certificates curl
+  apt_install ca-certificates curl
   sudo install -m 0755 -d /etc/apt/keyrings
   sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
   sudo chmod a+r /etc/apt/keyrings/docker.asc
@@ -97,7 +108,7 @@ install_docker() {
   $(. /etc/os-release && echo "$VERSION_CODENAME") stable" |
     sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
   sudo apt-get update -y
-  sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+  apt_install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
   sudo adduser "${USER}" docker
 }
 
@@ -117,7 +128,7 @@ install_thinkfan() {
     echo "[ERROR] No thinkfan config for $(hostname) (expected $conf)."
     exit 1
   fi
-  sudo apt install -y thinkfan
+  apt_install thinkfan
   if [ ! -f /etc/modprobe.d/thinkpad_acpi.conf ]; then
     echo "options thinkpad_acpi fan_control=1" | sudo tee /etc/modprobe.d/thinkpad_acpi.conf
   fi
@@ -135,14 +146,14 @@ install_tlp() {
     echo "[ERROR] No tlp config for $(hostname) (expected $conf)."
     exit 1
   fi
-  sudo apt install -y tlp
+  apt_install tlp
   sudo cp -a "$conf" /etc/
   sudo systemctl enable --now tlp.service
   sudo systemctl restart tlp.service
 }
 
 install_ufw() {
-  sudo apt install -y ufw
+  apt_install ufw
   sudo systemctl enable --now ufw.service
   sudo ufw enable
   sudo ufw status verbose
@@ -179,15 +190,15 @@ install_brave() {
   sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
   echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main" | sudo tee /etc/apt/sources.list.d/brave-browser-release.list
   sudo apt update -y
-  sudo apt install -y brave-browser
+  apt_install brave-browser
   # Prefer Brave browser
   BROWSER="" xdg-settings set default-web-browser brave-browser.desktop
 }
 
 install_librewolf() {
-  sudo apt install -y extrepo
+  apt_install extrepo
   sudo extrepo enable librewolf
-  sudo apt update -y && sudo apt install -y librewolf
+  sudo apt update -y && apt_install librewolf
   # Prefer LibreWolf browser
   BROWSER="" xdg-settings set default-web-browser brave-browser.desktop
 }
@@ -196,7 +207,7 @@ install_floorp() {
   curl -fsSL https://ppa.floorp.app/KEY.gpg | sudo gpg --dearmor -o /usr/share/keyrings/Floorp.gpg
   sudo curl -sS --compressed -o /etc/apt/sources.list.d/Floorp.list "https://ppa.floorp.app/Floorp.list"
   sudo apt update
-  sudo apt install floorp
+  apt_install floorp
   # Prefer Floorp browser
   BROWSER="" xdg-settings set default-web-browser floorp.desktop
 }
