@@ -10,6 +10,9 @@ feh
 firefox-esr-l10n-en-gb
 firefox-esr-l10n-fr
 firefox-esr-l10n-sk
+firmware-iwlwifi
+firmware-linux
+firmware-linux-nonfree
 flameshot
 gimp
 hsetroot
@@ -17,11 +20,10 @@ i3
 light
 lxappearance
 maim
-parcellite
+nsxiv
 picom
 rofi
 suckless-tools
-sxiv
 unclutter
 vlc
 vym

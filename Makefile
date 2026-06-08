@@ -1,6 +1,6 @@
 # Targets for building and running the local Debian test container.
 
-IMAGE := docker.io/tiborsimko/dotfiles-debian:12
+IMAGE := docker.io/tiborsimko/dotfiles-debian:13
 
 .PHONY: help docker-build docker-run docker-test
 

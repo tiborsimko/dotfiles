@@ -25,14 +25,13 @@ cd ~/.dotfiles
 
 ### 2. Install software
 
-On Debian 12, you can use the `install.sh` helper script to provision software:
+On Debian 13, you can use the `install.sh` helper script to provision software:
 
 ```console
 ./install.sh            # see help
 ./install.sh base-cli   # CLI packages
 ./install.sh base-gui   # GUI packages (optional)
 ./install.sh mise       # Runtime version manager
-./install.sh rustup     # Rust toolchain
 ...                     # etc
 ```
 
