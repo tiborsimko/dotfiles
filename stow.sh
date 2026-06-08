@@ -77,7 +77,7 @@ packages=(
   nvim
   # oauth2
   picom
-  # ssh
+  ssh
   starship
   taskwarrior
   tmux
