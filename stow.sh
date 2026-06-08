@@ -49,7 +49,9 @@ stow_variant_package() {
   if [ -d "$package/common" ]; then
     stow --no-folding --dir="$package" --target="$target_dir" common
   fi
-  stow --no-folding --dir="$package" --target="$target_dir" "$variant"
+  if [ -d "$package/$variant" ]; then
+    stow --no-folding --dir="$package" --target="$target_dir" "$variant"
+  fi
 }
 
 packages=(
@@ -110,7 +112,7 @@ target_dir=${STOW_TARGET:-$(dirname "$PWD")}
 
 for package in "${packages[@]}"; do
   case "$package" in
-    gnupg|taskwarrior)
+    gnupg|mise|taskwarrior)
       stow_variant_package "$package" "$os" "$target_dir"
       ;;
     *)

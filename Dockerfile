@@ -35,7 +35,7 @@ RUN ./install.sh mise
 # Pre-stage mise config so the mise-install layer is keyed on config.toml,
 # not on every dotfile edit. The stow step further down replaces it with a symlink.
 RUN mkdir -p /home/tibor/.config/mise
-COPY --chown=tibor:tibor mise/.config/mise/config.toml /home/tibor/.config/mise/config.toml
+COPY --chown=tibor:tibor mise/linux/.config/mise/config.toml /home/tibor/.config/mise/config.toml
 RUN ./install.sh mise-tools
 
 # Drop /etc/skel-derived rc files so stow won't conflict at runtime
