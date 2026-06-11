@@ -8,12 +8,12 @@ SyncState *
 
 # CERN
 IMAPAccount CERN
-Host cernmail.cern.ch
-User simko
-PassCmd "gpg --quiet --for-your-eyes-only --no-tty --decrypt ~/.gnupg/password-simko-cern.txt.gpg"
+Host outlook.office365.com
+User tibor.simko@cern.ch
+PassCmd "~/.config/oauth2/mutt_oauth2.py ~/.config/oauth2/tibor.simko@cern.ch.tokens"
 Port 993
-SSLType IMAPS
-AuthMechs LOGIN
+TLSType IMAPS
+AuthMechs XOAUTH2
 Timeout 60
 
 # Remote storage
@@ -38,19 +38,20 @@ Near :CERN-local:Github
 
 # CERN - Spam
 Channel CERN-Spam
-Far :CERN-remote:Spam
+Far :CERN-remote:"Junk Email"
 Near :CERN-local:Spam
 
 # CERN - Archive
 Channel CERN-Archive
-Far :CERN-remote:Archive
-Near :CERN-local:Archive
+Far :CERN-remote:
+Near :CERN-local:
+Patterns Archive
 
 # CERN - Others
 Channel CERN-Others
 Far :CERN-remote:
 Near :CERN-local:
-Patterns * !INBOX !Github !Spam !Archive !Drafts !Trash
+Patterns * !INBOX !Github !Spam !"Junk Email" !Archive !Drafts !Trash
 
 # CERN group - all channels
 Group CERN
