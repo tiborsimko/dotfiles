@@ -1,0 +1,62 @@
+# Tibor's light colour theme for Mutt.
+
+# Inspired by https://www.sthu.org/code/codesnippets/mutt-gruvbox.html
+# See also http://www.mutt.org/doc/manual/#color
+
+color attachment  color65  default
+color bold        color136 default
+color error       color124 default
+color hdrdefault  color242 default
+color indicator   color237 color180
+color markers     color245 default
+color normal      color237 default
+color prompt      color237 default
+color quoted      color100 default
+color quoted1     color65  default
+color quoted2     color100 default
+color quoted3     color65  default
+color quoted4     color100 default
+color quoted5     color65  default
+color search      color230 color130
+color signature   color65  default
+color status      color237 color180
+color tilde       color245 default
+color tree        color100 default
+color underline   color237 color250
+
+color sidebar_divider    color245 default
+color sidebar_new        color100 default
+
+color index color100 default ~N
+color index color65  default ~O
+color index color96  default ~P
+color index color130 default ~F
+color index color96  default ~Q
+color index color124 default ~=
+color index color237 color144 ~T
+color index color124 default ~D
+
+color header color130 default "^(To:|Cc:|Bcc:|From:)"
+color header color100 default "^Subject:"
+color header color65  default "^X-Spam-Status:"
+color header color65  default "^Received:"
+
+color body color100 default "[a-z]{3,255}://[-a-zA-Z0-9@:%._\\+~#=/?&,]+"
+#color body color100 default "[a-zA-Z]([-a-zA-Z0-9_]+\\.){2,256}[-a-zA-Z0-9_]{2,256}"
+color body color130 default "[-a-z_0-9.%$]+@[-a-z_0-9.]+\\.[-a-z][-a-z]+"
+color body color130 default "mailto:[-a-z_0-9.]+@[-a-z_0-9.]+"
+color body color230 color130 "[;:]-*[)>(<lt;|]"
+color body color136 default "\\*[- A-Za-z]+\\*"
+
+color body color130 default "^-.*PGP.*-*"
+color body color100 default "^gpg: Good signature from"
+color body color124 default "^gpg: Can't.*$"
+color body color130 default "^gpg: WARNING:.*$"
+color body color124 default "^gpg: BAD signature from"
+color body color124 default "^gpg: Note: This key has expired!"
+color body color130 default "^gpg: There is no indication that the signature belongs to the owner."
+color body color130 default "^gpg: can't handle these multiple signatures"
+color body color130 default "^gpg: signature verification suppressed"
+color body color130 default "^gpg: invalid node with packet of type"
+
+# vi:syntax=neomuttrc

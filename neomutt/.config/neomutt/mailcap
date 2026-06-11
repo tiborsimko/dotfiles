@@ -1,0 +1,41 @@
+# HTML
+text/html; w3m -I %{charset} -T text/html; copiousoutput;
+
+# PDF
+application/pdf; open %s;
+application/x-pdf; open %s;
+application/postscript; open %s;
+
+# MS Excel
+application/x-msexcel; libreoffice --calc %s;
+application/ms-exc; libreoffice --calc %s;
+application/excel; libreoffice --calc %s;
+application/msexcel; libreoffice --calc %s;
+application/vnd.ms-exc; libreoffice --calc %s;
+application/vnd.ms-excel; libreoffice --calc %s;
+
+# MS Word
+application/msword; libreoffice --writer %s;
+application/vnd.sun.xml.writer; libreoffice --writer %s;
+application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; libreoffice --writer %s;
+application/vnd.openxmlformats-officedocument.spreadsheetml.template; libreoffice --writer %s;
+application/vnd.openxmlformats-officedocument.presentationml.template; libreoffice --writer %s;
+application/vnd.openxmlformats-officedocument.presentationml.slideshow; libreoffice --writer %s;
+application/vnd.openxmlformats-officedocument.presentationml.presentation; libreoffice --writer %s;
+application/vnd.openxmlformats-officedocument.presentationml.slide; libreoffice --writer %s;
+application/vnd.openxmlformats-officedocument.wordprocessingml.document; libreoffice --writer %s;
+application/vnd.openxmlformats-officedocument.wordprocessingml.template; libreoffice --writer %s;
+application/vnd.ms-excel.addin.macroEnabled.12; libreoffice --writer %s;
+application/vnd.ms-excel.sheet.binary.macroEnabled.12; libreoffice --writer %s;
+
+# Images
+image/jpeg; open %s;
+image/pjpeg; open %s;
+image/png; open %s;
+image/gif; open %s;
+image/tiff; open %s;
+
+# Calendar (press `m` when viewing attachments)
+text/ics; gcalcli --calendar 'tibor.simko@gmail.com' import %s;
+text/calendar; gcalcli --calendar 'tibor.simko@gmail.com' import %s;
+application/ics; gcalcli --calendar 'tibor.simko@gmail.com' import %s;

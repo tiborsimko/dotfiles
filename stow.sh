@@ -67,11 +67,11 @@ packages=(
   inputrc
   karabiner
   lazygit
-  # mbsync
+  mbsync
   mimeapps
   mise
-  # msmtp
-  # neomutt
+  msmtp
+  neomutt
   # notmuch
   nvim
   # oauth2
