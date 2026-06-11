@@ -8,32 +8,57 @@ set -o errexit
 # quit on unbound symbols
 set -o nounset
 
-# usage help
-usage () {
-  echo "Usage: $0 [inbox|archive|all|help] [...]"
+# Set up GPG agent socket for OAuth2 token decryption
+GPG_TTY=$(tty 2>/dev/null || echo "not a tty")
+export GPG_TTY
+SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket 2>/dev/null || echo "")
+export SSH_AUTH_SOCK
+
+# Tell Cyrus SASL where to find the XOAUTH2 plugin on macOS (Homebrew prefix);
+# on Debian, libsasl2-modules-kdexoauth2 lives in the system default sasl2 dir.
+if [[ "$(uname -s)" == Darwin ]]; then
+  export SASL_PATH=/opt/homebrew/opt/cyrus-sasl/lib/sasl2:/opt/homebrew/opt/cyrus-sasl-xoauth2/lib/sasl2
+fi
+
+# check whether we can run
+if [ -n "$(pgrep -x mbsync)" ] || [ -n "$(pgrep -x notmuch)" ]; then
+  echo "mbsync or notmuch is already running. Exiting."
+  exit
+fi
+
+# print usage help
+usage() {
+  echo "Usage: $0 [inbox|archive|all|notmuch|help] [...]"
 }
 
 # synchronise mail
 needhelp=1
-if [[ "$@" = *"inbox"* ]]; then
+if [[ "$*" = *"inbox"* ]]; then
   # synchronise only current mail: takes ~3 seconds
   needhelp=0
   mbsync CERN-Inbox CERN-Github CERN-Spam
 fi
-if [[ "$@" = *"archive"* ]]; then
+if [[ "$*" = *"archive"* ]]; then
   # synchronise only current archive: takes ~3 seconds
   needhelp=0
   mbsync CERN-Archive
 fi
-if [[ "$@" = *"all"* ]]; then
+if [[ "$*" = *"all"* ]]; then
   # synchronise everything: takes ~3 minutes
   needhelp=0
   mbsync -a
 fi
-if [[ "$@" = *"help"* ]]; then
+if [[ "$*" = *"notmuch"* ]]; then
+  # synchronise nothing; just run notmuch
+  needhelp=0
+fi
+if [[ "$*" = *"help"* ]]; then
   needhelp=1
 fi
 if [ "$needhelp" -gt "0" ]; then
   usage
   exit 1
 fi
+
+# index new mail
+notmuch new --quiet
