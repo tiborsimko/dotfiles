@@ -74,7 +74,7 @@ packages=(
   neomutt
   notmuch
   nvim
-  # oauth2
+  oauth2
   picom
   ssh
   starship
