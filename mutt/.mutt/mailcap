@@ -2,9 +2,9 @@
 text/html; w3m -I %{charset} -T text/html; copiousoutput;
 
 # PDF
-application/pdf; zathura %s;
-application/x-pdf; zathura %s;
-application/postscript; zathura %s;
+application/pdf; open %s;
+application/x-pdf; open %s;
+application/postscript; open %s;
 
 # MS Excel
 application/x-msexcel; libreoffice --calc %s;
@@ -29,11 +29,11 @@ application/vnd.ms-excel.addin.macroEnabled.12; libreoffice --writer %s;
 application/vnd.ms-excel.sheet.binary.macroEnabled.12; libreoffice --writer %s;
 
 # Images
-image/jpeg; sxiv %s;
-image/pjpeg; sxiv %s;
-image/png; sxiv %s;
-image/gif; sxiv %s;
-image/tiff; sxiv %s;
+image/jpeg; open %s;
+image/pjpeg; open %s;
+image/png; open %s;
+image/gif; open %s;
+image/tiff; open %s;
 
 # Calendar (press `m` when viewing attachments)
 text/ics; gcalcli --calendar 'tibor.simko@gmail.com' import %s;
