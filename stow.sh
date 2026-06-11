@@ -80,7 +80,7 @@ packages=(
   starship
   taskwarrior
   tmux
-  # x1
+  x1
   xinit
   xmodmap
   xresources
