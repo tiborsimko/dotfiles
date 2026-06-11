@@ -72,7 +72,7 @@ packages=(
   mise
   msmtp
   neomutt
-  # notmuch
+  notmuch
   nvim
   # oauth2
   picom
