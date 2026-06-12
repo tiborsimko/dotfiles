@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+
+set -e
+
+start_colima() {
+  echo "==> Starting Colima..."
+  colima start \
+    --activate \
+    --arch aarch64 \
+    --cpu 8 \
+    --disk 300 \
+    --kubernetes \
+    --memory 18 \
+    --mount-type virtiofs \
+    --profile default \
+    --verbose \
+    --vm-type vz \
+    --vz-rosetta
+
+  echo "==> Waiting for Docker to be ready..."
+  until docker info >/dev/null 2>&1; do sleep 1; done
+
+  echo "==> Registering QEMU binfmt emulators for cross-platform builds..."
+  docker run --privileged --rm tonistiigi/binfmt --install all
+
+  echo "==> Setting colima as default buildx builder..."
+  docker buildx use colima
+
+  echo "==> Ready. Supported platforms:"
+  docker buildx inspect | grep Platforms
+}
+
+stop_colima() {
+  echo "==> Stopping Colima..."
+  colima stop
+}
+
+destroy_colima() {
+  echo "==> Deleting Colima 'default' profile and its data..."
+  colima delete --profile default --force --data
+
+  echo "==> Colima destroyed. Run 'colima-vm start' for a fresh setup."
+}
+
+usage() {
+  echo "Usage: $(basename "$0") {start|stop|destroy}"
+  exit 1
+}
+
+case "${1:-}" in
+start)
+  start_colima
+  ;;
+stop)
+  stop_colima
+  ;;
+destroy)
+  destroy_colima
+  ;;
+*)
+  usage
+  ;;
+esac

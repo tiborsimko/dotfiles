@@ -58,6 +58,7 @@ packages=(
   aerospace
   alacritty
   bash
+  colima
   dunst
   emacs
   # flake8
