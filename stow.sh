@@ -59,6 +59,7 @@ packages=(
   alacritty
   bash
   dunst
+  emacs
   # flake8
   fontconfig
   git
