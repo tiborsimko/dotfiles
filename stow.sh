@@ -67,6 +67,7 @@ packages=(
   gnupg
   i3
   inputrc
+  journal
   karabiner
   lazygit
   mbsync

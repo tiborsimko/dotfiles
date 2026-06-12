@@ -1,0 +1,311 @@
+#!/usr/bin/env python3
+
+"""Compile daily, weekly or other-timely reports from daily notes.
+
+Stand-up reports exclude the PERSONAL topic unless it is explicitly requested
+with ``-t PERSONAL``.
+"""
+
+import argparse
+import datetime
+import json
+import os
+import re
+import sys
+
+
+def get_full_day(day):
+    """Return full day information for a given day.
+
+    >>> get_full_day(datetime.date(2022, 9, 1))
+    'Thursday September 1st 2022'
+    >>> get_full_day(datetime.date(2022, 9, 2))
+    'Friday September 2nd 2022'
+    >>> get_full_day(datetime.date(2022, 9, 3))
+    'Saturday September 3rd 2022'
+    >>> get_full_day(datetime.date(2022, 9, 4))
+    'Sunday September 4th 2022'
+    >>> get_full_day(datetime.date(2022, 9, 11))
+    'Sunday September 11th 2022'
+    >>> get_full_day(datetime.date(2022, 9, 12))
+    'Monday September 12th 2022'
+    >>> get_full_day(datetime.date(2022, 9, 13))
+    'Tuesday September 13th 2022'
+    >>> get_full_day(datetime.date(2022, 9, 14))
+    'Wednesday September 14th 2022'
+    >>> get_full_day(datetime.date(2022, 9, 21))
+    'Wednesday September 21st 2022'
+    >>> get_full_day(datetime.date(2022, 9, 22))
+    'Thursday September 22nd 2022'
+    >>> get_full_day(datetime.date(2022, 9, 23))
+    'Friday September 23rd 2022'
+    >>> get_full_day(datetime.date(2022, 9, 24))
+    'Saturday September 24th 2022'
+    >>> get_full_day(datetime.date(2022, 9, 28))
+    'Wednesday September 28th 2022'
+    """
+    suffix = "th"
+    dd = day.strftime("%d")
+    if dd.endswith("1") and not dd.startswith("1"):
+        suffix = "st"
+    elif dd.endswith("2") and not dd.startswith("1"):
+        suffix = "nd"
+    elif dd.endswith("3") and not dd.startswith("1"):
+        suffix = "rd"
+    return day.strftime("%A %B %-d" + suffix + " %Y")
+
+
+def parse_args():
+    """Parse command-line arguments."""
+    parser = argparse.ArgumentParser(
+        description="Prepare report for the past number of days from my personal logbook."
+    )
+    parser.add_argument(
+        "-d",
+        "--day",
+        default="today",
+        help=(
+            "Which day are we interested in preparing the report for? "
+            "Use YYYY-MM-DD format. (default: today)"
+        ),
+    )
+    parser.add_argument(
+        "-n",
+        "--number",
+        type=int,
+        default=1,
+        help=(
+            "How many past days to analyse when assembling the report? " "(default: 1)"
+        ),
+    )
+    parser.add_argument(
+        "-t",
+        "--topics",
+        action="append",
+        help=(
+            "Do we assemble the report for some particular topics only? "
+            "May be repeated. In stand-up reports, '-t PERSONAL' explicitly "
+            "includes the otherwise excluded PERSONAL topic. (default: all)"
+        ),
+    )
+    parser.add_argument(
+        "-s",
+        "--standup",
+        action="store_true",
+        help=(
+            "Do we want to prepare a stand-up summary? PERSONAL entries are "
+            "excluded unless explicitly requested with '-t PERSONAL'. "
+            "(default: no)"
+        ),
+    )
+    parser.add_argument(
+        "--test",
+        action="store_true",
+        help="Do we want to run test suite only? (default: no)",
+    )
+    parser.add_argument(
+        "-v",
+        "--verbose",
+        action="store_true",
+        help="Do we want to include some debugging info? (default: no)",
+    )
+    args = parser.parse_args()
+    if args.topics is None:
+        args.topics = ["all"]
+    return args
+
+
+def cli(day, number, topics, standup, test, verbose):
+    """Prepare report for the past number of days from my personal logbook."""
+    entries = {}
+    errors = {}
+
+    # are we only running test suite?
+    if test:
+        import doctest
+
+        doctest.testmod(verbose=True)
+        sys.exit()
+
+    # get entries and errors from old days to reportday excluding
+    if day == "today":
+        reportday = datetime.date.today()
+    else:
+        reportday = datetime.date.fromisoformat(day)
+    oldday = reportday - datetime.timedelta(days=number)
+
+    # read markdown journal files covering the report date range;
+    # prefer monthly files (journal-YYYY-MM.md) and fall back to yearly
+    # archives (journal-YYYY.md) for years that haven't been split.
+    last_day = reportday - datetime.timedelta(days=1)
+
+    ym_pairs = set()
+    d = oldday
+    while d <= last_day:
+        ym_pairs.add((d.year, d.month))
+        d += datetime.timedelta(days=1)
+
+    files_to_read = []
+    years_with_yearly = set()
+    for year, month in sorted(ym_pairs):
+        monthly = os.path.expanduser(f"~/private/journal/journal-{year}-{month:02d}.md")
+        if os.path.exists(monthly):
+            files_to_read.append(monthly)
+            continue
+        yearly = os.path.expanduser(f"~/private/journal/journal-{year}.md")
+        if os.path.exists(yearly) and year not in years_with_yearly:
+            files_to_read.append(yearly)
+            years_with_yearly.add(year)
+
+    entry_re = re.compile(r"## (\d\d\d\d-\d\d-\d\d) (\d\d:\d\d:\d\d) #(.*?) (.*)$")
+    looks_like_entry_re = re.compile(r"## \d\d\d\d-\d\d-\d\d")
+
+    for journal_file in files_to_read:
+        if not os.path.exists(journal_file):
+            continue
+        with open(journal_file, "r") as fdesc:
+            for line in fdesc.readlines():
+                if not line.startswith("## "):
+                    continue
+                match = entry_re.match(line)
+                if match:
+                    datestr, timestr, topic, text = match.groups()
+                    entry_date = datetime.date.fromisoformat(datestr)
+
+                    # only include entries in the date range
+                    if entry_date < oldday or entry_date >= reportday:
+                        continue
+
+                    timestamp = f"{datestr} {timestr}"
+                    if "all" not in topics and topic not in topics:
+                        continue
+                    if standup and topic == "PERSONAL" and "PERSONAL" not in topics:
+                        continue
+                    if topic == "TEAM" and text == "Stand-up":
+                        continue
+                    if verbose:
+                        text = "[" + timestamp + "] " + text
+                    if entries.get(topic):
+                        entries[topic].append(text.strip())
+                    else:
+                        entries[topic] = [
+                            text,
+                        ]
+                else:
+                    # only report errors for lines that look like they should be entries
+                    if looks_like_entry_re.match(line):
+                        error_key = "parsing"
+                        if errors.get(error_key):
+                            errors[error_key].append(line.strip())
+                        else:
+                            errors[error_key] = [
+                                line,
+                            ]
+
+    # print leading stand-up header
+    if standup:
+        print(get_full_day(reportday) + " #standup thread")
+        print("")
+    else:
+        if number == 1:
+            print(get_full_day(reportday - datetime.timedelta(days=number)))
+        else:
+            print(
+                get_full_day(reportday - datetime.timedelta(days=number)),
+                "--",
+                get_full_day(reportday - datetime.timedelta(days=1)),
+            )
+        print("")
+
+    # print yesterday's achievement list
+    leadingspace = ""
+    if standup:
+        print("- Yesterday")
+        leadingspace = "    "
+    entry_topics = list(entries.keys())
+    entry_topics.sort()
+    nb_entries_total = 0
+    for topic in entry_topics:
+        nb_entries_total += len(entries[topic])
+    for topic in entry_topics:
+        if verbose:
+            print(
+                leadingspace + "-",
+                topic,
+                "[" + str(len(entries[topic])) + "/" + str(nb_entries_total),
+                "=",
+                str(round(100 * len(entries[topic]) / nb_entries_total, 1)) + "%]",
+            )
+        else:
+            print(leadingspace + "-", topic)
+        for text in entries[topic]:
+            print(leadingspace + "    -", text)
+
+    if standup:
+        # print placeholder for today's news
+        todayfocus = {}
+        for topic in topics:
+            if topic != "all":
+                todayfocus[topic] = [
+                    "FIXME",
+                ]
+
+        # enrich news with regularly occurring events; schedule data is
+        # loaded from an untracked private file keyed by full English weekday
+        # name ("Monday".."Sunday"), each value a list of {"topic", "text"}
+        # objects. The file is optional; absent or empty → no enrichment.
+        #
+        # Example ~/.config/journal/recurring.json:
+        #
+        #   {
+        #     "Monday": [
+        #       {"topic": "STANDUP", "text": "10:00-10:30 Weekly team standup."}
+        #     ],
+        #     "Wednesday": [
+        #       {"topic": "REVIEW",   "text": "14:00-15:00 Sprint review."},
+        #       {"topic": "PLANNING", "text": "15:00-16:00 Sprint planning."}
+        #     ]
+        #   }
+        recurring_path = os.path.expanduser("~/.config/journal/recurring.json")
+        if os.path.exists(recurring_path):
+            with open(recurring_path) as fdesc:
+                recurring = json.load(fdesc)
+            for event in recurring.get(reportday.strftime("%A"), []):
+                todayfocus.setdefault(event["topic"], []).append(event["text"])
+
+        # print today's focus list
+        print("- Today")
+        todayfocustopics = list(todayfocus.keys())
+        todayfocustopics.sort()
+        for todaytopic in todayfocustopics:
+            print("    -", todaytopic)
+            for todaytopicnewsitem in todayfocus[todaytopic]:
+                print("        -", todaytopicnewsitem)
+
+    # print errors
+    if errors:
+        print("")
+        print(
+            "//--o-o--<--",
+            len(errors),
+            "ERRORS FOUND! PLEASE FIX THE BELOW QUOTED DAY ENTRIES!",
+        )
+        print("")
+        error_days = list(errors.keys())
+        error_days.sort()
+        for error_day in error_days:
+            print("-", error_day)
+            for line in errors[error_day]:
+                print("    -", line)
+        print("")
+        print(
+            "\\--o-o-->--",
+            len(errors),
+            "ERRORS FOUND! PLEASE FIX THE ABOVE QUOTED DAY ENTRIES!",
+        )
+        print("")
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    cli(**vars(parse_args()))
