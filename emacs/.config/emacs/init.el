@@ -1774,8 +1774,6 @@ Similar to helm-selector-mu4e, this provides quick access to mu4e."
   :custom
   (treesit-auto-install 'prompt)
   :config
-  ;; Cache the language availability checks to speed up file opening
-  (setq treesit-auto-langs (treesit-auto--build-major-mode-remap-alist))
   (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode t))
 
