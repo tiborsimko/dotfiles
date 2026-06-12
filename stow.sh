@@ -79,6 +79,7 @@ packages=(
   nvim
   oauth2
   picom
+  reclaim
   ssh
   starship
   taskwarrior
