@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+#
+# Tibor's dark/light theme toggling script.
+
+set -e
+
+config_alacritty="$HOME/.dotfiles/alacritty/.config/alacritty/alacritty.toml"
+config_nvim="$HOME/.dotfiles/nvim/.config/nvim/lua/plugins/gruvbox.lua"
+config_neomutt="$HOME/.dotfiles/neomutt/.config/neomutt/neomuttrc"
+config_tmux="$HOME/.dotfiles/tmux/.config/tmux/tmux.conf"
+
+files=("$config_alacritty" "$config_neomutt" "$config_tmux" "$config_nvim")
+
+# Preflight: abort before editing if any config is missing so we don't
+# end up with partial state (some tools flipped, others stuck).
+for f in "${files[@]}"; do
+  [[ -f "$f" ]] || { echo "theme-toggle: missing config: $f" >&2; exit 1; }
+done
+
+if grep -q dark "$config_alacritty"; then
+  from=dark; to=light
+else
+  from=light; to=dark
+fi
+
+# `sed -i.bak` is the portable form across BSD sed (macOS) and GNU sed
+# (Linux); both accept a glued backup suffix. Empty `-i ''` is BSD-only.
+for f in "${files[@]}"; do
+  sed -i.bak "s|${from}|${to}|g" "$f"
+  rm -- "$f.bak"
+done
+
+# Reload tmux configuration if tmux is running
+if command -v tmux &>/dev/null && tmux info &>/dev/null 2>&1; then
+  tmux source-file ~/.config/tmux/tmux.conf
+fi
+
+# Reload running neovim instances (in background — each --server spawn is ~600ms)
+new_bg=$(sed -nE 's/.*vim\.o\.background = "(light|dark)".*/\1/p' "$config_nvim")
+if [ -n "$new_bg" ] && command -v nvim &>/dev/null; then
+  shopt -s nullglob
+  for sock in \
+    "${TMPDIR%/}/nvim.$USER"/*/nvim.*.0 \
+    "/tmp/nvim.$USER"/*/nvim.*.0 \
+    "${XDG_RUNTIME_DIR:-/run/user/$UID}/nvim."*/nvim.*.0; do
+    [ -S "$sock" ] || continue
+    nvim --server "$sock" --remote-expr \
+      "execute('set background=$new_bg | colorscheme gruvbox')" >/dev/null 2>&1 &
+    disown
+  done
+  shopt -u nullglob
+fi
+
+# Reload running neomutt instances (via tmux send-keys to F5 macro)
+if command -v tmux &>/dev/null && tmux info &>/dev/null 2>&1; then
+  tmux list-panes -a -F '#{pane_id} #{pane_current_command}' \
+    | awk '$2 == "neomutt" {print $1}' \
+    | while read -r pane; do
+        tmux send-keys -t "$pane" F5
+      done
+fi

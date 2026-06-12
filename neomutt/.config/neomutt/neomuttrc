@@ -72,7 +72,7 @@ set sendmail = "/opt/homebrew/bin/msmtp --account=cern"
 # Native notmuch integration (enables notmuch:// virtual folders)
 set nm_default_url = "notmuch://$HOME/Local/mbsyncmail"
 
-# Key bindings - reload colour theme (driven externally by x1-theme via tmux)
+# Key bindings - reload colour theme (driven externally by theme-toggle via tmux)
 macro index,pager <F5> "<enter-command>source ~/.config/neomutt/neomuttrc<enter>" "Reload colour theme"
 
 # Key bindings - general vim-like

@@ -6,7 +6,7 @@ vim.api.nvim_create_autocmd("VimLeave", {
 })
 
 -- Dim inactive splits to match tmux's inactive pane background.
--- Re-applied on every colorscheme load so live theme switches (x1-theme) work.
+-- Re-applied on every colorscheme load so live theme switches (theme-toggle) work.
 vim.api.nvim_create_autocmd("ColorScheme", {
   pattern = "gruvbox",
   callback = function()
