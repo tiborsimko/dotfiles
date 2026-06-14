@@ -87,7 +87,6 @@ packages=(
   taskwarrior
   theme
   tmux
-  x1
   xinit
   xmodmap
   xresources
