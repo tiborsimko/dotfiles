@@ -82,6 +82,7 @@ packages=(
   reclaim
   rsync
   ssh
+  sshuttle
   starship
   taskwarrior
   theme
