@@ -102,9 +102,9 @@ attach_or_switch() {
 # older versions (e.g. Debian 12's 0.38) error out, so fall back to
 # Enter-to-accept there.
 fzf_ver=$(fzf --version 2>/dev/null | head -n1 | awk '{print $1}')
-bind_one=""
+set --
 case "$fzf_ver" in
-  0.39*|0.[4-9][0-9]*|[1-9]*) bind_one="--bind one:accept" ;;
+  0.39*|0.[4-9][0-9]*|[1-9]*) set -- --bind one:accept ;;
 esac
 
 # ---- Stage 1: pick a running session, or open the create flow ----
@@ -118,7 +118,7 @@ selection=$(
       --border-label ' switch session ' \
       --exact \
       --query '^' \
-      $bind_one
+      "$@"
 )
 [ $? -eq 130 ] && exit 0
 [ -z "$selection" ] && exit 0
@@ -145,7 +145,7 @@ selection=$(
       --border-label ' create session ' \
       --exact \
       --query '^' \
-      $bind_one
+      "$@"
 )
 [ $? -eq 130 ] && exit 0
 [ -z "$selection" ] && exit 0
