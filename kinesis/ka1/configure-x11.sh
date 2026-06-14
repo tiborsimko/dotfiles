@@ -22,8 +22,3 @@ fi
 
 # Set faster keyboard repeat rate
 xset r rate 200 60
-
-# Modify external trackball
-xinput set-prop "Logitech USB Trackball" "libinput Scroll Method Enabled" 0 0 1
-xinput set-prop "Logitech USB Trackball" "libinput Left Handed Enabled" 0
-xinput set-prop "Logitech USB Trackball" "libinput Button Scrolling Button" 9
