@@ -24,7 +24,7 @@ nsxiv
 picom
 rofi
 suckless-tools
-unclutter
+unclutter-xfixes
 vlc
 vym
 wmctrl
