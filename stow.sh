@@ -80,6 +80,7 @@ packages=(
   oauth2
   picom
   reclaim
+  rsync
   ssh
   starship
   taskwarrior

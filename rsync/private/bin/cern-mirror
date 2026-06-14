@@ -2,8 +2,8 @@
 #
 # Tibor's mirror script from laptop to AFS. Some directories only.
 #
-# Example: x1-mirror # everything interesting
-# Example: x1-mirror www # only www and its subdirectories
+# Example: cern-mirror # everything interesting
+# Example: cern-mirror www # only www and its subdirectories
 
 SOURCEDIR=$HOME
 TARGETDIR=lxplus.cern.ch:
