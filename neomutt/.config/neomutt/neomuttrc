@@ -107,10 +107,10 @@ macro index,pager ,wa "<limit>all<enter>" "Widen to all messages"
 macro index,pager ,a ":set confirmappend=no delete=yes auto_tag=yes\n<save-message>=Archive\n<sync-mailbox>:set confirmappend=yes delete=ask-yes\n"
 
 # Key bindings - taskwarrior capture
-macro index,pager ,c "<pipe-message>x1-task-mail-capture<enter>" "Capture as taskwarrior task"
+macro index,pager ,c "<pipe-message>$HOME/.config/task/task-mail-capture.sh<enter>" "Capture as taskwarrior task"
 
 # Key bindings - taskwarrior jump
-macro index,pager ,j "<enter-command>source ~/.cache/neomutt-jump.rc<enter>" "Jump to message prepared by x1-task-mail-jump"
+macro index,pager ,j "<enter-command>source ~/.cache/neomutt-jump.rc<enter>" "Jump to message prepared by task-mail-jump.sh"
 
 # Key bindings - notmuch
 macro index ,s \
