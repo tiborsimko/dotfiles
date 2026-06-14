@@ -9,7 +9,7 @@ SOURCEDIR=$HOME
 TARGETDIR=lxplus.cern.ch:
 
 # analyze arguments:
-if [ "x$1" != "x" ]; then
+if [ -n "$1" ]; then
   SOURCEDIR="${SOURCEDIR}/$1"
   TARGETDIR="${TARGETDIR}$1"
 else
@@ -57,6 +57,6 @@ rsync -rlptDvz --no-specials --no-devices -e ssh \
   --exclude 'cernbox' \
   --exclude 'project/opendata/src/data-curation/cms-YYYY-simulated-datasets/cache' \
   --delete \
-  ${SOURCEDIR}/ ${TARGETDIR} # trailing slash in the source dir is important!
+  "${SOURCEDIR}/" "${TARGETDIR}" # trailing slash in the source dir is important!
 
 # end of file
