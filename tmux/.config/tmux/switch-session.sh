@@ -55,7 +55,7 @@ create_tmux_session() {
     tmux new-session -d -c "$dir" -s "$session"
     tmux send-keys -t "$session:1" "mutt" Enter
     tmux new-window -t "$session:2" -c "$dir"
-    tmux send-keys -t "$session:2" "while true; do echo \"==> \$(date)\" && x1-mbsync inbox archive && echo \"<== \$(date)\" && sleep 300; done" Enter
+    tmux send-keys -t "$session:2" "while true; do echo \"==> \$(date)\" && mail-sync inbox archive && echo \"<== \$(date)\" && sleep 300; done" Enter
     tmux select-window -t "$session:1"
     ;;
   opendata)

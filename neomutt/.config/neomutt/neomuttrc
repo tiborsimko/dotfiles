@@ -131,21 +131,21 @@ macro index ,T \
 # Key bindings - mbsync
 macro index ,u \
 "<enter-command>set my_old_pipe_decode=\$pipe_decode my_old_wait_key=\$wait_key nopipe_decode nowait_key<enter>\
-<shell-escape>x1-mbsync notmuch<enter>\
+<shell-escape>mail-sync notmuch<enter>\
 <enter-command>set pipe_decode=\$my_old_pipe_decode wait_key=\$my_old_wait_key<enter>" \
 "Update notmuch (fast)"
 macro index ,x \
 "<enter-command>set my_old_pipe_decode=\$pipe_decode my_old_wait_key=\$wait_key nopipe_decode nowait_key<enter>\
-<shell-escape>x1-mbsync inbox<enter>\
+<shell-escape>mail-sync inbox<enter>\
 <enter-command>set pipe_decode=\$my_old_pipe_decode wait_key=\$my_old_wait_key<enter>" \
 "Synchronise inbox folders (fast)"
 macro index ,y \
 "<enter-command>set my_old_pipe_decode=\$pipe_decode my_old_wait_key=\$wait_key nopipe_decode nowait_key<enter>\
-<shell-escape>x1-mbsync inbox archive<enter>\
+<shell-escape>mail-sync inbox archive<enter>\
 <enter-command>set pipe_decode=\$my_old_pipe_decode wait_key=\$my_old_wait_key<enter>" \
 "Synchronise inbox folders and current archive (medium)"
 macro index ,z \
 "<enter-command>set my_old_pipe_decode=\$pipe_decode my_old_wait_key=\$wait_key nopipe_decode nowait_key<enter>\
-<shell-escape>x1-mbsync all<enter>\
+<shell-escape>mail-sync all<enter>\
 <enter-command>set pipe_decode=\$my_old_pipe_decode wait_key=\$my_old_wait_key<enter>" \
 "Synchronise inbox folders and all past archives (slow)"
