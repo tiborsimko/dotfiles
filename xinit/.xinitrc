@@ -34,7 +34,7 @@ fi
 # Start screen lock daemon
 if [ -z "$(pgrep -x xss-lock)" ]; then
   # xss-lock --transfer-sleep-lock -- slock &
-  xss-lock --transfer-sleep-lock -- x1-i3lock &
+  xss-lock --transfer-sleep-lock -- "$HOME/.config/i3/i3lock.sh" &
 fi
 
 # Start compositor
