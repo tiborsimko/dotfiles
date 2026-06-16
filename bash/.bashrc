@@ -119,7 +119,7 @@ alias ec="emacsclient -t -e '(org-capture)'"
 alias ee="emacsclient -c -n"
 alias i3lock="i3lock -c 000000"
 # Kubectl completion - lazy loaded
-_kubectl_lazy_load() {
+__kubectl_lazy_load() {
   unset -f kubectl 2>/dev/null
   unalias kubectl 2>/dev/null
   # Load bash-completion first if not already loaded (kubectl completion depends on it)
@@ -137,7 +137,7 @@ _kubectl_lazy_load() {
 }
 
 kubectl() {
-  _kubectl_lazy_load
+  __kubectl_lazy_load
   command kubectl "$@"
 }
 alias kgd="kubectl get deployments"
