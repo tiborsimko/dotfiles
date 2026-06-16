@@ -61,8 +61,6 @@ _bash_completion_lazy_load() {
   elif [[ -f /etc/bash_completion ]]; then
     . /etc/bash_completion
   fi
-  # Re-setup kubectl completion for k alias if kubectl was already lazy-loaded
-  [[ -n "$_kubectl_completion_loaded" ]] && complete -o default -F __start_kubectl k
   return 124 # Signal to retry completion
 }
 
@@ -116,18 +114,14 @@ export LC_COLLATE="en_GB.UTF-8"
 # Configure useful aliases
 alias b='$BROWSER'
 alias cp='cp -i'
-alias d="docker"
 alias e="emacsclient -t"
 alias ec="emacsclient -t -e '(org-capture)'"
 alias ee="emacsclient -c -n"
-alias g="git"
-alias gg="lazygit"
-alias gl="glab"
 alias i3lock="i3lock -c 000000"
 # Kubectl completion - lazy loaded
 _kubectl_lazy_load() {
-  unset -f kubectl k 2>/dev/null
-  unalias kubectl k 2>/dev/null
+  unset -f kubectl 2>/dev/null
+  unalias kubectl 2>/dev/null
   # Load bash-completion first if not already loaded (kubectl completion depends on it)
   if ! type _get_comp_words_by_ref &>/dev/null; then
     if [[ -r "/opt/homebrew/etc/profile.d/bash_completion.sh" ]]; then
@@ -139,16 +133,10 @@ _kubectl_lazy_load() {
     fi
   fi
   source <(command kubectl completion bash)
-  complete -o default -F __start_kubectl k
   export _kubectl_completion_loaded=1
 }
 
 kubectl() {
-  _kubectl_lazy_load
-  command kubectl "$@"
-}
-
-k() {
   _kubectl_lazy_load
   command kubectl "$@"
 }
@@ -171,20 +159,61 @@ alias mutt="neomutt"
 alias mv='mv -i'
 alias o='$OPENER'
 alias open='$OPENER'
-alias p="podman"
-alias pc="podman-compose"
-alias rcg='reana-client-go'
-alias rc='reana-client'
-alias rd='reana-dev'
 alias rm='rm -i'
-alias t="task"
-alias to="taskopen"
 alias vim="nvim"
-alias v="nvim"
 alias wr='workon reana && if [ $(docker ps | grep kind-control-plane | grep -cv Paused) -gt 0 ]; then eval "$(reana-dev client-setup-environment)"; fi'
 alias wrm='workon reana && if [ $(docker ps | grep kind-control-plane | grep -cv Paused) -gt 0 ]; then eval "$(reana-dev client-setup-environment -n myreana)"; fi'
 
 alias rg='command rg --line-number --with-filename --no-heading --hidden --glob "!.git/"'
+
+# Command abbreviations: only expands when the entire pre-cursor input matches
+# a key. Synthetic `\C-x\C-a` runs the expander via `bind -x`; Enter/Tab chain
+# it via macros that end with non-recursing readline commands (`\C-j` =
+# accept-line, `\C-x\C-c` = complete). Space uses `bind -x` directly to avoid
+# macro recursion on a literal space.
+declare -A BASH_ABBREVS=(
+  [d]=docker
+  [g]=git
+  [gg]=lazygit
+  [gl]=glab
+  [k]=kubectl
+  [p]=podman
+  [pc]=podman-compose
+  [rc]=reana-client
+  [rcg]=reana-client-go
+  [rd]=reana-dev
+  [t]=task
+  [to]=taskopen
+  [v]=nvim
+)
+_expand_abbrev() {
+  if [[ -n $READLINE_LINE && -n ${BASH_ABBREVS[$READLINE_LINE]+x} ]]; then
+    READLINE_LINE=${BASH_ABBREVS[$READLINE_LINE]}
+    READLINE_POINT=${#READLINE_LINE}
+  fi
+}
+_expand_abbrev_space() {
+  _expand_abbrev
+  READLINE_LINE="${READLINE_LINE:0:$READLINE_POINT} ${READLINE_LINE:$READLINE_POINT}"
+  READLINE_POINT=$((READLINE_POINT + 1))
+}
+_expand_abbrev_tab() {
+  local before=$READLINE_LINE
+  _expand_abbrev
+  # Append a space after expansion so completion sees `kubectl ` (complete
+  # args), not `kubectl` (complete the command name itself).
+  if [[ $READLINE_LINE != "$before" ]]; then
+    READLINE_LINE="${READLINE_LINE:0:$READLINE_POINT} ${READLINE_LINE:$READLINE_POINT}"
+    READLINE_POINT=$((READLINE_POINT + 1))
+  fi
+}
+bind -x '"\C-x\C-a": _expand_abbrev'
+bind -x '"\C-x\C-t": _expand_abbrev_tab'
+bind -x '" ": _expand_abbrev_space'
+bind '"\C-x\C-c": complete'
+bind '"\C-m": "\C-x\C-a\C-j"'
+bind '"\e\C-m": "\C-x\C-a\C-j"'
+bind '"\C-i": "\C-x\C-t\C-x\C-c"'
 
 # GPG terminal for pinentry
 GPG_TTY=$(tty)
