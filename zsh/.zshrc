@@ -255,31 +255,33 @@ bindkey -M viins '^[^M' _expand_abbrev_accept
 bindkey -M vicmd '^M'   _expand_abbrev_accept
 
 # Kubectl completion - lazy loaded
-_kubectl_lazy_load() {
+__kubectl_lazy_load() {
     unfunction kubectl 2>/dev/null
-    source <(command kubectl completion zsh)
+    [[ -o interactive ]] && source <(command kubectl completion zsh)
     kubectl() { command kubectl "$@" }
     export _kubectl_completion_loaded=1
 }
 
 kubectl() {
-    _kubectl_lazy_load
+    __kubectl_lazy_load
     kubectl "$@"
 }
 
 _kubectl_lazy_completion() {
-    _kubectl_lazy_load
+    __kubectl_lazy_load
     _kubectl "$@"
 }
 
 compdef _kubectl_lazy_completion kubectl
 
 # K9s completion - lazy loaded
-_k9s_lazy_load() {
+__k9s_lazy_load() {
     # Unfunction the command wrapper to avoid interference
     unfunction k9s 2>/dev/null
-    # Load k9s completion if available
-    if command -v k9s &> /dev/null; then
+    # Load k9s completion if available (interactive only; non-interactive
+    # shells don't have completion wired up, and sourcing it there warns from
+    # compdef)
+    if [[ -o interactive ]] && command -v k9s &> /dev/null; then
         source <(command k9s completion zsh)
     fi
     # Recreate command wrapper without lazy loading (since it's now loaded)
@@ -290,13 +292,13 @@ _k9s_lazy_load() {
 
 # Lazy load k9s completion when k9s is used for the first time
 k9s() {
-    _k9s_lazy_load
+    __k9s_lazy_load
     k9s "$@"
 }
 
 # Completion trigger function that loads k9s on first TAB
 _k9s_lazy_completion() {
-    _k9s_lazy_load
+    __k9s_lazy_load
     # Now call the real k9s completion function
     _k9s "$@"
 }
