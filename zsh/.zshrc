@@ -149,6 +149,7 @@ bindkey -M vicmd 'k' history-beginning-search-backward
 bindkey -M vicmd 'j' history-beginning-search-forward
 
 # Treat Alacritty Shift+Return (ESC CR) as normal Enter at the shell prompt.
+# The abbreviation widget below later wraps this to expand before accepting.
 bindkey '^[^M' accept-line
 
 # Disable terminal bell/beep
@@ -187,9 +188,6 @@ alias cp='cp -i'
 alias e="emacsclient -t"
 alias ec="emacsclient -t -e '(org-capture)'"
 alias ee="emacsclient -c -n"
-alias g="git"
-alias gg="lazygit"
-alias gl="glab"
 alias i3lock="i3lock -c 000000"
 alias kgd="kubectl get deployments"
 alias kgdw="kubectl get deployments -o wide"
@@ -208,58 +206,73 @@ alias l="ls -la --color"
 alias ll="ls -l --color"
 alias mutt="neomutt"
 alias mv='mv -i'
-alias o=open
-alias p="podman"
-alias pc="podman-compose"
-alias rcg='reana-client-go'
-alias rc='reana-client'
-alias rd='reana-dev'
 alias rm='rm -i'
-alias t="task"
-alias to="taskopen"
 alias vim="nvim"
-alias v="nvim"
 alias wr='workon reana && eval "$(reana-dev client-setup-environment)"'
+
+# Command abbreviations: only expands when the entire pre-cursor input matches
+# a key, so it stays out of the way mid-command. Tab expands and falls through
+# to normal completion.
+typeset -gA ZSH_ABBREVS=(
+    d   docker
+    g   git
+    gg  lazygit
+    gl  glab
+    k   kubectl
+    o   open
+    p   podman
+    pc  podman-compose
+    rc  reana-client
+    rcg reana-client-go
+    rd  reana-dev
+    t   task
+    to  taskopen
+    v   nvim
+)
+_expand_abbrev_space() {
+    [[ -n $ZSH_ABBREVS[$LBUFFER] ]] && LBUFFER=$ZSH_ABBREVS[$LBUFFER]
+    zle .self-insert
+}
+_expand_abbrev_tab() {
+    [[ -n $ZSH_ABBREVS[$LBUFFER] ]] && LBUFFER=$ZSH_ABBREVS[$LBUFFER]' '
+    # fzf's `fzf --zsh` integration rebinds Tab; defer to it when present.
+    if (( $+widgets[fzf-completion] )); then
+        zle fzf-completion
+    else
+        zle expand-or-complete
+    fi
+}
+_expand_abbrev_accept() {
+    [[ -n $ZSH_ABBREVS[$LBUFFER] ]] && LBUFFER=$ZSH_ABBREVS[$LBUFFER]
+    zle .accept-line
+}
+zle -N _expand_abbrev_space
+zle -N _expand_abbrev_tab
+zle -N _expand_abbrev_accept
+bindkey -M viins ' '    _expand_abbrev_space
+bindkey -M viins '^M'   _expand_abbrev_accept
+bindkey -M viins '^[^M' _expand_abbrev_accept
+bindkey -M vicmd '^M'   _expand_abbrev_accept
 
 # Kubectl completion - lazy loaded
 _kubectl_lazy_load() {
-    # Unfunction the command wrappers to avoid interference
-    unfunction kubectl k 2>/dev/null
-    # Load kubectl completion
+    unfunction kubectl 2>/dev/null
     source <(command kubectl completion zsh)
-    # Set up completion for k to use kubectl's completion
-    compdef k=kubectl
-    # Recreate command wrappers without lazy loading (since it's now loaded)
     kubectl() { command kubectl "$@" }
-    k() { command kubectl "$@" }
-    # Mark as loaded
     export _kubectl_completion_loaded=1
 }
 
-# Lazy load kubectl completion when kubectl or k is used for the first time
 kubectl() {
     _kubectl_lazy_load
     kubectl "$@"
 }
 
-k() {
-    _kubectl_lazy_load
-    kubectl "$@"
-}
-
-# Completion trigger function that loads kubectl on first TAB
 _kubectl_lazy_completion() {
     _kubectl_lazy_load
-    # Now call the real kubectl completion function
     _kubectl "$@"
 }
 
-# Set up completion to trigger lazy load
 compdef _kubectl_lazy_completion kubectl
-compdef _kubectl_lazy_completion k
-
-# Docker alias
-alias d='docker'
 
 # K9s completion - lazy loaded
 _k9s_lazy_load() {
@@ -293,8 +306,6 @@ compdef _k9s_lazy_completion k9s
 
 alias rg='command rg --line-number --with-filename --no-heading --hidden --glob "!.git/"'
 
-# Set up completions for aliased commands
-compdef _git g
 
 # ff = fuzzy file (and edit)
 ff() {
@@ -390,6 +401,9 @@ if [[ ! -f "$_fzf_completion_cache" ]] || [[ $(command -v fzf) -nt "$_fzf_comple
 fi
 [[ -f "$_fzf_completion_cache" ]] && source "$_fzf_completion_cache"
 unset _fzf_completion_cache
+
+# Restore abbreviation expansion on Tab; fzf's source rebinds `^I` to fzf-completion.
+bindkey -M viins '^I' _expand_abbrev_tab
 
 # Load local host customisations
 [ -f $HOME/.zshrc.local ] && source $HOME/.zshrc.local
