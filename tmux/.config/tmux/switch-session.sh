@@ -13,7 +13,7 @@
 #
 # Usage: switch-session.sh
 
-predefined="blog_reana_io docs_reana_io dotfiles lxplus ntupling mutt opendata reana task www_reana_io"
+predefined="blog_reana_io docs_reana_io dotfiles lxplus ntupling mail opendata reana task www_reana_io"
 
 CREATE_LABEL='+ Create new session'
 CUSTOM_LABEL='+ Create new custom session'
@@ -50,10 +50,10 @@ create_tmux_session() {
     tmux new-window -t "$session:3" -c "$dir/../lhcb-ntupling-service-devops"
     tmux select-window -t "$session:1"
     ;;
-  mutt)
+  mail)
     dir=$HOME
     tmux new-session -d -c "$dir" -s "$session"
-    tmux send-keys -t "$session:1" "mutt" Enter
+    tmux send-keys -t "$session:1" "neomutt" Enter
     tmux new-window -t "$session:2" -c "$dir"
     tmux send-keys -t "$session:2" "while true; do echo \"==> \$(date)\" && mail-sync inbox archive && echo \"<== \$(date)\" && sleep 300; done" Enter
     tmux select-window -t "$session:1"
