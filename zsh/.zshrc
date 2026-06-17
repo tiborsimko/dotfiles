@@ -188,6 +188,7 @@ alias cp='cp -i'
 alias e="emacsclient -t"
 alias ec="emacsclient -t -e '(org-capture)'"
 alias ee="emacsclient -c -n"
+alias gg="lazygit"
 alias i3lock="i3lock -c 000000"
 alias kgd="kubectl get deployments"
 alias kgdw="kubectl get deployments -o wide"
@@ -204,9 +205,10 @@ alias kgx="kubectl get secrets"
 alias kgxw="kubectl get secrets -o wide"
 alias l="ls -la --color"
 alias ll="ls -l --color"
-alias mutt="neomutt"
 alias mv='mv -i'
 alias rm='rm -i'
+alias t="tmux"
+alias v="nvim"
 alias vim="nvim"
 alias wr='workon reana && eval "$(reana-dev client-setup-environment)"'
 
@@ -216,7 +218,6 @@ alias wr='workon reana && eval "$(reana-dev client-setup-environment)"'
 typeset -gA ZSH_ABBREVS=(
     d   docker
     g   git
-    gg  lazygit
     gl  glab
     k   kubectl
     o   open
@@ -225,9 +226,6 @@ typeset -gA ZSH_ABBREVS=(
     rc  reana-client
     rcg reana-client-go
     rd  reana-dev
-    t   task
-    to  taskopen
-    v   nvim
 )
 _expand_abbrev_space() {
     [[ -n $ZSH_ABBREVS[$LBUFFER] ]] && LBUFFER=$ZSH_ABBREVS[$LBUFFER]
