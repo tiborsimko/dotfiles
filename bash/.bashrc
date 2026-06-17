@@ -117,6 +117,7 @@ alias cp='cp -i'
 alias e="emacsclient -t"
 alias ec="emacsclient -t -e '(org-capture)'"
 alias ee="emacsclient -c -n"
+alias gg="lazygit"
 alias i3lock="i3lock -c 000000"
 # Kubectl completion - lazy loaded
 __kubectl_lazy_load() {
@@ -155,11 +156,12 @@ alias kgx="kubectl get secrets"
 alias kgxw="kubectl get secrets -o wide"
 alias l="ls -la --color"
 alias ll="ls -l --color"
-alias mutt="neomutt"
 alias mv='mv -i'
 alias o='$OPENER'
 alias open='$OPENER'
 alias rm='rm -i'
+alias t="tmux"
+alias v="nvim"
 alias vim="nvim"
 alias wr='workon reana && if [ $(docker ps | grep kind-control-plane | grep -cv Paused) -gt 0 ]; then eval "$(reana-dev client-setup-environment)"; fi'
 alias wrm='workon reana && if [ $(docker ps | grep kind-control-plane | grep -cv Paused) -gt 0 ]; then eval "$(reana-dev client-setup-environment -n myreana)"; fi'
@@ -174,7 +176,6 @@ alias rg='command rg --line-number --with-filename --no-heading --hidden --glob 
 declare -A BASH_ABBREVS=(
   [d]=docker
   [g]=git
-  [gg]=lazygit
   [gl]=glab
   [k]=kubectl
   [p]=podman
@@ -182,9 +183,6 @@ declare -A BASH_ABBREVS=(
   [rc]=reana-client
   [rcg]=reana-client-go
   [rd]=reana-dev
-  [t]=task
-  [to]=taskopen
-  [v]=nvim
 )
 _expand_abbrev() {
   if [[ -n $READLINE_LINE && -n ${BASH_ABBREVS[$READLINE_LINE]+x} ]]; then
