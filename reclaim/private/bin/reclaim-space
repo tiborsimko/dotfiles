@@ -39,3 +39,9 @@ fi
 if command -v docker >/dev/null; then
     docker system prune -f
 fi
+
+# AI relay packet history; only pruned by this manual reclaim command.
+relay_dir="${XDG_STATE_HOME:-$HOME/.local/state}/ai-relay"
+if [ -d "$relay_dir" ]; then
+    rm -f "$relay_dir"/*.md
+fi
