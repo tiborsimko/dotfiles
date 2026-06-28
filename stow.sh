@@ -83,6 +83,8 @@ packages=(
   aerospace
   alacritty
   bash
+  claude
+  codex
   colima
   dunst
   emacs
