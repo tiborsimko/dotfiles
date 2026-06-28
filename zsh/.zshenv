@@ -1,12 +1,7 @@
-# Tibor's zshenv configuration.
+# Tibor's zshenv bootstrap.
 
-# This file is sourced by all zsh instances (including non-interactive). This
-# file sets only those environment variables that are of interest for
-# non-interactive tools (LSP servers etc).
+export ZDOTDIR="${ZDOTDIR:-$HOME/.config/zsh}"
 
-# Set custom Go path
-export GOPATH=$HOME/private/go
-
-# Locale (needed by tools that process text, e.g. sort, grep)
-export LANG="en_GB.UTF-8"
-export LC_ALL="en_GB.UTF-8"
+if [ -f "$ZDOTDIR/.zshenv" ]; then
+    source "$ZDOTDIR/.zshenv"
+fi

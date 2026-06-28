@@ -87,11 +87,14 @@ source $ZSHPLUGGED/zsh-autosuggestions/zsh-autosuggestions.zsh
 [[ -d /opt/homebrew/share/zsh/site-functions ]] && fpath=(/opt/homebrew/share/zsh/site-functions $fpath)
 fpath=($ZSHPLUGGED/zsh-completions/src /usr/share/zsh/vendor-completions $fpath)
 autoload -Uz compinit
-if [[ ! -f ~/.zcompdump ]] || [[ $(date +'%j') != $(stat -f '%Sm' -t '%j' ~/.zcompdump 2>/dev/null) ]]; then
-  compinit
+_zcompdump="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump"
+mkdir -p "${_zcompdump:h}"
+if [[ ! -f "$_zcompdump" ]] || [[ $(date +'%j') != $(stat -f '%Sm' -t '%j' "$_zcompdump" 2>/dev/null) ]]; then
+  compinit -d "$_zcompdump"
 else
-  compinit -C
+  compinit -C -d "$_zcompdump"
 fi
+unset _zcompdump
 
 # Completion matching: exact -> case-insensitive -> partial-word at separators -> substring
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
