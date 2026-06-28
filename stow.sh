@@ -54,6 +54,31 @@ stow_variant_package() {
   fi
 }
 
+stow_folded_package() {
+  local package=$1
+  local target_dir=$2
+
+  # Codex's skill scanner discovers a skill only when its *directory* is a
+  # symlink; a symlinked SKILL.md inside a real directory (what --no-folding
+  # produces) is not picked up. (Claude tolerates the file-symlink form, so it
+  # stays on the default --no-folding path.) Pre-create the real skills/ parent
+  # so stow tree-folds each leaf skill directory into a single directory symlink.
+  local leaf
+  while IFS= read -r leaf; do
+    mkdir -p "$target_dir/$(dirname "$leaf")"
+    # A real directory here is the stale --no-folding form, which stow will not
+    # re-fold; fail with the one-time cleanup rather than reporting false success.
+    if [ -d "$target_dir/$leaf" ] && [ ! -L "$target_dir/$leaf" ]; then
+      echo "stow.sh: $target_dir/$leaf is a real directory from an earlier" >&2
+      echo "         --no-folding stow; stow cannot fold it. Remove it first:" >&2
+      echo "           rm -rf \"$target_dir/$leaf\"" >&2
+      exit 1
+    fi
+  done < <(cd "$package" && find . -type d -path '*/skills/*' -prune -print | sed 's|^\./||')
+
+  stow --target="$target_dir" "$package"
+}
+
 packages=(
   aerospace
   alacritty
@@ -119,6 +144,9 @@ for package in "${packages[@]}"; do
   case "$package" in
     gnupg|mise|taskwarrior)
       stow_variant_package "$package" "$os" "$target_dir"
+      ;;
+    codex)
+      stow_folded_package "$package" "$target_dir"
       ;;
     *)
       stow_package "$package" "$target_dir"
