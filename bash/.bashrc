@@ -238,8 +238,8 @@ export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
 
 # Enrich path
-if [[ "$PATH" != *"$HOME/.local/bin:$HOME/private/bin:$HOME/private/go/bin:"* ]]; then
-  export PATH="$HOME/.local/bin:$HOME/private/bin:$HOME/private/go/bin:$PATH"
+if [[ "$PATH" != *"$HOME/.local/bin:$HOME/private/go/bin:"* ]]; then
+  export PATH="$HOME/.local/bin:$HOME/private/go/bin:$PATH"
 fi
 
 # Enrich path with Nvim/Mason for Helix to use the same LSP servers, and Cargo and Go paths
