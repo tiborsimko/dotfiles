@@ -27,7 +27,6 @@ path=(
 export PATH=$HOME/.local/share/nvim/mason/bin:$HOME/.cargo/bin:$GOPATH/bin:/usr/local/go/bin:$PATH
 
 # User PATH additions
-[ -d $HOME/private/bin ] && export PATH=$HOME/private/bin:$PATH
 [ -d $HOME/.local/bin ] && export PATH=$HOME/.local/bin:$PATH
 
 # Fix for CERN LXPLUS7 self-compiled software (such as tmux, vim)
