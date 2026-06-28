@@ -1,10 +1,10 @@
-# Tibor's ~/.gitconfig
+# Tibor's Git configuration.
 [user]
   email = tibor.simko@cern.ch
   name = Tibor Šimko
   signingkey = BA5A2B67
 [include]
-  path = ~/.gitconfig.local  # contains user secrets such as hub tokens
+  path = config.local  # contains user secrets such as hub tokens
 [core]
   pager = less
 [interactive]
