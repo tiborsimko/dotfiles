@@ -21,7 +21,18 @@ start_colima() {
   until docker info >/dev/null 2>&1; do sleep 1; done
 
   echo "==> Registering QEMU binfmt emulators for cross-platform builds..."
-  docker run --privileged --rm tonistiigi/binfmt --install all
+  binfmt_ok=false
+  for attempt in 1 2 3; do
+    if docker run --privileged --rm tonistiigi/binfmt --install all; then
+      binfmt_ok=true
+      break
+    fi
+    echo "    binfmt registration failed (attempt $attempt/3)." >&2
+    [ "$attempt" -lt 3 ] && sleep 3
+  done
+  if [ "$binfmt_ok" = false ]; then
+    echo "    WARNING: binfmt registration failed; cross-platform builds may be unavailable." >&2
+  fi
 
   echo "==> Setting colima as default buildx builder..."
   docker buildx use colima
