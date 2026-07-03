@@ -20,6 +20,20 @@ start_colima() {
   echo "==> Waiting for Docker to be ready..."
   until docker info >/dev/null 2>&1; do sleep 1; done
 
+  # Keep app hostPath data on the big 300G data disk instead of the ~19G
+  # root disk. Symlinks persist across VM restarts; `ln -sfnT` fails loudly
+  # if a path already exists as a real directory (migrate manually then).
+  echo "==> Relocating app data directories onto the data disk..."
+  for dir in reana lhcb-ntupling-service; do
+    colima ssh -- sudo mkdir -p "/mnt/lima-colima/${dir}"
+    colima ssh -- sudo ln -sfnT "/mnt/lima-colima/${dir}" "/var/${dir}"
+  done
+
+  echo "==> Capping systemd journal size..."
+  colima ssh -- sudo mkdir -p /etc/systemd/journald.conf.d
+  colima ssh -- sudo /usr/bin/bash -c "printf '[Journal]\nSystemMaxUse=200M\n' > /etc/systemd/journald.conf.d/size.conf"
+  colima ssh -- sudo systemctl restart systemd-journald
+
   echo "==> Registering QEMU binfmt emulators for cross-platform builds..."
   binfmt_ok=false
   for attempt in 1 2 3; do
