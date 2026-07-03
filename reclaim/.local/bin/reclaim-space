@@ -1,47 +1,244 @@
 #!/bin/sh
 #
 # Reclaim disk space by clearing package manager and build caches.
+#
+# Usage: reclaim-space [--dry-run] target ...
+#
+# Example: reclaim-space all
+# Example: reclaim-space docker
+# Example: reclaim-space --dry-run brew docker npm
 
-set -ex
+set -eu
 
-# Homebrew
-if command -v brew >/dev/null; then
-    brew cleanup --prune=all
-fi
-
-# npm
-if command -v npm >/dev/null; then
-    npm cache clean --force
-fi
-
-# pip
-if command -v pip >/dev/null; then
-    pip cache purge
-fi
-
-# Go
-if command -v go >/dev/null; then
-    go clean -cache
-    go clean -modcache
-fi
-
-# mise
-if command -v mise >/dev/null; then
-    mise cache clear -y 2>/dev/null || true
-fi
-
-# Ruby gems
-if command -v gem >/dev/null; then
-    gem cleanup
-fi
-
-# Docker (containers, dangling images, networks, build cache)
-if command -v docker >/dev/null; then
-    docker system prune -f
-fi
-
-# AI relay packet history; only pruned by this manual reclaim command.
 relay_dir="${XDG_STATE_HOME:-$HOME/.local/state}/ai-relay"
-if [ -d "$relay_dir" ]; then
-    rm -f "$relay_dir"/*.md
+
+# Sum the sizes of the given paths in KB, skipping missing ones.
+du_kb() {
+    total=0
+    for path in "$@"; do
+        if [ -e "$path" ]; then
+            kb=$(du -sk "$path" 2>/dev/null | cut -f1)
+            total=$((total + ${kb:-0}))
+        fi
+    done
+    echo "$total"
+}
+
+fmt_kb() {
+    awk -v kb="$1" 'BEGIN {
+        v = kb; u = "KB"
+        if (v >= 1048576) { v /= 1048576; u = "GB" }
+        else if (v >= 1024) { v /= 1024; u = "MB" }
+        printf "%.1f %s", v, u
+    }'
+}
+
+size_brew() {
+    command -v brew >/dev/null || { echo 0; return; }
+    du_kb "$(brew --cache)"
+}
+
+reclaim_brew() {
+    if command -v brew >/dev/null; then
+        brew cleanup --prune=all
+    fi
+}
+
+size_docker() {
+    command -v docker >/dev/null || { echo 0; return; }
+    if ! df_out=$(docker system df --format '{{.Type}}|{{.Reclaimable}}' 2>/dev/null); then
+        echo "?"
+        return
+    fi
+    # Volumes excluded: `docker system prune` without `--volumes` keeps them.
+    echo "$df_out" | awk -F'|' '$1 != "Local Volumes" {
+        v = $2
+        if (sub(/TB.*/, "", v)) s += v * 1000000000000
+        else if (sub(/GB.*/, "", v)) s += v * 1000000000
+        else if (sub(/MB.*/, "", v)) s += v * 1000000
+        else if (sub(/kB.*/, "", v)) s += v * 1000
+        else if (sub(/B.*/, "", v)) s += v
+    } END { printf "%d\n", s / 1024 }'
+}
+
+reclaim_docker() {
+    if command -v docker >/dev/null; then
+        docker system prune -f
+    fi
+}
+
+size_gem() {
+    command -v gem >/dev/null || { echo 0; return; }
+    du_kb "$(gem env gemdir)"
+}
+
+reclaim_gem() {
+    if command -v gem >/dev/null; then
+        gem cleanup
+    fi
+}
+
+size_go() {
+    command -v go >/dev/null || { echo 0; return; }
+    du_kb "$(go env GOCACHE)" "$(go env GOMODCACHE)"
+}
+
+reclaim_go() {
+    if command -v go >/dev/null; then
+        go clean -cache -modcache
+    fi
+}
+
+size_mise() {
+    command -v mise >/dev/null || { echo 0; return; }
+    du_kb "$(mise cache)"
+}
+
+reclaim_mise() {
+    if command -v mise >/dev/null; then
+        mise cache clear -y 2>/dev/null || true
+    fi
+}
+
+size_npm() {
+    command -v npm >/dev/null || { echo 0; return; }
+    du_kb "$(npm config get cache)/_cacache"
+}
+
+reclaim_npm() {
+    if command -v npm >/dev/null; then
+        npm cache clean --force
+    fi
+}
+
+size_pip() {
+    command -v pip >/dev/null || { echo 0; return; }
+    du_kb "$(pip cache dir 2>/dev/null)"
+}
+
+reclaim_pip() {
+    if command -v pip >/dev/null; then
+        pip cache purge
+    fi
+}
+
+size_relay() {
+    du_kb "$relay_dir"
+}
+
+reclaim_relay() {
+    # AI relay packet history; only pruned by this manual reclaim command.
+    if [ -d "$relay_dir" ]; then
+        rm -f "$relay_dir"/*.md
+    fi
+}
+
+run_target() {
+    target=$1
+    count=$((count + 1))
+    if [ "$dry_run" -eq 1 ]; then
+        if [ "$target" = gem ]; then
+            # Sizing old gem versions needs the uninstall run itself.
+            echo "$target: reclaimable size unknown"
+            return
+        fi
+        before=$("size_$target")
+        if [ "$before" = "?" ]; then
+            echo "$target: reclaimable size unknown"
+        else
+            echo "$target: about $(fmt_kb "$before") reclaimable"
+            total_kb=$((total_kb + before))
+        fi
+        return
+    fi
+    before=$("size_$target")
+    if [ "$before" = "?" ]; then
+        before=0
+    fi
+    # The `if !` suppresses `set -e` inside the cleaner, so cleaners must
+    # stay single-command to not mask failures of any earlier steps.
+    if ! "reclaim_$target"; then
+        echo "$target: failed to reclaim"
+        failures=$((failures + 1))
+        return
+    fi
+    after=$("size_$target")
+    if [ "$after" = "?" ]; then
+        after=$before
+    fi
+    freed=$((before - after))
+    if [ "$freed" -lt 0 ]; then
+        freed=0
+    fi
+    echo "$target: reclaimed about $(fmt_kb "$freed")"
+    total_kb=$((total_kb + freed))
+}
+
+run_all() {
+    run_target brew
+    run_target docker
+    run_target gem
+    run_target go
+    run_target mise
+    run_target npm
+    run_target pip
+    run_target relay
+}
+
+help() {
+    echo "Usage: $0 [--dry-run] target ..."
+    echo "Options:"
+    echo "  --dry-run  Report reclaimable space without cleaning"
+    echo "  --help     Display this help message"
+    echo "Targets:"
+    echo "  all     Reclaim all targets"
+    echo "  brew    Clean Homebrew caches (brew cleanup --prune=all)"
+    echo "  docker  Prune Docker containers, images, networks, build cache"
+    echo "  gem     Remove old Ruby gem versions"
+    echo "  go      Clean Go build and module caches"
+    echo "  mise    Clear mise cache"
+    echo "  npm     Clean npm cache"
+    echo "  pip     Purge pip cache"
+    echo "  relay   Prune AI relay packet history"
+}
+
+dry_run=0
+for arg in "$@"; do
+    case $arg in
+    --dry-run) dry_run=1 ;;
+    --help | -h | help)
+        help
+        exit 0
+        ;;
+    all | brew | docker | gem | go | mise | npm | pip | relay) ;;
+    *) echo "[ERROR] Unknown argument '$arg'. Exiting." && help && exit 1 ;;
+    esac
+done
+
+count=0
+failures=0
+total_kb=0
+for arg in "$@"; do
+    case $arg in
+    --dry-run) ;;
+    all) run_all ;;
+    *) run_target "$arg" ;;
+    esac
+done
+
+if [ "$count" -eq 0 ]; then
+    help
+    exit 0
+fi
+
+if [ "$count" -gt 1 ]; then
+    if [ "$dry_run" -eq 1 ]; then
+        echo "total: about $(fmt_kb "$total_kb") reclaimable"
+    else
+        echo "total: reclaimed about $(fmt_kb "$total_kb")"
+    fi
+fi
+
+if [ "$failures" -gt 0 ]; then
+    exit 1
 fi
