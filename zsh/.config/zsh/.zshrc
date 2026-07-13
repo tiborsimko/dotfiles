@@ -164,10 +164,10 @@ unsetopt BANG_HIST
 
 # Shortcuts for some directories
 setopt autonamedirs
-r=$HOME/private/project/reana/src
-o=$HOME/private/project/opendata/src/opendata.cern.ch
-a=$HOME/private/project/analysispreservation/src/analysispreservation.cern.ch
-i=$HOME/private/project/invenio/src
+r=$HOME/Code/github.com/reanahub
+o=$HOME/Code/github.com/cernopendata/opendata.cern.ch
+a=$HOME/Code/github.com/cernanalysispreservation/analysispreservation.cern.ch
+i=$HOME/Code/github.com/inveniosoftware
 
 # cdr / cd to recent directories
 autoload -Uz chpwd_recent_dirs cdr add-zsh-hook

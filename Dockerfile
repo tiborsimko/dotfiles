@@ -16,9 +16,10 @@ RUN apt-get update \
 # Create non-root user with passwordless sudo, matching bare-metal Debian UID
 RUN useradd -u 1000 -ms /bin/bash tibor && echo 'tibor ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/tibor
 
-# Run the rest of the build as the non-root user
+# Run the rest of the build as the non-root user. Mirror the documented host
+# checkout depth so tests do not rely on the repository being directly in $HOME.
 USER tibor
-WORKDIR /home/tibor/.dotfiles
+WORKDIR /home/tibor/Code/github.com/tiborsimko/dotfiles
 
 # Install apt packages from debian-packages-cli.txt
 # (kept independent of install.sh so install.sh edits don't invalidate this slow layer)
@@ -46,7 +47,7 @@ RUN DEBIAN_FRONTEND=noninteractive ./install.sh locales
 # Copy the full dotfiles repo and stow CLI configs at build time.
 # At runtime the bind mount overlays this so relative symlinks stay valid
 # and host edits propagate without rebuild.
-COPY --chown=tibor:tibor . /home/tibor/.dotfiles
+COPY --chown=tibor:tibor . .
 # Drop the pre-staged mise config so stow can place a symlink in its stead.
 RUN rm -f /home/tibor/.config/mise/config.toml && ./stow.sh all
 

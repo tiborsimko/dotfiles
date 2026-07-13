@@ -22,7 +22,7 @@ create_tmux_session() {
   session=$1
   case "$session" in
   blog_reana_io)
-    dir=$HOME/private/project/reana/src/blog.reana.io
+    dir=$HOME/Code/github.com/reanahub/blog.reana.io
     tmux new-session -d -c "$dir" -s "$session"
     tmux send-keys -t "$session:1" "wr" Enter
     tmux new-window -t "$session:2" -c "$dir"
@@ -31,7 +31,7 @@ create_tmux_session() {
     tmux select-window -t "$session:1"
     ;;
   docs_reana_io)
-    dir=$HOME/private/project/reana/src/docs.reana.io
+    dir=$HOME/Code/github.com/reanahub/docs.reana.io
     tmux new-session -d -c "$dir" -s "$session"
     tmux send-keys -t "$session:1" "wr" Enter
     tmux new-window -t "$session:2" -c "$dir"
@@ -40,11 +40,11 @@ create_tmux_session() {
     tmux select-window -t "$session:1"
     ;;
   dotfiles)
-    dir=$HOME/.dotfiles
+    dir=$HOME/Code/github.com/tiborsimko/dotfiles
     tmux new-session -d -c "$dir" -s "$session"
     ;;
   ntupling)
-    dir=$HOME/private/project/opendata/src/lhcb-ntupling-service-frontend
+    dir=$HOME/Code/gitlab.cern.ch/cernopendata/lhcb-ntupling-service-frontend
     tmux new-session -d -c "$dir" -s "$session"
     tmux new-window -t "$session:2" -c "$dir/../lhcb-ntupling-service-backend"
     tmux new-window -t "$session:3" -c "$dir/../lhcb-ntupling-service-devops"
@@ -59,12 +59,12 @@ create_tmux_session() {
     tmux select-window -t "$session:1"
     ;;
   opendata)
-    dir=$HOME/private/project/opendata/src/opendata.cern.ch
+    dir=$HOME/Code/github.com/cernopendata/opendata.cern.ch
     tmux new-session -d -c "$dir" -s "$session"
     tmux new-window -t "$session:2" -c "$dir/../data-curation"
     ;;
   reana)
-    dir=$HOME/private/project/reana/src/reana
+    dir=$HOME/Code/github.com/reanahub/reana
     tmux new-session -d -c "$dir" -s "$session"
     tmux send-keys -t "$session:1" "wr" Enter
     tmux new-window -t "$session:2" -c "$dir/../reana-demo-root6-roofit"
@@ -77,7 +77,7 @@ create_tmux_session() {
     tmux send-keys -t "$session:1" "tasksh" Enter
     ;;
   www_reana_io)
-    dir=$HOME/private/project/reana/src/www.reana.io
+    dir=$HOME/Code/github.com/reanahub/www.reana.io
     tmux new-session -d -c "$dir" -s "$session"
     tmux send-keys -t "$session:1" "wr" Enter
     tmux new-window -t "$session:2" -c "$dir"

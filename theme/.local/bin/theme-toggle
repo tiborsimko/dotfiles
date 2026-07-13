@@ -4,10 +4,15 @@
 
 set -e
 
-config_alacritty="$HOME/.dotfiles/alacritty/.config/alacritty/alacritty.toml"
-config_nvim="$HOME/.dotfiles/nvim/.config/nvim/lua/plugins/gruvbox.lua"
-config_neomutt="$HOME/.dotfiles/neomutt/.config/neomutt/neomuttrc"
-config_tmux="$HOME/.dotfiles/tmux/.config/tmux/tmux.conf"
+# This script is normally invoked through its Stow-managed symlink. Resolve the
+# source path and derive the repository root from theme/.local/bin/theme-toggle.
+script_path=$(realpath "${BASH_SOURCE[0]}")
+repo_dir=$(realpath "$(dirname "$script_path")/../../..")
+
+config_alacritty="$repo_dir/alacritty/.config/alacritty/alacritty.toml"
+config_nvim="$repo_dir/nvim/.config/nvim/lua/plugins/gruvbox.lua"
+config_neomutt="$repo_dir/neomutt/.config/neomutt/neomuttrc"
+config_tmux="$repo_dir/tmux/.config/tmux/tmux.conf"
 
 files=("$config_alacritty" "$config_neomutt" "$config_tmux" "$config_nvim")
 

@@ -1,12 +1,17 @@
 #!/usr/bin/env bash
 
-# Activate dotfiles via GNU Stow. Run from the dotfiles repo root.
+# Activate dotfiles via GNU Stow.
 #
 # Packages are uncommented progressively as each is verified via
-# `make docker-test`; see TODO.md for the rollout order.
+# `make docker-test`.
 
 set -o errexit
 set -o nounset
+
+# Resolve package paths relative to this script so callers need not run it from
+# the repository root.
+repo_dir=$(CDPATH='' cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
+cd "$repo_dir"
 
 help() {
   echo "Usage: $0 [options] <target>..."
@@ -140,7 +145,7 @@ esac
 
 os=$(detect_os)
 # STOW_TARGET overrides the default home directory; useful for temp-target test runs.
-target_dir=${STOW_TARGET:-$(dirname "$PWD")}
+target_dir=${STOW_TARGET:-"$HOME"}
 
 for package in "${packages[@]}"; do
   case "$package" in

@@ -16,11 +16,12 @@ Personal configuration for my development environment, managed with
 
 ## Installation
 
-### 1. Clone into `$HOME`
+### 1. Clone the repository
 
 ```console
-git clone git@github.com:tiborsimko/dotfiles ~/.dotfiles
-cd ~/.dotfiles
+mkdir -p ~/Code/github.com/tiborsimko
+git clone git@github.com:tiborsimko/dotfiles ~/Code/github.com/tiborsimko/dotfiles
+cd ~/Code/github.com/tiborsimko/dotfiles
 ```
 
 ### 2. Install software

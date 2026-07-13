@@ -1,6 +1,7 @@
 # Targets for building and running the local Debian test container.
 
 IMAGE := docker.io/tiborsimko/dotfiles-debian:13
+CONTAINER_DOTFILES_DIR := /home/tibor/Code/github.com/tiborsimko/dotfiles
 
 .PHONY: help docker-build docker-run docker-test
 
@@ -16,7 +17,7 @@ docker-run: # Open an interactive shell in the Docker container.
 	docker run --rm -it \
 	  --platform linux/amd64 \
 	  --hostname dotfiles-test \
-	  -v $(PWD):/home/tibor/.dotfiles \
+	  -v "$(CURDIR):$(CONTAINER_DOTFILES_DIR)" \
 	  $(IMAGE) \
 	  bash -l
 
@@ -24,6 +25,6 @@ docker-test: # Run dotfiles tests inside the Docker container.
 	@docker run --rm -t \
 	  --platform linux/amd64 \
 	  --hostname dotfiles-test \
-	  -v $(PWD):/home/tibor/.dotfiles \
+	  -v "$(CURDIR):$(CONTAINER_DOTFILES_DIR)" \
 	  $(IMAGE) \
-	  /home/tibor/.dotfiles/test.sh
+	  $(CONTAINER_DOTFILES_DIR)/test.sh
