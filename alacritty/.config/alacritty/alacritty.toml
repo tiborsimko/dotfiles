@@ -37,7 +37,8 @@ action = "Select"
 binding = { key = "H", mods = "Control|Shift" }
 
 [[hints.enabled]]
-regex = """[^ ]+"""
+# Treat whitespace and tmux's vertical pane border as token boundaries.
+regex = """[^\\s│]+"""
 action = "Select"
 binding = { key = "W", mods = "Control|Shift" }
 
