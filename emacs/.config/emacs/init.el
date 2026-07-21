@@ -1106,7 +1106,7 @@ Similar to helm-selector-mu4e, this provides quick access to mu4e."
         mu4e-refile-folder "/Archive")   ;; saved messages
 
   ;; Fetching mail
-  (setq mu4e-get-mail-command "mail-sync inbox archive"
+  (setq mu4e-get-mail-command "mail-sync --scope inbox --scope archive"
         mu4e-update-interval nil)
   (setq mu4e-change-filenames-when-moving t) ; since I am using mbsync rather than offlineimap
 

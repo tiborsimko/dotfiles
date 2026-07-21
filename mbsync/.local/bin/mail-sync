@@ -8,6 +8,154 @@ set -o errexit
 # quit on unbound symbols
 set -o nounset
 
+# propagate pipeline errors
+set -o pipefail
+
+program_name=${0##*/}
+readonly MAIL_SYNC_SKIPPED_STATUS=75
+
+usage() {
+  cat <<EOF
+Usage:
+  $program_name --scope SCOPE [--scope SCOPE ...] [--loop SECONDS]
+  $program_name --notmuch [--loop SECONDS]
+
+Synchronise CERN mail and update the notmuch index.
+
+Options:
+  --scope SCOPE   Select inbox, archive, or all. May be repeated.
+  --notmuch       Update only the notmuch index, without running mbsync.
+  --loop SECONDS  Repeat indefinitely, sleeping after each attempt.
+  --help          Display this help and exit.
+
+Scopes:
+  inbox           Synchronise the Inbox, Github, and Spam channels.
+  archive         Synchronise the Archive channel.
+  all             Synchronise all configured channels.
+
+All mail synchronisation scopes update the notmuch index afterwards.
+
+Exit statuses (without --loop):
+  0               Operation completed successfully.
+  2               Invalid command-line usage.
+  75              Operation skipped because mbsync or notmuch is running.
+  any other value Exit status returned by mbsync or notmuch.
+
+Examples:
+  $program_name --scope inbox
+  $program_name --scope inbox --scope archive
+  $program_name --scope all
+  $program_name --notmuch
+  $program_name --loop 300 --scope inbox --scope archive
+EOF
+}
+
+fail() {
+  printf '%s: %s\n' "$program_name" "$1" >&2
+  printf "Try '%s --help' for more information.\n" "$program_name" >&2
+  exit 2
+}
+
+sync_inbox=0
+sync_archive=0
+sync_all=0
+notmuch_only=0
+loop_interval=
+sync_arguments=()
+
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+  --scope)
+    [ "$#" -ge 2 ] || fail "option '--scope' requires an argument"
+    case "$2" in
+    inbox)
+      sync_inbox=1
+      ;;
+    archive)
+      sync_archive=1
+      ;;
+    all)
+      sync_all=1
+      ;;
+    *)
+      fail "unknown scope: $2"
+      ;;
+    esac
+    sync_arguments+=(--scope "$2")
+    shift 2
+    ;;
+  --notmuch)
+    notmuch_only=1
+    sync_arguments+=(--notmuch)
+    shift
+    ;;
+  --loop)
+    [ "$#" -ge 2 ] || fail "option '--loop' requires an argument"
+    [ -z "$loop_interval" ] || fail "option '--loop' may be specified only once"
+    [[ "$2" =~ ^[1-9][0-9]*$ ]] || fail "loop interval must be a positive integer"
+    loop_interval=$2
+    shift 2
+    ;;
+  --help)
+    usage
+    exit 0
+    ;;
+  --)
+    shift
+    [ "$#" -eq 0 ] || fail "unexpected argument: $1"
+    ;;
+  *)
+    fail "unknown option: $1"
+    ;;
+  esac
+done
+
+if [ "$notmuch_only" -eq 1 ]; then
+  if [ "$sync_inbox" -eq 1 ] || [ "$sync_archive" -eq 1 ] || [ "$sync_all" -eq 1 ]; then
+    fail "option '--notmuch' cannot be combined with '--scope'"
+  fi
+elif [ "$sync_all" -eq 1 ]; then
+  if [ "$sync_inbox" -eq 1 ] || [ "$sync_archive" -eq 1 ]; then
+    fail "scope 'all' cannot be combined with other scopes"
+  fi
+elif [ "$sync_inbox" -eq 0 ] && [ "$sync_archive" -eq 0 ]; then
+  fail "no operation selected"
+fi
+
+if [ -n "$loop_interval" ]; then
+  if [ "$notmuch_only" -eq 1 ]; then
+    loop_action="updating notmuch index"
+  elif [ "$sync_all" -eq 1 ]; then
+    loop_action="syncing all"
+  else
+    selected_scopes=
+    if [ "$sync_inbox" -eq 1 ]; then
+      selected_scopes=inbox
+    fi
+    if [ "$sync_archive" -eq 1 ]; then
+      selected_scopes="${selected_scopes:+$selected_scopes }archive"
+    fi
+    loop_action="syncing $selected_scopes"
+  fi
+
+  while true; do
+    printf '[%s] mail-sync: %s\n' "$(date '+%FT%T')" "$loop_action"
+    if "$0" "${sync_arguments[@]}"; then
+      mail_sync_result=succeeded
+    else
+      mail_sync_status=$?
+      if [ "$mail_sync_status" -eq "$MAIL_SYNC_SKIPPED_STATUS" ]; then
+        mail_sync_result="skipped (another sync is running)"
+      else
+        mail_sync_result="failed (exit $mail_sync_status)"
+      fi
+    fi
+    printf '[%s] mail-sync: %s; sleeping for %s seconds\n' \
+      "$(date '+%FT%T')" "$mail_sync_result" "$loop_interval"
+    sleep "$loop_interval"
+  done
+fi
+
 # Set up GPG agent socket for OAuth2 token decryption
 GPG_TTY=$(tty 2>/dev/null || echo "not a tty")
 export GPG_TTY
@@ -20,45 +168,25 @@ if [[ "$(uname -s)" == Darwin ]]; then
   export SASL_PATH=/opt/homebrew/opt/cyrus-sasl/lib/sasl2:/opt/homebrew/opt/cyrus-sasl-xoauth2/lib/sasl2
 fi
 
-# check whether we can run
-if [ -n "$(pgrep -x mbsync)" ] || [ -n "$(pgrep -x notmuch)" ]; then
+# Check whether we can run.
+if pgrep -x mbsync >/dev/null || pgrep -x notmuch >/dev/null; then
   echo "mbsync or notmuch is already running. Exiting."
-  exit
+  exit "$MAIL_SYNC_SKIPPED_STATUS"
 fi
 
-# print usage help
-usage() {
-  echo "Usage: $0 [inbox|archive|all|notmuch|help] [...]"
-}
-
-# synchronise mail
-needhelp=1
-if [[ "$*" = *"inbox"* ]]; then
-  # synchronise only current mail: takes ~3 seconds
-  needhelp=0
+# Synchronise mail.
+if [ "$sync_inbox" -eq 1 ]; then
+  # Synchronise current mail: takes ~3 seconds.
   mbsync CERN-Inbox CERN-Github CERN-Spam
 fi
-if [[ "$*" = *"archive"* ]]; then
-  # synchronise only current archive: takes ~3 seconds
-  needhelp=0
+if [ "$sync_archive" -eq 1 ]; then
+  # Synchronise the current archive: takes ~3 seconds.
   mbsync CERN-Archive
 fi
-if [[ "$*" = *"all"* ]]; then
-  # synchronise everything: takes ~3 minutes
-  needhelp=0
-  mbsync -a
-fi
-if [[ "$*" = *"notmuch"* ]]; then
-  # synchronise nothing; just run notmuch
-  needhelp=0
-fi
-if [[ "$*" = *"help"* ]]; then
-  needhelp=1
-fi
-if [ "$needhelp" -gt "0" ]; then
-  usage
-  exit 1
+if [ "$sync_all" -eq 1 ]; then
+  # Synchronise everything: takes ~3 minutes.
+  mbsync --all
 fi
 
-# index new mail
+# Index new mail.
 notmuch new --quiet
