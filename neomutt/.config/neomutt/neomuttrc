@@ -76,9 +76,10 @@ set nm_default_url = "notmuch://$HOME/Local/mbsyncmail"
 macro index,pager <F5> "<enter-command>source ~/.config/neomutt/neomuttrc<enter>" "Reload colour theme"
 
 # Key bindings - general vim-like
-bind pager g top
+bind index,pager,attach g noop
+bind attach,index gg first-entry
+bind pager gg top
 bind pager G bottom
-bind attach,index g first-entry
 bind attach,index G last-entry
 bind index,pager R group-reply
 bind index,pager C mail
@@ -86,25 +87,25 @@ bind index m mark-message
 
 # Key bindings - quick folder operations
 macro index,pager ,,  "<change-folder>=INBOX<enter><limit>~U<enter>" "Go to unread in INBOX"
-macro index,pager ,g1 "<change-folder>=INBOX<enter><limit>~(~d <1d)<enter>" "Go to last 1 day in INBOX"
-macro index,pager ,g7 "<change-folder>=INBOX<enter><limit>~(~d <1w)<enter>" "Go to 7 days in INBOX"
-macro index,pager ,g9 "<change-folder>=INBOX<enter><limit>~(~d <30d)<enter>" "Go to 30 days in INBOX"
-macro index,pager ,ga "<change-folder>=Archive<enter>" "Go to Archive folder"
-macro index,pager ,gg "<change-folder>=Github<enter>" "Go to Github folder (all)"
-macro index,pager ,gi "<change-folder>=INBOX<enter>" "Go to INBOX folder"
-macro index,pager ,gn "<change-folder>=Github<enter><limit>~s neovim | ~s LazyVim | ~s lazy.nvim<enter>" "Go to Github folder (neovim)"
-macro index,pager ,go "<change-folder>=Github<enter><limit>! ~s cernopendata ! ~s continuous-reuse ! ~s lhcb-ntupling-service ! ~s reana<enter>" "Go to Github folder (other)"
-macro index,pager ,gp "<change-folder>=Github<enter><limit>~s puppet | ~s inveniosoftware | ~s inspire | ~s cds-videos<enter>" "Go to Github folder (puppet, inveniosoftware, etc)"
-macro index,pager ,gs "<change-folder>=Spam<enter>" "Go to Spam folder"
-macro index,pager ,gu "<change-folder>=INBOX<enter><limit>~U<enter>" "Go to unread in INBOX"
-macro index,pager ,gw "<change-folder>=Github<enter><limit>~s cernopendata | ~s continuous-reuse | ~s lhcb-ntupling-service | ~s reana<enter>" "Go to Github folder (work)"
+macro index,pager g1  "<change-folder>=INBOX<enter><limit>~(~d <1d)<enter>" "Go to last 1 day in INBOX"
+macro index,pager g7  "<change-folder>=INBOX<enter><limit>~(~d <1w)<enter>" "Go to 7 days in INBOX"
+macro index,pager g9  "<change-folder>=INBOX<enter><limit>~(~d <30d)<enter>" "Go to 30 days in INBOX"
+macro index,pager ga  "<change-folder>=Archive<enter>" "Go to Archive folder"
+macro index,pager gh  "<change-folder>=Github<enter>" "Go to Github folder (all)"
+macro index,pager gi  "<change-folder>=INBOX<enter>" "Go to INBOX folder"
+macro index,pager gn  "<change-folder>=Github<enter><limit>~s neovim | ~s LazyVim | ~s lazy.nvim<enter>" "Go to Github folder (neovim)"
+macro index,pager go  "<change-folder>=Github<enter><limit>! ~s cernopendata ! ~s continuous-reuse ! ~s lhcb-ntupling-service ! ~s reana<enter>" "Go to Github folder (other)"
+macro index,pager gp  "<change-folder>=Github<enter><limit>~s puppet | ~s inveniosoftware | ~s inspire | ~s cds-videos<enter>" "Go to Github folder (puppet, inveniosoftware, etc)"
+macro index,pager gs  "<change-folder>=Spam<enter>" "Go to Spam folder"
+macro index,pager gu  "<change-folder>=INBOX<enter><limit>~U<enter>" "Go to unread in INBOX"
+macro index,pager gw  "<change-folder>=Github<enter><limit>~s cernopendata | ~s continuous-reuse | ~s lhcb-ntupling-service | ~s reana<enter>" "Go to Github folder (work)"
 macro index,pager ,w1 "<limit>~(~d <1d)<enter>" "Widen to last 1 day"
 macro index,pager ,w7 "<limit>~(~d <1w)<enter>" "Widen to last 7 days"
 macro index,pager ,w9 "<limit>~(~d <30d)<enter>" "Widen to last 30 days"
 macro index,pager ,wa "<limit>all<enter>" "Widen to all messages"
 
 # Key bindings - mail archiving
-macro index,pager ,a ":set confirmappend=no delete=yes auto_tag=yes\n<save-message>=Archive\n<sync-mailbox>:set confirmappend=yes delete=ask-yes\n"
+macro index,pager ,a ":set confirmappend=no delete=yes auto_tag=yes\n<save-message>=Archive\n<sync-mailbox>:set confirmappend=yes delete=ask-yes\n" "Move message(s) to Archive"
 
 # Key bindings - taskwarrior capture
 macro index,pager ,c "<pipe-message>$HOME/.config/task/task-mail-capture.sh<enter>" "Capture as taskwarrior task"
