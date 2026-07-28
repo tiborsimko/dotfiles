@@ -2,55 +2,114 @@
 #
 # Tibor's dark/light theme toggling script.
 
-set -e
+set -euo pipefail
 
-# This script is normally invoked through its Stow-managed symlink. Resolve the
-# source path and derive the repository root from theme/.local/bin/theme-toggle.
-script_path=$(realpath "${BASH_SOURCE[0]}")
-repo_dir=$(realpath "$(dirname "$script_path")/../../..")
+config_home="$HOME/.config"
+state_dir="$config_home/theme-toggle"
+mode_file="$state_dir/current"
 
-config_alacritty="$repo_dir/alacritty/.config/alacritty/alacritty.toml"
-config_nvim="$repo_dir/nvim/.config/nvim/lua/plugins/gruvbox.lua"
-config_neomutt="$repo_dir/neomutt/.config/neomutt/neomuttrc"
-config_tmux="$repo_dir/tmux/.config/tmux/tmux.conf"
-
-files=("$config_alacritty" "$config_neomutt" "$config_tmux" "$config_nvim")
-
-# Preflight: abort before editing if any config is missing so we don't
-# end up with partial state (some tools flipped, others stuck).
-for f in "${files[@]}"; do
-  [[ -f "$f" ]] || { echo "theme-toggle: missing config: $f" >&2; exit 1; }
-done
-
-if grep -q dark "$config_alacritty"; then
-  from=dark; to=light
+if [[ -r "$mode_file" ]]; then
+  IFS= read -r from < "$mode_file" || true
 else
-  from=light; to=dark
+  from=light
 fi
 
-# `sed -i.bak` is the portable form across BSD sed (macOS) and GNU sed
-# (Linux); both accept a glued backup suffix. Empty `-i ''` is BSD-only.
-for f in "${files[@]}"; do
-  sed -i.bak "s|${from}|${to}|g" "$f"
-  rm -- "$f.bak"
+case "$from" in
+  dark) to=light ;;
+  light) to=dark ;;
+  *)
+    echo "theme-toggle: invalid mode in $mode_file: $from" >&2
+    exit 1
+    ;;
+esac
+
+source_alacritty="$config_home/alacritty/theme-$to.toml"
+source_neomutt="$config_home/neomutt/theme-$to"
+source_tmux="$config_home/tmux/theme-$to.conf"
+config_alacritty="$config_home/alacritty/alacritty.toml"
+
+sources=("$source_alacritty" "$source_neomutt" "$source_tmux" "$config_alacritty")
+for source_file in "${sources[@]}"; do
+  if [[ ! -f "$source_file" ]]; then
+    echo "theme-toggle: missing theme: $source_file" >&2
+    exit 1
+  fi
 done
+
+mkdir -p \
+  "$state_dir" \
+  "$config_home/alacritty" \
+  "$config_home/neomutt" \
+  "$config_home/tmux"
+
+temporary_files=()
+destination_files=()
+
+cleanup() {
+  if ((${#temporary_files[@]})); then
+    rm -f -- "${temporary_files[@]}"
+  fi
+}
+trap cleanup EXIT
+
+stage_link() {
+  local link_target=$1
+  local destination_file=$2
+  local temporary_file
+
+  temporary_file=$(mktemp "$destination_file.tmp.XXXXXX")
+  temporary_files+=("$temporary_file")
+  rm -f -- "$temporary_file"
+  ln -s "$link_target" "$temporary_file"
+  destination_files+=("$destination_file")
+}
+
+stage_mode() {
+  local temporary_file
+
+  temporary_file=$(mktemp "$mode_file.tmp.XXXXXX")
+  temporary_files+=("$temporary_file")
+  printf '%s\n' "$to" > "$temporary_file"
+  destination_files+=("$mode_file")
+}
+
+# Prepare every new link before replacing any current state. Relative targets
+# keep tracked theme edits live, while the mode file acts as the commit marker.
+stage_link "theme-$to.toml" "$config_home/alacritty/theme-current.toml"
+stage_link "theme-$to" "$config_home/neomutt/theme-current"
+stage_link "theme-$to.conf" "$config_home/tmux/theme-current.conf"
+stage_mode
+
+for index in "${!temporary_files[@]}"; do
+  mv -f -- "${temporary_files[$index]}" "${destination_files[$index]}"
+done
+temporary_files=()
+trap - EXIT
+
+# Alacritty does not watch an imported file that was missing when its config
+# was loaded. Touching the main config makes the first toggle reload the newly
+# created theme-current.toml without changing tracked file contents.
+touch "$config_alacritty"
 
 # Reload tmux configuration if tmux is running
 if command -v tmux &>/dev/null && tmux info &>/dev/null 2>&1; then
-  tmux source-file ~/.config/tmux/tmux.conf
+  tmux source-file "$config_home/tmux/tmux.conf"
 fi
 
 # Reload running neovim instances (in background — each --server spawn is ~600ms)
-new_bg=$(sed -nE 's/.*vim\.o\.background = "(light|dark)".*/\1/p' "$config_nvim")
-if [ -n "$new_bg" ] && command -v nvim &>/dev/null; then
+if command -v nvim &>/dev/null; then
+  tmp_dir=${TMPDIR:-/tmp}
+  tmp_dir=${tmp_dir%/}
+  user_name=${USER:-$(id -un)}
+  user_id=${UID:-$(id -u)}
   shopt -s nullglob
   for sock in \
-    "${TMPDIR%/}/nvim.$USER"/*/nvim.*.0 \
-    "/tmp/nvim.$USER"/*/nvim.*.0 \
-    "${XDG_RUNTIME_DIR:-/run/user/$UID}/nvim."*/nvim.*.0; do
+    "$tmp_dir/nvim.$user_name"/*/nvim.*.0 \
+    "/tmp/nvim.$user_name"/*/nvim.*.0 \
+    "${XDG_RUNTIME_DIR:-/run/user/$user_id}/nvim."*/nvim.*.0; do
     [ -S "$sock" ] || continue
     nvim --server "$sock" --remote-expr \
-      "execute('set background=$new_bg | colorscheme gruvbox')" >/dev/null 2>&1 &
+      "execute('set background=$to | colorscheme gruvbox')" >/dev/null 2>&1 &
     disown
   done
   shopt -u nullglob

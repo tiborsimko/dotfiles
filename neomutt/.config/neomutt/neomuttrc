@@ -1,7 +1,8 @@
 # Tibor's neomutt configuration.
 
-# Colour scheme
-source ~/.config/neomutt/theme-light
+# Colour scheme. theme-current is a local symlink managed by theme-toggle;
+# reading exactly one file avoids leaking additive colour rules across themes.
+source "if test -r ~/.config/neomutt/theme-current; then cat ~/.config/neomutt/theme-current; else cat ~/.config/neomutt/theme-light; fi|"
 
 # Speed
 set sleep_time = 0

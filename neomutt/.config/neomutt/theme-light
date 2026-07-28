@@ -3,6 +3,11 @@
 # Inspired by https://www.sthu.org/code/codesnippets/mutt-gruvbox.html
 # See also http://www.mutt.org/doc/manual/#color
 
+# Clear additive pattern rules retained by a live theme reload.
+uncolor body *
+uncolor header *
+uncolor index *
+
 color attachment  color65  default
 color bold        color136 default
 color error       color124 default

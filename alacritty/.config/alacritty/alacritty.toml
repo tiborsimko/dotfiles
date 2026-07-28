@@ -1,7 +1,7 @@
 # Tibor's Alacritty configuration.
 
 [general]
-import = ["~/.config/alacritty/theme-light.toml"]
+import = ["theme-light.toml", "theme-current.toml"]
 
 [env]
 TERM = "alacritty"
