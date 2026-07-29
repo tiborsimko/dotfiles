@@ -75,6 +75,24 @@ action = "ToggleViMode"
 key = "Y"
 mode = "Vi"
 
+# Reset font size (Cmd-0 is reserved for tmux)
+[[keyboard.bindings]]
+action = "ResetFontSize"
+key = "="
+mods = "Command"
+
+# Increase font size (explicit Shift is required for Cmd-+)
+[[keyboard.bindings]]
+action = "IncreaseFontSize"
+key = "+"
+mods = "Command|Shift"
+
+# Decrease font size
+[[keyboard.bindings]]
+action = "DecreaseFontSize"
+key = "-"
+mods = "Command"
+
 # Tmux helper: switch to last session
 [[keyboard.bindings]]
 chars = "\u0000s"
@@ -99,58 +117,64 @@ chars = "\u0000t"
 key = "T"
 mods = "Command"
 
+# Tmux helper: switch to alternate window
+[[keyboard.bindings]]
+chars = "\u00000"
+key = "0"
+mods = "Command"
+
 # Tmux helper: focus window 1
 [[keyboard.bindings]]
 chars = "\u00001"
-key = "Key1"
+key = "1"
 mods = "Command"
 
 # Tmux helper: focus window 2
 [[keyboard.bindings]]
 chars = "\u00002"
-key = "Key2"
+key = "2"
 mods = "Command"
 
 # Tmux helper: focus window 3
 [[keyboard.bindings]]
 chars = "\u00003"
-key = "Key3"
+key = "3"
 mods = "Command"
 
 # Tmux helper: focus window 4
 [[keyboard.bindings]]
 chars = "\u00004"
-key = "Key4"
+key = "4"
 mods = "Command"
 
 # Tmux helper: focus window 5
 [[keyboard.bindings]]
 chars = "\u00005"
-key = "Key5"
+key = "5"
 mods = "Command"
 
 # Tmux helper: focus window 6
 [[keyboard.bindings]]
 chars = "\u00006"
-key = "Key6"
+key = "6"
 mods = "Command"
 
 # Tmux helper: focus window 7
 [[keyboard.bindings]]
 chars = "\u00007"
-key = "Key7"
+key = "7"
 mods = "Command"
 
 # Tmux helper: focus window 8
 [[keyboard.bindings]]
 chars = "\u00008"
-key = "Key8"
+key = "8"
 mods = "Command"
 
 # Tmux helper: focus window 9
 [[keyboard.bindings]]
 chars = "\u00009"
-key = "Key9"
+key = "9"
 mods = "Command"
 
 # Tmux helper: previous session
