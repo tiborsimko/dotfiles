@@ -37,8 +37,8 @@ outer.bottom = 0
 outer.top = 0
 outer.right = 0
 
-# Hyper (⌃⌥⌘, via Karabiner-mapped Caps Lock) is the sole Aerospace modifier.
-# Plain Alt is left free for app shortcuts (Emacs Meta, etc.).
+# Hyper (⌃⌥⌘, via Karabiner-mapped Caps Lock) is the primary Aerospace modifier.
+# Plain Alt remains free except for the numeric workspace aliases below.
 [mode.main.binding]
 
 # Enter service mode (layout / lock / fullscreen / multi-monitor)
@@ -56,7 +56,7 @@ ctrl-alt-cmd-shift-j = 'move down'
 ctrl-alt-cmd-shift-k = 'move up'
 ctrl-alt-cmd-shift-l = 'move right'
 
-# Resize: plus/minus by finger memory; arrows mirror tmux prefix-arrows.
+# Resize: minus/equal by key position; arrows mirror tmux prefix-arrows.
 ctrl-alt-cmd-minus = 'resize smart -50'
 ctrl-alt-cmd-equal = 'resize smart +50'
 ctrl-alt-cmd-up = 'resize height +50'
@@ -87,7 +87,7 @@ ctrl-alt-cmd-shift-7 = ['move-node-to-workspace 7', 'workspace 7']
 ctrl-alt-cmd-shift-8 = ['move-node-to-workspace 8', 'workspace 8']
 ctrl-alt-cmd-shift-9 = ['move-node-to-workspace 9', 'workspace 9']
 
-# Named (mnemonic) workspaces — one app each, auto-assigned via on-window-detected
+# Named (mnemonic) app workspaces — auto-assigned via on-window-detected
 ctrl-alt-cmd-b = 'workspace B' # Browser (Chrome)
 ctrl-alt-cmd-c = 'workspace C' # Calendar
 ctrl-alt-cmd-e = 'workspace E' # Emacs
@@ -143,7 +143,8 @@ ctrl-alt-cmd-enter = 'layout tiles accordion'                              # mon
 ctrl-alt-cmd-slash = 'layout h_tiles v_tiles'                              # toggle container orientation (trial)
 ctrl-alt-cmd-backslash = 'layout h_tiles v_tiles'                          # same, alt key for muscle-memory
 
-# Service mode: entered with Hyper-Space, single-key, auto-exits to main.
+# Service mode: entered with Hyper-Space; most single-key actions auto-exit.
+# Volume up/down remain in service mode so they can be repeated.
 [mode.service.binding]
 esc = 'mode main'
 r = ['reload-config', 'mode main']
