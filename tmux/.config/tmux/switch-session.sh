@@ -13,7 +13,7 @@
 #
 # Usage: switch-session.sh
 
-predefined="blog_reana_io docs_reana_io dotfiles lxplus ntupling mail opendata reana task www_reana_io"
+predefined="blog_reana_io docs_reana_io dotfiles journal lxplus ntupling mail opendata reana task www_reana_io"
 
 CREATE_LABEL='+ Create new session'
 CUSTOM_LABEL='+ Create new custom session'
@@ -42,6 +42,11 @@ create_tmux_session() {
   dotfiles)
     dir=$HOME/Code/github.com/tiborsimko/dotfiles
     tmux new-session -d -c "$dir" -s "$session"
+    ;;
+  journal)
+    dir=$HOME/private/journal
+    tmux new-session -d -c "$dir" -s "$session"
+    tmux send-keys -t "$session:1" "nvim \"+autocmd User VeryLazy ++once lua vim.schedule(function() vim.api.nvim_input(' jj') end)\"" Enter
     ;;
   ntupling)
     dir=$HOME/Code/gitlab.cern.ch/cernopendata/lhcb-ntupling-service-frontend
