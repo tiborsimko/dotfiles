@@ -12,7 +12,28 @@ if [[ -x /opt/homebrew/bin/brew ]]; then
 fi
 
 # Set system-level programs
+export BROWSER="open"
+export EDITOR="nvim"
+export OPENER="open"
+export PAGER="less"
 export TERMINAL="alacritty"
+export VISUAL="nvim"
+
+# Tool defaults
+export BAT_THEME=ansi
+export FZF_DEFAULT_OPTS='--layout=reverse --height 50% --gutter=" " --color=pointer:#689d6a,marker:#689d6a'
+export K9S_SKIN="gruvbox-dark-hard"
+
+# Less
+export LESS='-F -i -M -R -z-4'
+export LESSCHARSET=utf-8
+export LESS_TERMCAP_mb=$'\E[01;31m'
+export LESS_TERMCAP_md=$'\E[01;31m'
+export LESS_TERMCAP_me=$'\E[0m'
+export LESS_TERMCAP_se=$'\E[0m'
+export LESS_TERMCAP_so=$'\E[00;47;30m'
+export LESS_TERMCAP_ue=$'\E[0m'
+export LESS_TERMCAP_us=$'\E[01;32m'
 
 # Ensure path arrays do not contain duplicates
 typeset -gU cdpath fpath mailpath path
@@ -20,6 +41,7 @@ typeset -gU cdpath fpath mailpath path
 # Set the list of directories that Zsh searches for programs
 path=(
   /usr/local/{bin,sbin}
+  "${KREW_ROOT:-$HOME/.krew}/bin"
   $path
 )
 

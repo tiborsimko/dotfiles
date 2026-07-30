@@ -12,26 +12,15 @@ ZSHZPROF=0  # 0=no, 1=yes
 autoload -Uz bracketed-paste-magic
 zle -N bracketed-paste bracketed-paste-magic
 
-# Set programs used in interactive sessions
-export BROWSER="open"
-export PAGER="less"
-export OPENER="open"
-
-# Set EDITOR and VISUAL based on environment
+# Override EDITOR and VISUAL inside Emacs
 if [[ -n "$INSIDE_EMACS" ]]; then
     # Use emacsclient without -c to reuse current frame (faster in eat terminal)
     export EDITOR="emacsclient"
     export VISUAL="emacsclient"
-else
-    export EDITOR="nvim"
-    export VISUAL="nvim"
 fi
 
 # Fzf with rg
 export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*"'
-
-# Fzf layout and minimal customization
-export FZF_DEFAULT_OPTS='--layout=reverse --height 50% --gutter=" " --color=pointer:#689d6a,marker:#689d6a'
 
 # Fzf to use fd instead of find to list path candidates
 _fzf_compgen_path() {
@@ -46,25 +35,8 @@ _fzf_compgen_dir() {
 GPG_TTY=$(tty)
 export GPG_TTY
 
-# Set bat theme (for delta)
-export BAT_THEME=ansi
-
-# K9s colours
-export K9S_SKIN="gruvbox-dark-hard"
-
 # Claude Code client
 export COLORTERM=truecolor
-
-# Less
-export LESS='-F -i -M -R -z-4'
-export LESSCHARSET=utf-8
-export LESS_TERMCAP_mb=$'\E[01;31m'
-export LESS_TERMCAP_md=$'\E[01;31m'
-export LESS_TERMCAP_me=$'\E[0m'
-export LESS_TERMCAP_se=$'\E[0m'
-export LESS_TERMCAP_so=$'\E[00;47;30m'
-export LESS_TERMCAP_ue=$'\E[0m'
-export LESS_TERMCAP_us=$'\E[01;32m'
 
 # Configure where to install zsh plugins
 ZSHPLUGGED=$HOME/.zsh/plugged
@@ -359,9 +331,6 @@ rmvirtualenv() { rm -rf ~/.virtualenvs/${1} }
 
 # Use mise activate for full PATH/env management (hooks, auto-venv, etc.)
 eval "$(mise activate zsh)"
-
-# Add krew (kubectl plugin manager) to PATH
-export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
 # Prompt
 eval "$(starship init zsh)"
