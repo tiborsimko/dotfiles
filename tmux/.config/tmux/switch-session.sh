@@ -62,6 +62,9 @@ create_tmux_session() {
     dir=$HOME/Code/github.com/cernopendata/opendata.cern.ch
     tmux new-session -d -c "$dir" -s "$session"
     tmux new-window -t "$session:2" -c "$dir/../data-curation"
+    tmux new-window -t "$session:3" -c "$dir/../cernopendata-client"
+    tmux send-keys -t "$session:3" "workon cernopendata-client" Enter
+    tmux select-window -t "$session:1"
     ;;
   reana)
     dir=$HOME/Code/github.com/reanahub/reana
