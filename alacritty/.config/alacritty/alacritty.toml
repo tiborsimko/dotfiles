@@ -108,6 +108,12 @@ chars = "\u0000g"
 key = "P"
 mods = "Command"
 
+# Tmux helper: jump to the most recent alert across all sessions
+[[keyboard.bindings]]
+chars = "\u0000I"
+key = "I"
+mods = "Command"
+
 # Tmux helper: focus pane up (Cmd-k -> C-Space k)
 [[keyboard.bindings]]
 chars = "\u0000k"
