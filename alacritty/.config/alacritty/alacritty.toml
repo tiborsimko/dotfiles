@@ -8,6 +8,9 @@ TERM = "alacritty"
 LANG = "en_GB.UTF-8"
 LC_ALL = "en_GB.UTF-8"
 
+[terminal]
+shell = { program = "/bin/zsh", args = ["-l", "-c", "exec env -u TMUX tmux new-session \\; set-option @alacritty-auto 1"] }
+
 [font]
 size = 18
 # normal = { family = "JetBrainsMono Nerd Font", style = "Medium" }
@@ -230,10 +233,10 @@ chars = "\u000c"
 key = "L"
 mods = "Command"
 
-# Tmux helper: switch to any pane (or create a new session)
+# Tmux helper: switch to any pane or create a new session (Cmd-G -> C-Space w)
 [[keyboard.bindings]]
 chars = "\u0000w"
-key = "W"
+key = "G"
 mods = "Command"
 
 # Tmux helper: zoom pane (Cmd-Z -> C-Space z)
@@ -246,12 +249,6 @@ mods = "Command"
 [[keyboard.bindings]]
 chars = "\u0000f"
 key = "F"
-mods = "Command"
-
-# Disable quitting terminal by mistake
-[[keyboard.bindings]]
-action = "None"
-key = "Q"
 mods = "Command"
 
 [cursor]
