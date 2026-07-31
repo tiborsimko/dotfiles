@@ -7,8 +7,14 @@ source "if test -r ~/.config/neomutt/theme-current; then cat ~/.config/neomutt/t
 # Speed
 set sleep_time = 0
 
-# Disable sounds
+# Keep ordinary error bells disabled, but alert Tmux about new mail
 set beep = no
+set beep_new = yes
+
+# Check the open Maildir regularly while NeoMutt is idle.  The macOS build has
+# no inotify support, so timeout controls how quickly local delivery is seen.
+set check_new = yes
+set timeout = 30
 
 # Attachments
 set mailcap_path = ~/.config/neomutt/mailcap
