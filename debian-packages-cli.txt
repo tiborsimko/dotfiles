@@ -41,7 +41,6 @@ ncal
 ncdu
 neomutt
 notmuch
-notmuch-mutt
 npm
 pass
 pdftk
