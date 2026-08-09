@@ -9,7 +9,11 @@ LANG = "en_GB.UTF-8"
 LC_ALL = "en_GB.UTF-8"
 
 [terminal]
-shell = { program = "/bin/zsh", args = ["-l", "-c", "exec env -u TMUX tmux new-session \\; set-option @alacritty-auto 1"] }
+shell = { program = "/bin/zsh", args = [
+  "-l",
+  "-c",
+  "exec env -u TMUX tmux new-session \\; set-option @alacritty-auto 1",
+] }
 
 [font]
 size = 18
@@ -272,5 +276,5 @@ dynamic_padding = true
 option_as_alt = "Both"
 
 [window.padding]
-y = 2
-x = 2
+y = 1
+x = 1
