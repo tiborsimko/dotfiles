@@ -15,7 +15,7 @@ search.case.sensitive=no
 reserved.lines=3
 
 # I have read the news
-news.version=3.4.2
+news.version=3.5.0
 
 # User-defined attribute for tracking emails by Message-ID
 uda.mid.type=string
