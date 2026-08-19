@@ -10,7 +10,7 @@ vim.api.nvim_create_autocmd("VimLeave", {
 vim.api.nvim_create_autocmd("ColorScheme", {
   pattern = "gruvbox",
   callback = function()
-    local bg = vim.o.background == "dark" and "#26282b" or "#e8e4d8"
+    local bg = vim.o.background == "dark" and "#282726" or "#e6e4d9"
     vim.api.nvim_set_hl(0, "NormalNC", { bg = bg })
   end,
 })

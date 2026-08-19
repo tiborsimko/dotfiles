@@ -1,7 +1,7 @@
-# Tibor's Alacritty light theme based on Gruvbox light hard.
+# Tibor's Alacritty light theme using Gruvbox light hard colours with a Flexoki background.
 
 [colors.primary]
-background = '#f9f5d7'
+background = '#fffcf0'
 foreground = '#3c3836'
 
 [colors.normal]

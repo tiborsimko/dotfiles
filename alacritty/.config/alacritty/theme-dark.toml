@@ -1,7 +1,7 @@
-# Tibor's Alacritty dark theme based on Gruvbox dark hard.
+# Tibor's Alacritty dark theme using Gruvbox dark hard colours with a Flexoki background.
 
 [colors.primary]
-background = "#1d2021"
+background = "#100f0f"
 foreground = "#ebdbb2"
 
 [colors.normal]
