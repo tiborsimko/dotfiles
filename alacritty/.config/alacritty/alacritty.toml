@@ -118,12 +118,6 @@ chars = "\u0000I"
 key = "I"
 mods = "Command"
 
-# Tmux helper: focus pane up (Cmd-k -> C-Space k)
-[[keyboard.bindings]]
-chars = "\u0000k"
-key = "K"
-mods = "Command"
-
 # Tmux helper: create new tab
 [[keyboard.bindings]]
 chars = "\u0000t"
@@ -235,6 +229,12 @@ key = "F18"
 [[keyboard.bindings]]
 chars = "\u000a"
 key = "J"
+mods = "Command"
+
+# Tmux helper: focus pane up (Cmd-k, sends raw C-k for smart routing)
+[[keyboard.bindings]]
+chars = "\u000b"
+key = "K"
 mods = "Command"
 
 # Tmux helper: focus pane right (Cmd-l, sends raw C-l for smart routing)
