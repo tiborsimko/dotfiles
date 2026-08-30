@@ -22,70 +22,20 @@
 [commit]
   gpgsign = true
 [alias]
+  # Keep personal shortcuts to one-letter roots; refine them with arguments.
   a = add
-  ci = commit
-  k = log --graph --decorate --pretty=format:'%C(blue)%d%Creset %C(yellow)%h%Creset %s, %C(bold green)%an%Creset, %C(green)%cd%Creset' --date=relative
-  ka = log --graph --decorate --pretty=format:'%C(blue)%d%Creset %C(yellow)%h%Creset %s, %C(bold green)%an%Creset, %C(green)%cd%Creset' --date=relative --all
-  g = grep
-  l = log --format=oneline
-  lg = log gh-pages.. --format=oneline
-  lgp = log gh-pages.. -p
-  lgs = log gh-pages.. --stat
-  lm = log master.. --format=oneline
-  lmp = log master.. -p
-  lms = log master.. --stat
-  lp = log production.. --format=oneline
-  lpp = log production.. -p
-  lps = log production.. --stat
-  lq = log qa.. --format=oneline
-  lqp = log qa.. -p
-  lqs = log qa.. --stat
-  xq = log production..qa
-  co = checkout
-  cog = checkout gh-pages
-  com = checkout master
-  cop = checkout production
-  coq = checkout qa
-  lbi = !"git for-each-ref --format='%(committerdate:short) %(refname)' --sort=committerdate refs/heads/*$1*"
-  rbi = !"git for-each-ref --format='%(committerdate:short) %(refname)' --sort=committerdate refs/remotes/$1"
-  b = branch -vv
-  s = status -s
-  f = fetch
-  m = merge --ff-only
-  fu = fetch upstream
-  pom = push origin master
-  pum = push upstream master
-  merge-push-delete-branch = !sh -c 'git fetch upstream && git fetch origin && git checkout master && git merge --ff-only upstream/master && git merge --ff-only $1 && git branch -d $1 && git push upstream master && git push origin master && git push origin :$1' -
-  merge-push-delete-pr = !sh -c 'git fetch upstream && git checkout master && git merge --ff-only upstream/master && git merge --ff-only upstream/pr/$1 && git branch -d pr-$1 && git push upstream master && git push origin master' -
+  b = "!f() { ~/.config/git/git-branches.sh \"$@\"; }; f"
+  c = checkout
   d = diff
-  dg = diff gh-pages
-  dm = diff master
-  dp = diff production
-  dq = diff qa
-  dgs = diff gh-pages --stat
-  dms = diff master --stat
-  dps = diff production --stat
-  dqs = diff qa --stat
-  dog = diff gh-pages origin/gh-pages
-  dom = diff master origin/master
-  dop = diff production origin/production
-  doq = diff qa origin/qa
-  dug = diff gh-pages upstream/gh-pages
-  dum = diff master upstream/master
-  dup = diff production upstream/production
-  duq = diff qa upstream/qa
-  mog = !"git checkout gh-pages && git merge --ff-only origin/gh-pages && git checkout -"
-  mom = !"git checkout master && git merge --ff-only origin/master && git checkout -"
-  mop = !"git checkout production && git merge --ff-only origin/production && git checkout -"
-  moq = !"git checkout qa && git merge --ff-only origin/qa && git checkout -"
-  mug = !"git checkout gh-pages && git merge --ff-only upstream/gh-pages && git checkout -"
-  mum = !"git checkout master && git merge --ff-only upstream/master && git checkout -"
-  mup = !"git checkout production && git merge --ff-only upstream/production && git checkout -"
-  muq = !"git checkout qa && git merge --ff-only upstream/qa && git checkout -"
-  # Inspect or capture GitHub/GitLab repositories and forge items.
-  r = "!f() { ~/.config/git/git-forge.sh repo \"$@\"; }; f"
+  f = "!f() { ~/.config/git/git-fetch.sh \"$@\"; }; f"
+  g = grep
   i = "!f() { ~/.config/git/git-forge.sh issue \"$@\"; }; f"
+  k = log --graph --decorate --pretty=format:'%C(blue)%d%Creset %C(yellow)%h%Creset %s, %C(bold green)%an%Creset, %C(green)%cd%Creset' --date=relative --all
+  l = "!f() { ~/.config/git/git-log.sh \"$@\"; }; f"
   p = "!f() { ~/.config/git/git-forge.sh pr \"$@\"; }; f"
+  r = "!f() { ~/.config/git/git-forge.sh repo \"$@\"; }; f"
+  s = status -s
+  x = "!f() { ~/.config/git/git-x.sh \"$@\"; }; f"
 [color]
   ui = auto
   branch = auto

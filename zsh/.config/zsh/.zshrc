@@ -68,6 +68,37 @@ else
 fi
 unset _zcompdump
 
+# The shell-backed `git f` alias chooses remotes dynamically. Present it to
+# Git's completion machinery as the native fetch command.
+_git_f() {
+  words[__git_cmd_idx]=fetch
+  _git_fetch "$@"
+}
+
+# The shell-backed `git l` alias only selects a default output format. Keep
+# native log option and revision completion for every supplied argument.
+_git_l() {
+  words[__git_cmd_idx]=log
+  _git_log "$@"
+}
+
+# Complete the explicit workflows understood by the shell-backed `git x`
+# dispatcher, and local branch names where land-branch expects one.
+_git_x() {
+  local subcommands="land-branch land-pr"
+  local subcommand
+
+  subcommand=$(__git_find_on_cmdline "$subcommands")
+  if [ -z "$subcommand" ]; then
+    __gitcomp "$subcommands"
+    return
+  fi
+
+  case "$subcommand" in
+  land-branch) __gitcomp_nl "$(__git_heads)" ;;
+  esac
+}
+
 # Completion matching: exact -> case-insensitive -> partial-word at separators -> substring
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
 

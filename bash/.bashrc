@@ -56,6 +56,39 @@ _bash_completion_lazy_load() {
 # Set default completion to trigger lazy load
 complete -D -F _bash_completion_lazy_load
 
+# The shell-backed `git f` alias chooses remotes dynamically. Present it to
+# Git's completion machinery as the native fetch command.
+_git_f() {
+  # shellcheck disable=SC2034,SC2154  # dynamic Git completion context
+  words[__git_cmd_idx]=fetch
+  _git_fetch "$@"
+}
+
+# The shell-backed `git l` alias only selects a default output format. Keep
+# native log option and revision completion for every supplied argument.
+_git_l() {
+  # shellcheck disable=SC2034,SC2154  # dynamic Git completion context
+  words[__git_cmd_idx]=log
+  _git_log "$@"
+}
+
+# Complete the explicit workflows understood by the shell-backed `git x`
+# dispatcher, and local branch names where land-branch expects one.
+_git_x() {
+  local subcommands="land-branch land-pr"
+  local subcommand
+
+  subcommand=$(__git_find_on_cmdline "$subcommands")
+  if [ -z "$subcommand" ]; then
+    __gitcomp "$subcommands"
+    return
+  fi
+
+  case "$subcommand" in
+  land-branch) __gitcomp_nl "$(__git_heads)" ;;
+  esac
+}
+
 # Virtualenv helpers (replacing virtualenvwrapper)
 workon() { source ~/.virtualenvs/"${1}"/bin/activate; }
 mkvirtualenv() {

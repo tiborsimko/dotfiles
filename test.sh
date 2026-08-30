@@ -103,6 +103,9 @@ check_abbrev_table "Zsh" "$dotfiles_dir/zsh/.config/zsh/.zshrc" \
 check_abbrev_table "Bash" "$dotfiles_dir/bash/.bashrc" \
   "declare -A BASH_ABBREVS=("
 
+section "Git aliases"
+check bash "\"$dotfiles_dir/tests/test-git-aliases.sh\""
+
 section "Git forge shortcuts"
 check bash "\"$dotfiles_dir/tests/test-git-forge.sh\""
 
