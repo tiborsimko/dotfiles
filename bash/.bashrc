@@ -144,17 +144,13 @@ alias rg='command rg --line-number --with-filename --no-heading --hidden --glob 
 # a key. Synthetic `\C-x\C-a` runs the expander via `bind -x`; Enter/Tab chain
 # it via macros that end with non-recursing readline commands (`\C-j` =
 # accept-line, `\C-x\C-c` = complete). Space uses `bind -x` directly to avoid
-# macro recursion on a literal space.
+# macro recursion on a literal space. Keep keys to one lowercase letter;
+# test.sh enforces it.
 declare -A BASH_ABBREVS=(
   [d]=docker
   [g]=git
-  [gl]=glab
   [k]=kubectl
-  [p]=podman
-  [pc]=podman-compose
-  [rc]=reana-client
-  [rcg]=reana-client-go
-  [rd]=reana-dev
+  [r]=reana-client-go
 )
 _expand_abbrev() {
   if [[ -n $READLINE_LINE && -n ${BASH_ABBREVS[$READLINE_LINE]+x} ]]; then

@@ -17,6 +17,7 @@ fi
 passed=0
 failed=0
 warnings=0
+dotfiles_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 
 section() { printf '\n=== %s ===\n' "$1"; }
 
@@ -36,6 +37,71 @@ check() {
     failed=$((failed + 1))
   fi
 }
+
+abbrev_keys() {
+  local file=$1 marker=$2
+  awk -v marker="$marker" '
+    index($0, marker) {
+      in_table = 1
+      next
+    }
+    in_table && /^[[:space:]]*\)/ {
+      exit
+    }
+    in_table {
+      line = $0
+      sub(/[[:space:]]*#.*/, "", line)
+      sub(/^[[:space:]]*/, "", line)
+      if (line == "") {
+        next
+      }
+      if (line ~ /^\[/) {
+        sub(/^\[/, "", line)
+        sub(/\].*$/, "", line)
+      } else {
+        sub(/[[:space:]].*$/, "", line)
+      }
+      print line
+    }
+  ' "$file"
+}
+
+check_abbrev_table() {
+  local label=$1 file=$2 marker=$3
+  local key keys_seen="" count=0 bad=0
+
+  if ! grep -Fq "$marker" "$file"; then
+    echo "${RED}FAIL:${RESET} $label abbreviation table not found"
+    failed=$((failed + 1))
+    return
+  fi
+
+  while IFS= read -r key; do
+    [[ -z "$key" ]] && continue
+    count=$((count + 1))
+    keys_seen="${keys_seen:+$keys_seen }$key"
+    if [[ ! "$key" =~ ^[a-z]$ ]]; then
+      echo "${RED}FAIL:${RESET} $label abbreviation '$key' is not one lowercase letter"
+      bad=1
+    fi
+  done < <(abbrev_keys "$file" "$marker")
+
+  if ((count == 0)); then
+    echo "${RED}FAIL:${RESET} $label abbreviation table is empty"
+    failed=$((failed + 1))
+  elif ((bad > 0)); then
+    failed=$((failed + 1))
+  else
+    echo "$label: OK ($keys_seen)"
+    passed=$((passed + 1))
+  fi
+}
+
+section "Command abbreviations"
+check_abbrev_table "Zsh" "$dotfiles_dir/zsh/.config/zsh/.zshrc" \
+  "typeset -gA ZSH_ABBREVS=("
+check_abbrev_table "Bash" "$dotfiles_dir/bash/.bashrc" \
+  "declare -A BASH_ABBREVS=("
 
 section "Interactive shell"
 stderr=$(bash -lic true 2>&1 1>/dev/null |

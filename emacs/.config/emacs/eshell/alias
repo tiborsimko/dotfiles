@@ -16,13 +16,9 @@ alias kgsw kubectl get services -o wide $*
 alias kgx kubectl get secrets $*
 alias kgxw kubectl get secrets -o wide $*
 alias d docker $*
-alias p podman $*
-alias pc podman-compose $*
 alias l ls -la $*
 alias ll ls -l $*
-alias rc reana-client $*
-alias rcg reana-client-go $*
-alias rd reana-dev $*
+alias r reana-client-go $*
 alias v find-file $1
 alias e find-file $1
 alias t task $*

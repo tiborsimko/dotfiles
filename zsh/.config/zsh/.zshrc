@@ -189,18 +189,14 @@ alias wr='workon reana && eval "$(reana-dev client-setup-environment)"'
 
 # Command abbreviations: only expands when the entire pre-cursor input matches
 # a key, so it stays out of the way mid-command. Tab expands and falls through
-# to normal completion.
+# to normal completion. Keep keys to one lowercase letter; test.sh enforces it.
+# `r` intentionally replaces Zsh's history-repeat builtin (use `builtin r`).
 typeset -gA ZSH_ABBREVS=(
-    d   docker
-    g   git
-    gl  glab
-    k   kubectl
-    o   open
-    p   podman
-    pc  podman-compose
-    rc  reana-client
-    rcg reana-client-go
-    rd  reana-dev
+    d docker
+    g git
+    k kubectl
+    o open
+    r reana-client-go
 )
 _expand_abbrev_space() {
     [[ -n $ZSH_ABBREVS[$LBUFFER] ]] && LBUFFER=$ZSH_ABBREVS[$LBUFFER]
