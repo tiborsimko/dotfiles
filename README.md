@@ -12,7 +12,7 @@ Personal configuration for my development environment, managed with
 - **Shell:** Zsh
 - **Terminal:** Alacritty
 - **Theme:** Gruvbox
-- **Window manager:** i3 (Linux); Aerospace (macOS)
+- **Window manager:** i3 (Linux); AeroSpace (macOS)
 
 ## Installation
 

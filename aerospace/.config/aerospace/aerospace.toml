@@ -1,4 +1,4 @@
-# Tibor's Aerospace configuration.
+# Tibor's AeroSpace configuration.
 
 # Config version
 config-version = 2
@@ -43,7 +43,7 @@ outer.bottom = 0
 outer.top = 0
 outer.right = 0
 
-# Alt owns the Aerospace keyspace. Digits address workspaces, HJKL address
+# Alt owns the AeroSpace keyspace. Digits address workspaces, HJKL address
 # directions, Shift+letters address applications, and Space enters service mode.
 [mode.main.binding]
 
