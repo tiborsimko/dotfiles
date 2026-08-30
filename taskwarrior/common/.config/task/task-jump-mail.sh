@@ -8,21 +8,21 @@
 set -eu
 
 if [ $# -ne 1 ]; then
-  echo "Usage: task-mail-jump.sh <task-id-or-uuid>" >&2
+  echo "Usage: task-jump-mail.sh <task-id-or-uuid>" >&2
   exit 2
 fi
 
 mid=$(task _get "$1.mid" 2>/dev/null || true)
 
 if [ -z "$mid" ]; then
-  echo "task-mail-jump.sh: task $1 has no mid attribute" >&2
+  echo "task-jump-mail.sh: task $1 has no mid attribute" >&2
   exit 1
 fi
 
 if ! command -v tmux >/dev/null 2>&1 \
    || ! tmux has-session -t mail 2>/dev/null \
    || ! tmux list-windows -t mail -F '#{window_name}' 2>/dev/null | grep -qx neomutt; then
-  echo "task-mail-jump.sh: no tmux 'mail' session with a 'neomutt' window — start it first" >&2
+  echo "task-jump-mail.sh: no tmux 'mail' session with a 'neomutt' window — start it first" >&2
   exit 1
 fi
 

@@ -3,7 +3,7 @@
 # Capture a piped RFC822 email as a Taskwarrior task. The Message-ID
 # is stored in the `mid` UDA; the description defaults to "From: Subject"
 # and is presented for editing with Readline (left/right, backspace,
-# etc. all work). Invoked by neomutt's <pipe-message>task-mail-capture.sh.
+# etc. all work). Invoked by neomutt's <pipe-message>task-capture-mail.sh.
 set -eu
 
 msg=$(cat)
@@ -43,7 +43,7 @@ from_name=$(printf '%s' "$from_raw" | sed -E 's/[[:space:]]*<[^>]*>[[:space:]]*$
 [ -z "$from_name" ] && from_name=$(printf '%s' "$from_raw" | sed -E 's/^<?([^@]+)@.*/\1/')
 
 if [ -z "$mid" ]; then
-  echo "task-mail-capture.sh: no Message-ID header found" >&2
+  echo "task-capture-mail.sh: no Message-ID header found" >&2
   exit 1
 fi
 

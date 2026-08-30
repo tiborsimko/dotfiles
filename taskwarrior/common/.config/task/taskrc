@@ -20,3 +20,29 @@ news.version=3.5.0
 # User-defined attribute for tracking emails by Message-ID
 uda.mid.type=string
 uda.mid.label=Message-ID
+
+# tasksh review support
+uda.reviewed.type=date
+uda.reviewed.label=Reviewed
+
+report._reviewed.description=Tasksh review report. Adjust the filter to your needs.
+report._reviewed.columns=uuid
+report._reviewed.sort=reviewed+,modified+
+report._reviewed.filter=( reviewed.none: or reviewed.before:now-6days ) and ( +PENDING or +WAITING )
+
+# Weekly focus workflow
+#
+# +focus marks the deliberately selected tasks for the current week. Keep the
+# pending set at ten tasks or fewer. +ACTIVE remains reserved for work that is
+# genuinely in progress now.
+urgency.user.tag.focus.coefficient=0.0
+
+report.focus.description=Weekly focus
+report.focus.columns=id,start.age,tags,due.relative,description.count
+report.focus.labels=ID,Active,Tags,Due,Description
+report.focus.filter=status:pending +focus
+report.focus.sort=start-,urgency-
+
+# tasksh conveniences: `42 pick` and `42 drop`
+alias.pick=modify +focus
+alias.drop=modify -focus

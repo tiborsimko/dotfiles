@@ -56,6 +56,7 @@ color.uda.priority.L=
 
 # Tags
 color.tag.next=bold yellow
+color.tag.focus=underline
 color.tag.none=
 color.tagged=
 
