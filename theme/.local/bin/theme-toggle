@@ -27,6 +27,8 @@ source_alacritty="$config_home/alacritty/theme-$to.toml"
 source_neomutt="$config_home/neomutt/theme-$to"
 source_tmux="$config_home/tmux/theme-$to.conf"
 config_alacritty="$config_home/alacritty/alacritty.toml"
+config_codex="$HOME/.codex/config.toml"
+codex_theme="gruvbox-$to"
 
 sources=("$source_alacritty" "$source_neomutt" "$source_tmux" "$config_alacritty")
 for source_file in "${sources[@]}"; do
@@ -73,11 +75,25 @@ stage_mode() {
   destination_files+=("$mode_file")
 }
 
+stage_codex_config() {
+  local temporary_file
+
+  temporary_file=$(mktemp "$config_codex.tmp.XXXXXX")
+  temporary_files+=("$temporary_file")
+  sed -E \
+    "s/^theme = \"gruvbox-(dark|light)\"$/theme = \"$codex_theme\"/" \
+    "$config_codex" > "$temporary_file"
+  destination_files+=("$config_codex")
+}
+
 # Prepare every new link before replacing any current state. Relative targets
 # keep tracked theme edits live, while the mode file acts as the commit marker.
 stage_link "theme-$to.toml" "$config_home/alacritty/theme-current.toml"
 stage_link "theme-$to" "$config_home/neomutt/theme-current"
 stage_link "theme-$to.conf" "$config_home/tmux/theme-current.conf"
+if [[ -f "$config_codex" ]]; then
+  stage_codex_config
+fi
 stage_mode
 
 for index in "${!temporary_files[@]}"; do
