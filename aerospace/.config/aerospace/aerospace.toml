@@ -100,23 +100,20 @@ alt-shift-z = 'exec-and-forget ~/.config/aerospace/focus-app.sh --prefer-title "
 # Volume up/down remain in service mode so they can be repeated.
 [mode.service.binding]
 esc = 'mode main'
-r = ['reload-config', 'mode main']
+shift-r = ['reload-config', 'mode main']
 backspace = ['close-all-windows-but-current', 'mode main']
 
 # Layout / window-state
-enter = ['layout tiles accordion', 'mode main'] # tiles/accordion toggle; preserves orientation & per-child ratios
-slash = ['layout h_tiles v_tiles', 'mode main'] # toggle container orientation
-backslash = ['layout h_tiles v_tiles', 'mode main'] # alternate key for muscle memory
+m = ['layout accordion horizontal vertical', 'mode main'] # monocle (accordion) family; invoke again to rotate
+t = ['layout tiles horizontal vertical', 'mode main'] # tiled family; invoke again to rotate
 x = [
   'exec-and-forget osascript -e "tell application \"System Events\" to keystroke \"q\" using {control down, command down}"',
   'mode main',
 ] # lock screen
 z = ['fullscreen', 'mode main']
 f = ['layout floating tiling', 'mode main'] # toggle floating/tiling
-s = ['layout v_tiles', 'mode main'] # split   (vim :split  — stacked)
-v = ['layout h_tiles', 'mode main'] # vsplit  (vim :vsplit — side by side)
+r = ['flatten-workspace-tree', 'mode main'] # reset layout
 b = ['balance-sizes', 'mode main']
-t = ['flatten-workspace-tree', 'mode main'] # tidy/reset layout
 
 # Window selection
 g = [
