@@ -5,7 +5,7 @@
 # See `--help` for usage.
 
 # Define desired versions of custom software
-NERDFONTS=v3.5.0
+NERDFONTS=v3.5.1
 
 set -o errexit
 set -o nounset
