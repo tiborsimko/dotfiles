@@ -1907,10 +1907,17 @@
                         "description": "Caps Lock → Hyper (⌃⌥⌘) if held, Escape if tapped",
                         "manipulators": [
                             {
-                                "from": { "key_code": "caps_lock" },
+                                "from": {
+                                    "key_code": "caps_lock",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "parameters": {
+                                    "basic.to_if_alone_timeout_milliseconds": 300
+                                },
                                 "to": [
                                     {
                                         "key_code": "left_command",
+                                        "lazy": true,
                                         "modifiers": ["left_control", "left_option"]
                                     }
                                 ],
