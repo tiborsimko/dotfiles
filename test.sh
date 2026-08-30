@@ -103,6 +103,9 @@ check_abbrev_table "Zsh" "$dotfiles_dir/zsh/.config/zsh/.zshrc" \
 check_abbrev_table "Bash" "$dotfiles_dir/bash/.bashrc" \
   "declare -A BASH_ABBREVS=("
 
+section "Git forge shortcuts"
+check bash "\"$dotfiles_dir/tests/test-git-forge.sh\""
+
 section "Interactive shell"
 stderr=$(bash -lic true 2>&1 1>/dev/null |
   grep -vE "cannot set terminal process group|no job control in this shell" || true)

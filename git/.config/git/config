@@ -82,14 +82,10 @@
   mum = !"git checkout master && git merge --ff-only upstream/master && git checkout -"
   mup = !"git checkout production && git merge --ff-only upstream/production && git checkout -"
   muq = !"git checkout qa && git merge --ff-only upstream/qa && git checkout -"
-  # Capture GitHub/GitLab issues and pull/merge requests as Taskwarrior tasks.
-  ti = "!f() { ~/.config/task/task-capture-git.sh capture issue \"$@\"; }; f"
-  tp = "!f() { ~/.config/task/task-capture-git.sh capture pr \"$@\"; }; f"
-  w = !gh repo view -w 
-  wi = !gh issue view -w 
-  wii = !gh issue list -w 
-  wp = !gh pr view -w 
-  wpp = !gh pr list -w 
+  # Inspect or capture GitHub/GitLab repositories and forge items.
+  r = "!f() { ~/.config/git/git-forge.sh repo \"$@\"; }; f"
+  i = "!f() { ~/.config/git/git-forge.sh issue \"$@\"; }; f"
+  p = "!f() { ~/.config/git/git-forge.sh pr \"$@\"; }; f"
 [color]
   ui = auto
   branch = auto
