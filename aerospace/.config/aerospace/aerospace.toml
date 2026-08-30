@@ -9,14 +9,14 @@ enable-normalization-flatten-containers = true
 enable-normalization-opposite-orientation-for-nested-containers = true
 
 # 30 px sliver of neighbours in accordion mode — enough orientation cue
-# when one window is "monocled" via Hyper-Enter.
+# when windows share an almost-fullscreen stack.
 accordion-padding = 30
 
 # Default root layout for new workspaces
-default-root-container-layout = 'tiles'
+default-root-container-layout = 'accordion'
 
-# Default root orientation ('auto' = horizontal on wide monitors, vertical on tall ones)
-default-root-container-orientation = 'auto'
+# Vertical accordion mirrors i3's stacking layout.
+default-root-container-orientation = 'vertical'
 
 # Mouse follows focus across monitors (only when the monitor changes).
 on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
@@ -37,85 +37,32 @@ outer.bottom = 0
 outer.top = 0
 outer.right = 0
 
-# Hyper (⌃⌥⌘, via Karabiner-mapped Caps Lock) is the primary Aerospace modifier.
-# Plain Alt remains free except for the numeric workspace aliases below.
+# Alt owns the Aerospace keyspace. Digits address workspaces, HJKL address
+# directions, Shift+letters address applications, and Space enters service mode.
 [mode.main.binding]
 
-# Enter service mode (layout / lock / fullscreen / multi-monitor)
-ctrl-alt-cmd-space = 'mode service'
+# Enter service mode for layout, window-state, picker, and multi-monitor actions.
+alt-space = 'mode service'
 
 # Focus neighbour (wraps at workspace edges)
-ctrl-alt-cmd-h = 'focus --boundaries-action wrap-around-the-workspace left'
-ctrl-alt-cmd-j = 'focus --boundaries-action wrap-around-the-workspace down'
-ctrl-alt-cmd-k = 'focus --boundaries-action wrap-around-the-workspace up'
-ctrl-alt-cmd-l = 'focus --boundaries-action wrap-around-the-workspace right'
+alt-h = 'focus --boundaries-action wrap-around-the-workspace left'
+alt-j = 'focus --boundaries-action wrap-around-the-workspace down'
+alt-k = 'focus --boundaries-action wrap-around-the-workspace up'
+alt-l = 'focus --boundaries-action wrap-around-the-workspace right'
 
 # Move window in layout
-ctrl-alt-cmd-shift-h = 'move left'
-ctrl-alt-cmd-shift-j = 'move down'
-ctrl-alt-cmd-shift-k = 'move up'
-ctrl-alt-cmd-shift-l = 'move right'
+alt-shift-h = 'move left'
+alt-shift-j = 'move down'
+alt-shift-k = 'move up'
+alt-shift-l = 'move right'
 
-# Resize: minus/equal by key position; arrows mirror tmux prefix-arrows.
-ctrl-alt-cmd-minus = 'resize smart -50'
-ctrl-alt-cmd-equal = 'resize smart +50'
-ctrl-alt-cmd-up = 'resize height +50'
-ctrl-alt-cmd-down = 'resize height -50'
-ctrl-alt-cmd-right = 'resize width +50'
-ctrl-alt-cmd-left = 'resize width -50'
+# Resize in the same directions (mirrors i3 Mod+Ctrl+HJKL).
+ctrl-alt-h = 'resize width -50'
+ctrl-alt-j = 'resize height -50'
+ctrl-alt-k = 'resize height +50'
+ctrl-alt-l = 'resize width +50'
 
 # Workspaces (0 = back-and-forth to previous workspace)
-ctrl-alt-cmd-1 = 'workspace 1'
-ctrl-alt-cmd-2 = 'workspace 2'
-ctrl-alt-cmd-3 = 'workspace 3'
-ctrl-alt-cmd-4 = 'workspace 4'
-ctrl-alt-cmd-5 = 'workspace 5'
-ctrl-alt-cmd-6 = 'workspace 6'
-ctrl-alt-cmd-7 = 'workspace 7'
-ctrl-alt-cmd-8 = 'workspace 8'
-ctrl-alt-cmd-9 = 'workspace 9'
-ctrl-alt-cmd-0 = 'workspace-back-and-forth'
-
-# Move window to workspace and follow it there
-ctrl-alt-cmd-shift-1 = ['move-node-to-workspace 1', 'workspace 1']
-ctrl-alt-cmd-shift-2 = ['move-node-to-workspace 2', 'workspace 2']
-ctrl-alt-cmd-shift-3 = ['move-node-to-workspace 3', 'workspace 3']
-ctrl-alt-cmd-shift-4 = ['move-node-to-workspace 4', 'workspace 4']
-ctrl-alt-cmd-shift-5 = ['move-node-to-workspace 5', 'workspace 5']
-ctrl-alt-cmd-shift-6 = ['move-node-to-workspace 6', 'workspace 6']
-ctrl-alt-cmd-shift-7 = ['move-node-to-workspace 7', 'workspace 7']
-ctrl-alt-cmd-shift-8 = ['move-node-to-workspace 8', 'workspace 8']
-ctrl-alt-cmd-shift-9 = ['move-node-to-workspace 9', 'workspace 9']
-
-# Named (mnemonic) app workspaces — auto-assigned via on-window-detected
-ctrl-alt-cmd-b = 'workspace B' # Browser (Chrome)
-ctrl-alt-cmd-c = 'workspace C' # Calendar
-ctrl-alt-cmd-e = 'workspace E' # Emacs
-ctrl-alt-cmd-f = 'workspace F' # Finder / Firefox
-ctrl-alt-cmd-m = 'workspace M' # Mattermost
-ctrl-alt-cmd-p = 'workspace P' # Preview
-ctrl-alt-cmd-s = 'workspace S' # Slack / Safari
-ctrl-alt-cmd-t = 'workspace T' # Terminal (Alacritty)
-ctrl-alt-cmd-w = 'workspace W' # WhatsApp
-ctrl-alt-cmd-x = 'workspace X' # X / Bluesky
-ctrl-alt-cmd-y = 'workspace Y' # YouTube
-ctrl-alt-cmd-z = 'workspace Z' # Zoom
-
-# Move window to named workspace + follow
-ctrl-alt-cmd-shift-b = ['move-node-to-workspace B', 'workspace B']
-ctrl-alt-cmd-shift-c = ['move-node-to-workspace C', 'workspace C']
-ctrl-alt-cmd-shift-e = ['move-node-to-workspace E', 'workspace E']
-ctrl-alt-cmd-shift-f = ['move-node-to-workspace F', 'workspace F']
-ctrl-alt-cmd-shift-m = ['move-node-to-workspace M', 'workspace M']
-ctrl-alt-cmd-shift-p = ['move-node-to-workspace P', 'workspace P']
-ctrl-alt-cmd-shift-s = ['move-node-to-workspace S', 'workspace S']
-ctrl-alt-cmd-shift-t = ['move-node-to-workspace T', 'workspace T']
-ctrl-alt-cmd-shift-w = ['move-node-to-workspace W', 'workspace W']
-ctrl-alt-cmd-shift-x = ['move-node-to-workspace X', 'workspace X']
-ctrl-alt-cmd-shift-y = ['move-node-to-workspace Y', 'workspace Y']
-ctrl-alt-cmd-shift-z = ['move-node-to-workspace Z', 'workspace Z']
-
-# Plain-Alt workspace aliases (shadow Emacs M-[0-9])
 alt-1 = 'workspace 1'
 alt-2 = 'workspace 2'
 alt-3 = 'workspace 3'
@@ -136,16 +83,20 @@ alt-shift-7 = ['move-node-to-workspace 7', 'workspace 7']
 alt-shift-8 = ['move-node-to-workspace 8', 'workspace 8']
 alt-shift-9 = ['move-node-to-workspace 9', 'workspace 9']
 
-# App/window picker: replay the existing Raycast Option-Tab hotkey.
-ctrl-alt-cmd-g = 'exec-and-forget osascript -e "tell application \"System Events\" to key code 48 using {option down}"'
+# Focus an existing app wherever it is; absent apps are not launched.
+# H/J/K/L stay reserved for directional focus and movement.
+alt-shift-b = 'exec-and-forget ~/.config/aerospace/focus-app.sh --prefer-title "Google Chrome – work" "Google Chrome"'
+alt-shift-c = 'exec-and-forget ~/.config/aerospace/focus-app.sh Calendar'
+alt-shift-f = 'exec-and-forget ~/.config/aerospace/focus-app.sh Finder'
+alt-shift-m = 'exec-and-forget ~/.config/aerospace/focus-app.sh Mattermost'
+alt-shift-s = 'exec-and-forget ~/.config/aerospace/focus-app.sh Slack'
+alt-shift-t = 'exec-and-forget ~/.config/aerospace/focus-app.sh Alacritty'
+alt-shift-w = 'exec-and-forget ~/.config/aerospace/focus-app.sh "WhatsApp Web"'
+alt-shift-x = 'exec-and-forget ~/.config/aerospace/focus-app.sh X'
+alt-shift-y = 'exec-and-forget ~/.config/aerospace/focus-app.sh YouTube'
+alt-shift-z = 'exec-and-forget ~/.config/aerospace/focus-app.sh --prefer-title "Zoom Meeting" Zoom'
 
-# Misc window management
-ctrl-alt-cmd-n = 'exec-and-forget ~/.config/aerospace/focus-next-window.sh' # cycle windows of same app globally
-ctrl-alt-cmd-enter = 'layout tiles accordion'                              # monocle toggle; preserves orientation & per-child ratios
-ctrl-alt-cmd-slash = 'layout h_tiles v_tiles'                              # toggle container orientation (trial)
-ctrl-alt-cmd-backslash = 'layout h_tiles v_tiles'                          # same, alt key for muscle-memory
-
-# Service mode: entered with Hyper-Space; most single-key actions auto-exit.
+# Service mode: entered with Alt-Space; most single-key actions auto-exit.
 # Volume up/down remain in service mode so they can be repeated.
 [mode.service.binding]
 esc = 'mode main'
@@ -153,6 +104,9 @@ r = ['reload-config', 'mode main']
 backspace = ['close-all-windows-but-current', 'mode main']
 
 # Layout / window-state
+enter = ['layout tiles accordion', 'mode main'] # tiles/accordion toggle; preserves orientation & per-child ratios
+slash = ['layout h_tiles v_tiles', 'mode main'] # toggle container orientation
+backslash = ['layout h_tiles v_tiles', 'mode main'] # alternate key for muscle memory
 x = [
   'exec-and-forget osascript -e "tell application \"System Events\" to keystroke \"q\" using {control down, command down}"',
   'mode main',
@@ -164,7 +118,14 @@ v = ['layout h_tiles', 'mode main'] # vsplit  (vim :vsplit — side by side)
 b = ['balance-sizes', 'mode main']
 t = ['flatten-workspace-tree', 'mode main'] # tidy/reset layout
 
-# Multi-monitor (arrows live here because they are resize in main mode)
+# Window selection
+g = [
+  'exec-and-forget osascript -e "tell application \"System Events\" to key code 48 using {option down}"',
+  'mode main',
+] # Raycast app/window picker
+n = ['exec-and-forget ~/.config/aerospace/focus-next-window.sh', 'mode main'] # cycle windows of focused app globally
+
+# Multi-monitor
 o = ['move-workspace-to-monitor --wrap-around next', 'mode main']
 a = [
   'exec-and-forget ~/.config/aerospace/swap-monitor-workspaces.sh',
@@ -173,7 +134,7 @@ a = [
 left = ['focus-monitor --wrap-around prev', 'mode main']
 right = ['focus-monitor --wrap-around next', 'mode main']
 
-# Joins live in service mode because Hyper-h/j/k/l are focus bindings.
+# Joins live in service mode because Alt-H/J/K/L are focus bindings.
 h = ['join-with left', 'mode main']
 j = ['join-with down', 'mode main']
 k = ['join-with up', 'mode main']
@@ -184,65 +145,39 @@ down = 'volume down'
 up = 'volume up'
 shift-down = ['volume set 0', 'mode main']
 
-# Auto-assign newly-detected windows to their named workspace.
-# Manually-moved windows (Hyper+Shift+<letter>) are NOT re-routed — they stay where you put them.
+# Auto-route ambient apps away from the current task workspace.
+# Workspace 7 holds social communication/media, 8 work communication,
+# and 9 meetings.
+# Manually-moved windows are not re-routed after initial detection.
 # To verify an app's exact name: aerospace list-apps
 [[on-window-detected]]
-if.app-name-regex-substring = '^Google Chrome$'
-run = 'move-node-to-workspace B'
-
-[[on-window-detected]]
-if.app-name-regex-substring = '^Calendar$'
-run = 'move-node-to-workspace C'
-
-[[on-window-detected]]
-if.app-name-regex-substring = '^Emacs$'
-run = 'move-node-to-workspace E'
-
-[[on-window-detected]]
-if.app-name-regex-substring = '^Finder$'
-run = 'move-node-to-workspace F'
-
-[[on-window-detected]]
-if.app-name-regex-substring = '^Firefox$'
-run = 'move-node-to-workspace F'
-
-[[on-window-detected]]
-if.app-name-regex-substring = '^Mattermost$'
-run = 'move-node-to-workspace M'
-
-[[on-window-detected]]
-if.app-name-regex-substring = '^Preview$'
-run = 'move-node-to-workspace P'
-
-[[on-window-detected]]
-if.app-name-regex-substring = '^Safari$'
-run = 'move-node-to-workspace S'
-
-[[on-window-detected]]
-if.app-name-regex-substring = '^Slack$'
-run = 'move-node-to-workspace S'
-
-[[on-window-detected]]
-if.app-name-regex-substring = '^Alacritty$'
-run = 'move-node-to-workspace T'
+if.app-name-regex-substring = '^Bluesky$'
+run = 'move-node-to-workspace 7'
 
 [[on-window-detected]]
 if.app-name-regex-substring = '^WhatsApp Web$'
-run = 'move-node-to-workspace W'
-
-[[on-window-detected]]
-if.app-name-regex-substring = '^Bluesky$'
-run = 'move-node-to-workspace X'
+run = 'move-node-to-workspace 7'
 
 [[on-window-detected]]
 if.app-name-regex-substring = '^X$'
-run = 'move-node-to-workspace X'
+run = 'move-node-to-workspace 7'
 
 [[on-window-detected]]
 if.app-name-regex-substring = '^YouTube$'
-run = 'move-node-to-workspace Y'
+run = 'move-node-to-workspace 7'
+
+[[on-window-detected]]
+if.app-name-regex-substring = '^Mattermost$'
+run = 'move-node-to-workspace 8'
+
+[[on-window-detected]]
+if.app-name-regex-substring = '^Slack$'
+run = 'move-node-to-workspace 8'
+
+[[on-window-detected]]
+if.app-name-regex-substring = '^Microsoft Teams$'
+run = 'move-node-to-workspace 9'
 
 [[on-window-detected]]
 if.app-name-regex-substring = '^Zoom$'
-run = 'move-node-to-workspace Z'
+run = 'move-node-to-workspace 9'

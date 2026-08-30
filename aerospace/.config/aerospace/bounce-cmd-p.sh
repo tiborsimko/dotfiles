@@ -9,7 +9,7 @@
 # Karabiner's shell_command runs with a minimal PATH; reach Homebrew tools.
 export PATH="/opt/homebrew/bin:$PATH"
 
-~/.config/aerospace/focus-app.sh Alacritty
+~/.config/aerospace/focus-app.sh --activate Alacritty
 
 /usr/bin/osascript <<'OSA'
 tell application "System Events"

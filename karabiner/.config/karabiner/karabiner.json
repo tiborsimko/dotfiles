@@ -192,7 +192,7 @@
                                     "key_code": "h",
                                     "modifiers": {
                                         "mandatory": ["control"],
-                                        "optional": ["caps_lock", "option"]
+                                        "optional": ["caps_lock"]
                                     }
                                 },
                                 "to": [{ "key_code": "delete_or_backspace" }],
@@ -800,7 +800,7 @@
                                     "key_code": "v",
                                     "modifiers": {
                                         "mandatory": ["option"],
-                                        "optional": ["caps_lock", "shift"]
+                                        "optional": ["caps_lock"]
                                     }
                                 },
                                 "to": [{ "key_code": "page_up" }],
@@ -863,7 +863,7 @@
                                     "key_code": "b",
                                     "modifiers": {
                                         "mandatory": ["option"],
-                                        "optional": ["caps_lock", "shift"]
+                                        "optional": ["caps_lock"]
                                     }
                                 },
                                 "to": [
@@ -931,7 +931,7 @@
                                     "key_code": "f",
                                     "modifiers": {
                                         "mandatory": ["option"],
-                                        "optional": ["caps_lock", "shift"]
+                                        "optional": ["caps_lock"]
                                     }
                                 },
                                 "to": [
@@ -1368,7 +1368,7 @@
                                     "key_code": "h",
                                     "modifiers": {
                                         "mandatory": ["control"],
-                                        "optional": ["caps_lock", "option"]
+                                        "optional": ["caps_lock"]
                                     }
                                 },
                                 "to": [{ "key_code": "delete_or_backspace" }],
@@ -1766,7 +1766,7 @@
                                     "key_code": "v",
                                     "modifiers": {
                                         "mandatory": ["option"],
-                                        "optional": ["caps_lock", "shift"]
+                                        "optional": ["caps_lock"]
                                     }
                                 },
                                 "to": [{ "key_code": "page_up" }],
@@ -1785,7 +1785,7 @@
                                     "key_code": "b",
                                     "modifiers": {
                                         "mandatory": ["option"],
-                                        "optional": ["caps_lock", "shift"]
+                                        "optional": ["caps_lock"]
                                     }
                                 },
                                 "to": [
@@ -1809,7 +1809,7 @@
                                     "key_code": "f",
                                     "modifiers": {
                                         "mandatory": ["option"],
-                                        "optional": ["caps_lock", "shift"]
+                                        "optional": ["caps_lock"]
                                     }
                                 },
                                 "to": [
@@ -1902,29 +1902,6 @@
                                 "type": "basic"
                             }
                         ]
-                    },
-                    {
-                        "description": "Caps Lock → Hyper (⌃⌥⌘) if held, Escape if tapped",
-                        "manipulators": [
-                            {
-                                "from": {
-                                    "key_code": "caps_lock",
-                                    "modifiers": { "optional": ["any"] }
-                                },
-                                "parameters": {
-                                    "basic.to_if_alone_timeout_milliseconds": 300
-                                },
-                                "to": [
-                                    {
-                                        "key_code": "left_command",
-                                        "lazy": true,
-                                        "modifiers": ["left_control", "left_option"]
-                                    }
-                                ],
-                                "to_if_alone": [{ "key_code": "escape" }],
-                                "type": "basic"
-                            }
-                        ]
                     }
                 ]
             },
@@ -1949,6 +1926,12 @@
                 }
             ],
             "name": "Default profile",
+            "simple_modifications": [
+                {
+                    "from": { "key_code": "caps_lock" },
+                    "to": [{ "key_code": "escape" }]
+                }
+            ],
             "selected": true,
             "virtual_hid_keyboard": { "keyboard_type_v2": "ansi" }
         }
