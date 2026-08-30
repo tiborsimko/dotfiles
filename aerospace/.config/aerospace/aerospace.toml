@@ -8,15 +8,15 @@ start-at-login = true
 enable-normalization-flatten-containers = true
 enable-normalization-opposite-orientation-for-nested-containers = true
 
-# 30 px sliver of neighbours in accordion mode — enough orientation cue
-# when windows share an almost-fullscreen stack.
-accordion-padding = 30
+# 10 px sliver of neighbours in accordion mode — a subtle navigation cue
+# without materially reducing the focused window's usable space.
+accordion-padding = 10
 
 # Default root layout for new workspaces
 default-root-container-layout = 'accordion'
 
-# Vertical accordion mirrors i3's stacking layout.
-default-root-container-orientation = 'vertical'
+# Horizontal accordion mirrors i3's tabbed layout and favours H/L navigation.
+default-root-container-orientation = 'horizontal'
 
 # Mouse follows focus across monitors (only when the monitor changes).
 on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
