@@ -97,6 +97,7 @@ ctrl-alt-cmd-p = 'workspace P' # Preview
 ctrl-alt-cmd-s = 'workspace S' # Slack / Safari
 ctrl-alt-cmd-t = 'workspace T' # Terminal (Alacritty)
 ctrl-alt-cmd-w = 'workspace W' # WhatsApp
+ctrl-alt-cmd-x = 'workspace X' # X / Bluesky
 ctrl-alt-cmd-y = 'workspace Y' # YouTube
 ctrl-alt-cmd-z = 'workspace Z' # Zoom
 
@@ -110,6 +111,7 @@ ctrl-alt-cmd-shift-p = ['move-node-to-workspace P', 'workspace P']
 ctrl-alt-cmd-shift-s = ['move-node-to-workspace S', 'workspace S']
 ctrl-alt-cmd-shift-t = ['move-node-to-workspace T', 'workspace T']
 ctrl-alt-cmd-shift-w = ['move-node-to-workspace W', 'workspace W']
+ctrl-alt-cmd-shift-x = ['move-node-to-workspace X', 'workspace X']
 ctrl-alt-cmd-shift-y = ['move-node-to-workspace Y', 'workspace Y']
 ctrl-alt-cmd-shift-z = ['move-node-to-workspace Z', 'workspace Z']
 
@@ -228,6 +230,14 @@ run = 'move-node-to-workspace T'
 [[on-window-detected]]
 if.app-name-regex-substring = '^WhatsApp Web$'
 run = 'move-node-to-workspace W'
+
+[[on-window-detected]]
+if.app-name-regex-substring = '^Bluesky$'
+run = 'move-node-to-workspace X'
+
+[[on-window-detected]]
+if.app-name-regex-substring = '^X$'
+run = 'move-node-to-workspace X'
 
 [[on-window-detected]]
 if.app-name-regex-substring = '^YouTube$'
