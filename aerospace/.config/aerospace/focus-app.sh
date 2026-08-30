@@ -61,6 +61,6 @@ fi
 if [ -n "$WINDOW_ID" ]; then
     aerospace focus --window-id "$WINDOW_ID"
 elif [ "$ACTIVATE" = true ] && aerospace list-apps | grep -q " | $APP_NAME\$"; then
-    # App is running but minimized - bring it to focus
+    # Running but windowless: ask it to open one (bounce-cmd-p.sh only).
     open -a "$APP_NAME"
 fi
