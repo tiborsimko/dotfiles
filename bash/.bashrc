@@ -110,18 +110,9 @@ lsvirtualenvs() {
 }
 rmvirtualenv() { rm -rf ~/.virtualenvs/"${1}"; }
 
-# Override EDITOR and VISUAL inside Emacs
-if [[ -n "$INSIDE_EMACS" ]]; then
-  export EDITOR="emacsclient -c"
-  export VISUAL="emacsclient -c"
-fi
-
 # Configure useful aliases
 alias b='$BROWSER'
 alias cp='cp -i'
-alias e="emacsclient -t"
-alias ec="emacsclient -t -e '(org-capture)'"
-alias ee="emacsclient -c -n"
 alias gg="lazygit"
 alias i3lock="i3lock -c 000000"
 # Kubectl completion - lazy loaded
@@ -287,9 +278,6 @@ if [[ ! -f "$_zoxide_cache" ]] || [[ $(command -v zoxide) -nt "$_zoxide_cache" ]
 fi
 [[ -f "$_zoxide_cache" ]] && source "$_zoxide_cache"
 unset _zoxide_cache
-
-# Emacs eat shell integration (directory tracking, etc.)
-[ -n "$EAT_SHELL_INTEGRATION_DIR" ] && source "$EAT_SHELL_INTEGRATION_DIR/bash"
 
 # Load keychain
 [ -f "/usr/bin/keychain" ] && eval "$(keychain --eval --agents ssh --quick --quiet)"

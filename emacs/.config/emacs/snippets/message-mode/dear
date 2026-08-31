@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: dear
-# key: dear
-# --
-Dear `(tibor/mu4e-get-recipient-names)`:
-$0

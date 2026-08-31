@@ -12,13 +12,6 @@ ZSHZPROF=0  # 0=no, 1=yes
 autoload -Uz bracketed-paste-magic
 zle -N bracketed-paste bracketed-paste-magic
 
-# Override EDITOR and VISUAL inside Emacs
-if [[ -n "$INSIDE_EMACS" ]]; then
-    # Use emacsclient without -c to reuse current frame (faster in eat terminal)
-    export EDITOR="emacsclient"
-    export VISUAL="emacsclient"
-fi
-
 # Fzf with rg
 export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*"'
 
@@ -191,9 +184,6 @@ setopt clobber
 # Useful aliases
 alias b="$BROWSER"
 alias cp='cp -i'
-alias e="emacsclient -t"
-alias ec="emacsclient -t -e '(org-capture)'"
-alias ee="emacsclient -c -n"
 alias gg="lazygit"
 alias i3lock="i3lock -c 000000"
 alias kgd="kubectl get deployments"
@@ -331,9 +321,6 @@ fv() {
     local file
     file="$(rg --max-count=1 --ignore-case --files-with-matches --no-messages "$@" | fzf-tmux +m --preview="rg --ignore-case --pretty --context 10 '"$@"' {}")" && ${OPENER} "$file"
 }
-
-# Emacs eat shell integration (directory tracking, etc.)
-[ -n "$EAT_SHELL_INTEGRATION_DIR" ] && source "$EAT_SHELL_INTEGRATION_DIR/zsh"
 
 # Virtualenv helpers (replacing virtualenvwrapper)
 workon() { source ~/.virtualenvs/${1}/bin/activate }

@@ -92,7 +92,6 @@ packages=(
   codex
   colima
   dunst
-  emacs
   # flake8
   fontconfig
   git

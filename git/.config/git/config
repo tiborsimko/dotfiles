@@ -47,13 +47,6 @@
   colorMoved = default
 [grep]
   lineNumber = true
-[magithub]
-  online = true
-  contextRemote = "upstream"
-[magithub "status"]
-  includeStatusHeader = true
-  includePullRequestsSection = true
-  includeIssuesSection = true
 [merge]
   tool = nvimdiff
   conflictstyle = zdiff3
