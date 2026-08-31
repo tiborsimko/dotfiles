@@ -253,12 +253,8 @@ if [ "$mode" = task ]; then
   [ -n "$reference" ] || die "--task requires an item number"
   [ "$reference" != . ] || die "--task requires a numeric item number"
   [ -x "$task_capture" ] || die "task capture helper not found: $task_capture"
-  if [ "${#task_modifiers[@]}" -eq 0 ]; then
-    exec "$task_capture" capture "$item_kind" "$reference"
-  else
-    exec "$task_capture" capture "$item_kind" "$reference" \
-      "${task_modifiers[@]}"
-  fi
+  exec "$task_capture" capture "$item_kind" "$reference" \
+    "${task_modifiers[@]}"
 fi
 
 [ "${#task_modifiers[@]}" -eq 0 ] ||

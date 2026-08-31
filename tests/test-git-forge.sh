@@ -61,7 +61,7 @@ assert_rejected() {
 
   set +e
   actual=$(
-    GIT_FORGE_COMMON="$forge_common" /bin/bash "$forge_script" "$@" 2>&1
+    GIT_FORGE_COMMON="$forge_common" "$BASH" "$forge_script" "$@" 2>&1
   )
   status=$?
   set -e
@@ -95,17 +95,16 @@ assert_dispatch "glab:issue view 42" "$gitlab_remote" issue 42
 assert_dispatch "glab:mr view" "$gitlab_remote" pr .
 assert_dispatch "glab:repo view --web" "$gitlab_remote" repo -w
 
-# macOS ships Bash 3.2, where an empty array expansion fails under set -u.
 task_output=$(
   GIT_FORGE_COMMON="$forge_common" TASK_CAPTURE_GIT=/bin/echo \
-    /bin/bash "$forge_script" issue 123 -t
+    "$BASH" "$forge_script" issue 123 -t
 )
 assert_equal "capture issue 123" "$task_output" \
-  "Bash 3.2 task capture without modifiers"
+  "task capture without modifiers"
 
 task_output=$(
   GIT_FORGE_COMMON="$forge_common" TASK_CAPTURE_GIT=/bin/echo \
-    /bin/bash "$forge_script" issue 123 -t +focus project:DOTFILES
+    "$BASH" "$forge_script" issue 123 -t +focus project:DOTFILES
 )
 assert_equal "capture issue 123 +focus project:DOTFILES" "$task_output" \
   "task capture with modifiers"
@@ -125,7 +124,7 @@ capture_output=$(
   # shellcheck disable=SC2016
   REMOTE_URL="$github_remote" GIT_FORGE_COMMON="$forge_common" \
     SCRIPT="$capture_script" UUID=12345678-1234-1234-1234-123456789abc \
-    /bin/bash -c '
+    "$BASH" -c '
       git() {
         [ "$#" -eq 3 ] && [ "$1 $2 $3" = "remote get-url origin" ] ||
           return 1

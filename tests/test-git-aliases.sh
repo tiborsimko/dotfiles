@@ -96,7 +96,7 @@ run_native_completion() {
   # from words[1]. The function body is evaluated by the child Bash process.
   # shellcheck disable=SC2016
   CONFIG="$shell_config" ALIAS_NAME="$alias_name" \
-    NATIVE_COMMAND="$native_command" /bin/bash -c '
+    NATIVE_COMMAND="$native_command" "$BASH" -c '
     eval "$(sed -n "/^_git_${ALIAS_NAME}()/,/^}/p" "$CONFIG")"
     words=(git -C /tmp "$ALIAS_NAME" "")
     __git_cmd_idx=3
@@ -130,7 +130,7 @@ run_x_completion() {
   # completion helpers it expects. The function body is evaluated by Bash.
   # shellcheck disable=SC2016
   CONFIG="$shell_config" SELECTED_SUBCOMMAND="$selected_subcommand" \
-    /bin/bash -c '
+    "$BASH" -c '
       eval "$(sed -n '\''/^_git_x()/,/^}/p'\'' "$CONFIG")"
       __git_find_on_cmdline() { printf "%s" "$SELECTED_SUBCOMMAND"; }
       __gitcomp() { printf "subcommands:%s\n" "$1"; }
@@ -188,7 +188,7 @@ run_fetch() {
 
   # The function is evaluated by the child Bash process.
   # shellcheck disable=SC2016
-  MOCK_REMOTES="$mock_remotes" SCRIPT="$fetch_script" /bin/bash -c '
+  MOCK_REMOTES="$mock_remotes" SCRIPT="$fetch_script" "$BASH" -c '
     git() {
       if [ "${1:-} ${2:-}" = "config --get" ]; then
         local remote=${3#remote.}
@@ -219,7 +219,7 @@ assert_equal "git:fetch --all" "$(run_fetch 'upstream origin' --all)" \
 run_log() {
   # The function is evaluated by the child Bash process.
   # shellcheck disable=SC2016
-  SCRIPT="$log_script" /bin/bash -c '
+  SCRIPT="$log_script" "$BASH" -c '
     git() { printf "git:%s\n" "$*"; }
     source "$SCRIPT"
   ' log-test "$@"
