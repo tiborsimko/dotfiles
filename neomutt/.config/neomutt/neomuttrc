@@ -83,11 +83,13 @@ set nm_default_url = "notmuch://$HOME/Local/mbsyncmail"
 macro index,pager <F5> "<enter-command>source ~/.config/neomutt/neomuttrc<enter>" "Reload colour theme"
 
 # Key bindings - general vim-like
-bind index,pager,attach g noop
-bind attach,index gg first-entry
+bind index,pager,attach,browser g noop
+bind attach,browser,index gg first-entry
 bind pager gg top
 bind pager G bottom
-bind attach,index G last-entry
+bind attach,browser,index G last-entry
+bind index,pager gt next-thread
+bind index,pager gT previous-thread
 bind index,pager R group-reply
 bind index,pager C mail
 bind index m mark-message
