@@ -146,7 +146,7 @@ check kind "kind version"
 check delta "delta --version"
 check lazygit "lazygit --version | head -1"
 check cr "cr version | head -1"
-for v in 3.14 3.13 3.12 3.11 3.10 3.9 3.8; do
+for v in 3.15 3.14 3.13 3.12 3.11 3.10 3.9 3.8; do
   check "python$v" "python$v --version"
 done
 
