@@ -109,6 +109,9 @@ check bash "\"$dotfiles_dir/tests/test-git-aliases.sh\""
 section "Git forge shortcuts"
 check bash "\"$dotfiles_dir/tests/test-git-forge.sh\""
 
+section "Task capture syntax"
+check bash "\"$dotfiles_dir/tests/test-task-capture.sh\""
+
 section "Interactive shell"
 stderr=$(bash -lic true 2>&1 1>/dev/null |
   grep -vE "cannot set terminal process group|no job control in this shell" || true)
