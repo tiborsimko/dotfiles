@@ -43,6 +43,10 @@ report.focus.labels=ID,Active,Tags,Due,Description
 report.focus.filter=status:pending +focus
 report.focus.sort=start-,urgency-
 
+# Open a task's external target from tasksh. Use `gx ID` for active tasks and
+# `gx -A UUID` for completed or out-of-context tasks.
+alias.gx=execute taskopen
+
 # tasksh conveniences: `42 pick` and `42 drop`
 alias.pick=modify +focus
 alias.drop=modify -focus

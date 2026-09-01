@@ -3,7 +3,16 @@
 [General]
 taskbin = task
 path_ext = /usr/share/taskopen/scripts
+task_attributes = "priority,project,tags,description,mid"
+no_annotation_hook = ""
 
 [Actions]
 # Open notes as Markdown files.
 notes.command = "editnote $HOME/private/tasknotes/$UUID.md \"$TASK_DESCRIPTION\" $UUID"
+
+# Jump to the email referenced by the Taskwarrior `mid` UDA.
+mail.target = mid
+mail.regex = "(.+)"
+mail.command = "$HOME/.config/task/task-jump-mail.sh $UUID"
+mail.labelregex = ""
+mail.modes = "normal,any,batch"
