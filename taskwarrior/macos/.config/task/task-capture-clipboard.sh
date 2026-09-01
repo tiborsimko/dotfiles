@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #
-# Capture the macOS clipboard as a Taskwarrior task. Invoked by AeroSpace's
-# Alt-t binding. Capture is deliberately offline and untagged; metadata can be
-# completed during review.
+# Capture the macOS clipboard as a Taskwarrior task. Invoked from AeroSpace
+# service mode with Alt-Space, then t. Capture is deliberately offline and
+# untagged; metadata can be completed during review.
 set -euo pipefail
 
 export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:${PATH:-}"

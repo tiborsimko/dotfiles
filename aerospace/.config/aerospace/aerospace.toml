@@ -47,7 +47,8 @@ outer.right = 0
 # directions, Shift+letters address applications, and Space enters service mode.
 [mode.main.binding]
 
-# Enter service mode for layout, window-state, picker, and multi-monitor actions.
+# Enter service mode for layout, window-state, picker, task capture, and
+# multi-monitor actions.
 alt-space = 'mode service'
 
 # Focus neighbour (wraps at workspace edges)
@@ -67,9 +68,6 @@ ctrl-alt-h = 'resize width -50'
 ctrl-alt-j = 'resize height -50'
 ctrl-alt-k = 'resize height +50'
 ctrl-alt-l = 'resize width +50'
-
-# Capture the current clipboard contents as a Taskwarrior task.
-alt-t = 'exec-and-forget ~/.config/task/task-capture-clipboard.sh'
 
 # Workspaces (0 = back-and-forth to previous workspace)
 alt-1 = 'workspace 1'
@@ -152,3 +150,6 @@ l = ['join-with right', 'mode main']
 down = 'volume down'
 up = 'volume up'
 shift-down = ['volume set 0', 'mode main']
+
+# Capture the current clipboard contents as a Taskwarrior task.
+t = ['exec-and-forget ~/.config/task/task-capture-clipboard.sh', 'mode main']
