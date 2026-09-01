@@ -1,9 +1,9 @@
 # Tibor's taskopenrc configuration on Linux.
 
-# general
-TASKBIN='task'
-PATH_EXT=/usr/share/taskopen/scripts
+[General]
+taskbin = task
+path_ext = /usr/share/taskopen/scripts
 
-# open notes in markdown
-NOTES_FOLDER="$HOME/private/tasknotes/"
-NOTES_EXT=".md"
+[Actions]
+# Open notes as Markdown files.
+notes.command = "editnote $HOME/private/tasknotes/$UUID.md \"$TASK_DESCRIPTION\" $UUID"
