@@ -113,8 +113,10 @@ shift-r = ['reload-config', 'mode main']
 backspace = ['close-all-windows-but-current', 'mode main']
 
 # Layout / window-state
-m = ['layout accordion horizontal vertical', 'mode main'] # monocle (accordion) family; invoke again to rotate
-t = ['layout tiles horizontal vertical', 'mode main'] # tiled family; invoke again to rotate
+m = ['layout h_accordion', 'mode main'] # monocle (left/right)
+c = ['layout v_accordion', 'mode main'] # column (top/bottom)
+s = ['layout v_tiles', 'mode main'] # horizontal splits (top/bottom)
+v = ['layout h_tiles', 'mode main'] # vertical splits (left/right)
 x = [
   'exec-and-forget osascript -e "tell application \"System Events\" to keystroke \"q\" using {control down, command down}"',
   'mode main',
