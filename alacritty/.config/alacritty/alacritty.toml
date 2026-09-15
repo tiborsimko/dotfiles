@@ -82,13 +82,12 @@ action = "ToggleViMode"
 key = "Y"
 mode = "Vi"
 
-# Reset font size (Cmd-0 is reserved for tmux)
+# Increase font size with either macOS zoom-in spelling
 [[keyboard.bindings]]
-action = "ResetFontSize"
+action = "IncreaseFontSize"
 key = "="
 mods = "Command"
 
-# Increase font size (explicit Shift is required for Cmd-+)
 [[keyboard.bindings]]
 action = "IncreaseFontSize"
 key = "+"
@@ -99,6 +98,12 @@ mods = "Command|Shift"
 action = "DecreaseFontSize"
 key = "-"
 mods = "Command"
+
+# Reset font size (Cmd-0 is reserved for tmux)
+[[keyboard.bindings]]
+action = "ResetFontSize"
+key = ")"
+mods = "Command|Shift"
 
 # Tmux helper: switch to last session
 [[keyboard.bindings]]
