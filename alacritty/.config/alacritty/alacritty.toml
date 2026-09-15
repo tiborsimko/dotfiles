@@ -12,7 +12,7 @@ LC_ALL = "en_GB.UTF-8"
 shell = { program = "/bin/zsh", args = [
   "-l",
   "-c",
-  "exec env -u TMUX tmux new-session \\; set-option @alacritty-auto 1",
+  "exec env -u TMUX tmux new-session",
 ] }
 
 # Set terminal font.
