@@ -1,8 +1,10 @@
 # Tibor's Ghostty light theme using Gruvbox light hard colours with a Flexoki background.
 
+# Set background and foreground colours.
 background = #fffcf0
 foreground = #3c3836
 
+# Set the ANSI palette.
 palette = 0=#f9f5d7
 palette = 1=#cc241d
 palette = 2=#98971a

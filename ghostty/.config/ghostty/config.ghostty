@@ -1,10 +1,6 @@
 # Tibor's Ghostty configuration.
 
-# Start every OS window as a Tmux client. Unset TMUX so Cmd-N also works when
-# invoked from a window that is already attached to Tmux.
-command = /bin/zsh -l -c "exec env -u TMUX tmux new-session"
-shell-integration = none
-
+# Set locale.
 env = LANG=en_GB.UTF-8
 env = LC_ALL=en_GB.UTF-8
 
@@ -19,98 +15,131 @@ font-size = 18
 # Disable ligatures.
 font-feature = -calt, -liga, -dlig
 
-# Keep SGR faint text legible while retaining a distinction from normal text.
+# Keep faint text legible.
 faint-opacity = 0.7
 
+# Use a steady bar cursor.
 cursor-style = bar
 cursor-style-blink = false
 adjust-cursor-thickness = 3
 
+# Set window padding.
 window-padding-x = 4
 window-padding-y = 4
 window-padding-balance = true
 window-padding-color = background
-macos-titlebar-style = hidden
+
+# Show tabs in the title bar.
+window-title-font-family = Iosevka Term
+macos-titlebar-style = tabs
+
+# Treat Option as Alt.
 macos-option-as-alt = true
 
-# Tmux owns persistent layout and session state.
+# Disable window-state restoration.
 window-save-state = never
 
-# Guard against closing a window or quitting Ghostty by accident.
+# Confirm before closing busy terminals.
 confirm-close-surface = true
 
-# Keep the safe macOS default. For a latency-only A/B test, false removes
-# synchronization but can tear, use more power, and upset some display paths.
+# Synchronize rendering with the display.
 window-vsync = true
 
-# Start with the light palette; theme-toggle installs theme-current and reloads
-# running Ghostty instances.
+# Load the light theme and current override.
 config-file = themes/theme-light
 config-file = ?themes/theme-current
 
-# Ghostty's native tabs, splits, search, command palette, and navigation would
-# compete with Tmux. Clear every default binding, then restore only deliberate
-# macOS application actions and Tmux forwarding bindings below.
+# Keep only explicit shortcuts.
 keybind = clear
 
-# macOS application and clipboard actions.
+# Application and clipboard shortcuts.
 # Keep Cmd-C plain-text-only; Ghostty's default mixed copy also adds HTML.
 keybind = super+c=copy_to_clipboard:plain
 keybind = super+v=paste_from_clipboard
 keybind = super+a=select_all
 keybind = super+n=new_window
+keybind = super+t=new_tab
 keybind = super+w=close_surface
 keybind = super+q=quit
 keybind = super+shift+,=reload_config
 
-# Shift bypasses Tmux mouse reporting; copy native selections to the clipboard.
+# Tab selection.
+keybind = super+1=goto_tab:1
+keybind = super+2=goto_tab:2
+keybind = super+3=goto_tab:3
+keybind = super+4=goto_tab:4
+keybind = super+5=goto_tab:5
+keybind = super+6=goto_tab:6
+keybind = super+7=goto_tab:7
+keybind = super+8=goto_tab:8
+keybind = super+9=goto_tab:9
+keybind = super+[=previous_tab
+keybind = super+]=next_tab
+keybind = super+shift+[=move_tab:-1
+keybind = super+shift+]=move_tab:1
+
+# Splits.
+split-preserve-zoom = navigation
+keybind = super+d=new_split:right
+keybind = super+shift+d=new_split:down
+keybind = super+z=toggle_split_zoom
+
+# Split focus with Cmd-H/J/K/L or Cmd-arrow keys.
+keybind = super+h=goto_split:left
+keybind = super+j=goto_split:down
+keybind = super+k=goto_split:up
+keybind = super+l=goto_split:right
+keybind = super+arrow_left=goto_split:left
+keybind = super+arrow_down=goto_split:down
+keybind = super+arrow_up=goto_split:up
+keybind = super+arrow_right=goto_split:right
+
+# Karabiner sends F18 for Cmd-H.
+keybind = f18=goto_split:left
+
+# Resize mode with H/J/K/L or arrow keys.
+# 0 or = equalizes splits; Escape or Cmd-R exits.
+keybind = super+r=activate_key_table:resize
+keybind = resize/h=resize_split:left,50
+keybind = resize/j=resize_split:down,50
+keybind = resize/k=resize_split:up,50
+keybind = resize/l=resize_split:right,50
+keybind = resize/arrow_left=resize_split:left,50
+keybind = resize/arrow_down=resize_split:down,50
+keybind = resize/arrow_up=resize_split:up,50
+keybind = resize/arrow_right=resize_split:right,50
+keybind = resize/0=equalize_splits
+keybind = resize/==equalize_splits
+keybind = resize/escape=deactivate_key_table
+keybind = resize/super+r=deactivate_key_table
+keybind = resize/catch_all=ignore
+
+# Copy native selections to the clipboard.
 copy-on-select = clipboard
 
-# Detect URLs independently of Tmux. Tmux mouse reporting means Ghostty needs
-# Cmd-Shift-click to open them; prefer terminal-independent Tmux hints instead.
+# Detect URLs for mouse opening.
 link-url = true
 link-previews = true
 
-# Font size (Cmd-0 remains reserved for Tmux's alternate window).
+# Font size.
 keybind = super+==increase_font_size:1
 keybind = super++=increase_font_size:1
 keybind = super+-=decrease_font_size:1
 keybind = super+shift+0=reset_font_size
 
-# Send a distinct Shift+Return sequence for terminal apps that support
-# modified keys, including Codex's shift-enter keymap.
+# Preserve Shift-Enter for terminal applications.
 keybind = shift+enter=text:\x1b[13;2u
 
-# Tmux-Fingers picker table (Cmd-Y -> Prefix-y).
-keybind = super+y=text:\x00y
+# Scrollback and search.
+keybind = super+home=scroll_to_top
+keybind = super+end=scroll_to_bottom
+keybind = super+page_up=scroll_page_up
+keybind = super+page_down=scroll_page_down
+keybind = super+f=start_search
+keybind = super+g=navigate_search:next
+keybind = super+shift+g=navigate_search:previous
+keybind = super+shift+f=end_search
 
-# Tmux sessions and windows. Tmux's prefix is Ctrl-Space (NUL, \x00).
-keybind = super+s=text:\x00s
-keybind = super+p=text:\x00p
-keybind = super+i=text:\x00I
-keybind = super+t=text:\x00t
-keybind = super+0=text:\x000
-keybind = super+1=text:\x001
-keybind = super+2=text:\x002
-keybind = super+3=text:\x003
-keybind = super+4=text:\x004
-keybind = super+5=text:\x005
-keybind = super+6=text:\x006
-keybind = super+7=text:\x007
-keybind = super+8=text:\x008
-keybind = super+9=text:\x009
-keybind = super+[=text:\x00(
-keybind = super+]=text:\x00)
-keybind = super+shift+[=text:\x00N
-keybind = super+shift+]=text:\x00n
-
-# Tmux panes.
-keybind = super+d=text:\x00|
-keybind = super+shift+d=text:\x00-
-keybind = f18=text:\x08
-keybind = super+j=text:\x0a
-keybind = super+k=text:\x0b
-keybind = super+l=text:\x0c
-keybind = super+g=text:\x00g
-keybind = super+z=text:\x00z
-keybind = super+f=text:\x00f
+# Jump between shell prompts with Cmd-Shift-Up/Down.
+keybind = super+shift+arrow_up=jump_to_prompt:-1
+keybind = super+shift+arrow_down=jump_to_prompt:1

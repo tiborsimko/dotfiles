@@ -1,8 +1,10 @@
 # Tibor's Ghostty dark theme using Gruvbox dark hard colours with a Flexoki background.
 
+# Set background and foreground colours.
 background = #100f0f
 foreground = #ebdbb2
 
+# Set the ANSI palette.
 palette = 0=#282828
 palette = 1=#cc241d
 palette = 2=#98971a
