@@ -16,7 +16,6 @@ export BROWSER="open"
 export EDITOR="nvim"
 export OPENER="open"
 export PAGER="less"
-export TERMINAL="alacritty"
 export VISUAL="nvim"
 
 # Tool defaults
