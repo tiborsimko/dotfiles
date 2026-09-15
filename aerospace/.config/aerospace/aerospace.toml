@@ -80,6 +80,11 @@ alt-7 = 'workspace 7'
 alt-8 = 'workspace 8'
 alt-9 = 'workspace 9'
 alt-0 = 'workspace-back-and-forth'
+
+# Cycle non-empty workspaces on the focused monitor.
+alt-leftSquareBracket = 'list-workspaces --monitor focused --empty no | workspace --wrap-around --stdin prev'
+alt-rightSquareBracket = 'list-workspaces --monitor focused --empty no | workspace --wrap-around --stdin next'
+
 alt-shift-1 = ['move-node-to-workspace 1', 'workspace 1']
 alt-shift-2 = ['move-node-to-workspace 2', 'workspace 2']
 alt-shift-3 = ['move-node-to-workspace 3', 'workspace 3']
