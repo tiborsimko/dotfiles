@@ -106,6 +106,12 @@ action = "ResetFontSize"
 key = ")"
 mods = "Command|Shift"
 
+# Tmux-Fingers picker table (Cmd-Y -> Prefix-y)
+[[keyboard.bindings]]
+chars = "\u0000y"
+key = "Y"
+mods = "Command"
+
 # Tmux helper: switch to last session
 [[keyboard.bindings]]
 chars = "\u0000s"
@@ -114,7 +120,7 @@ mods = "Command"
 
 # Tmux helper: switch to any session (Cmd-P, like Mattermost/Slack quick switcher)
 [[keyboard.bindings]]
-chars = "\u0000g"
+chars = "\u0000p"
 key = "P"
 mods = "Command"
 
@@ -249,9 +255,9 @@ chars = "\u000c"
 key = "L"
 mods = "Command"
 
-# Tmux helper: switch to any pane or create a new session (Cmd-G -> C-Space w)
+# Tmux helper: switch to any pane or create a new session (Cmd-G -> C-Space g)
 [[keyboard.bindings]]
-chars = "\u0000w"
+chars = "\u0000g"
 key = "G"
 mods = "Command"
 
