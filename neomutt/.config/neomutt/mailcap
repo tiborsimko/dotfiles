@@ -1,41 +1,77 @@
-# HTML
-text/html; w3m -I %{charset} -T text/html; copiousoutput;
+# Graphical entries come first for m and nametemplate lookup.
+# auto_view and P skip entries without copiousoutput.
+# x-neomutt-keep retains GUI temporary files after open returns; no NeoMutt cleanup.
+# Save attachments with s before making permanent edits.
 
-# PDF
-application/pdf; open %s;
-application/x-pdf; open %s;
-application/postscript; open %s;
+# HTML: browser on demand, w3m for inline reading and text previews.
+text/html; open %s; nametemplate=%s.html; x-neomutt-keep;
+text/html; w3m -I %{charset} -O UTF-8 -T text/html -dump -cols 80 -o display_link_number=1; copiousoutput; x-neomutt-nowrap;
 
-# MS Excel
-application/x-msexcel; libreoffice --calc %s;
-application/ms-exc; libreoffice --calc %s;
-application/excel; libreoffice --calc %s;
-application/msexcel; libreoffice --calc %s;
-application/vnd.ms-exc; libreoffice --calc %s;
-application/vnd.ms-excel; libreoffice --calc %s;
+# PDF: graphical viewer by default, text preview on demand with P.
+application/pdf; open %s; nametemplate=%s.pdf; x-neomutt-keep;
+application/pdf; pdftotext -layout -enc UTF-8 -nopgbrk %s -; copiousoutput; x-neomutt-nowrap;
+application/x-pdf; open %s; nametemplate=%s.pdf; x-neomutt-keep;
+application/x-pdf; pdftotext -layout -enc UTF-8 -nopgbrk %s -; copiousoutput; x-neomutt-nowrap;
 
-# MS Word
-application/msword; libreoffice --writer %s;
-application/vnd.sun.xml.writer; libreoffice --writer %s;
-application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; libreoffice --writer %s;
-application/vnd.openxmlformats-officedocument.spreadsheetml.template; libreoffice --writer %s;
-application/vnd.openxmlformats-officedocument.presentationml.template; libreoffice --writer %s;
-application/vnd.openxmlformats-officedocument.presentationml.slideshow; libreoffice --writer %s;
-application/vnd.openxmlformats-officedocument.presentationml.presentation; libreoffice --writer %s;
-application/vnd.openxmlformats-officedocument.presentationml.slide; libreoffice --writer %s;
-application/vnd.openxmlformats-officedocument.wordprocessingml.document; libreoffice --writer %s;
-application/vnd.openxmlformats-officedocument.wordprocessingml.template; libreoffice --writer %s;
-application/vnd.ms-excel.addin.macroEnabled.12; libreoffice --writer %s;
-application/vnd.ms-excel.sheet.binary.macroEnabled.12; libreoffice --writer %s;
+# PostScript needs a separate viewer associated with .ps on current macOS.
+application/postscript; open %s; nametemplate=%s.ps; x-neomutt-keep;
 
-# Images
-image/jpeg; open %s;
-image/pjpeg; open %s;
-image/png; open %s;
-image/gif; open %s;
-image/tiff; open %s;
+# Spreadsheets: use the macOS default application for each file extension.
+application/x-msexcel; open %s; nametemplate=%s.xls; x-neomutt-keep;
+application/ms-exc; open %s; nametemplate=%s.xls; x-neomutt-keep;
+application/excel; open %s; nametemplate=%s.xls; x-neomutt-keep;
+application/msexcel; open %s; nametemplate=%s.xls; x-neomutt-keep;
+application/vnd.ms-exc; open %s; nametemplate=%s.xls; x-neomutt-keep;
+application/vnd.ms-excel; open %s; nametemplate=%s.xls; x-neomutt-keep;
+application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; open %s; nametemplate=%s.xlsx; x-neomutt-keep;
+# Preserve wide tables; warn because Pandoc can omit inline cell strings.
+application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; echo 'Preview may omit cell text. Use m in the attachment menu for the original.' && pandoc --from=xlsx --to=plain --columns=80 %s; copiousoutput; x-neomutt-nowrap;
+application/vnd.openxmlformats-officedocument.spreadsheetml.template; open %s; nametemplate=%s.xltx; x-neomutt-keep;
+application/vnd.ms-excel.addin.macroEnabled.12; open %s; nametemplate=%s.xlam; x-neomutt-keep;
+application/vnd.ms-excel.sheet.binary.macroEnabled.12; open %s; nametemplate=%s.xlsb; x-neomutt-keep;
+application/vnd.ms-excel.sheet.macroEnabled.12; open %s; nametemplate=%s.xlsm; x-neomutt-keep;
+application/vnd.oasis.opendocument.spreadsheet; open %s; nametemplate=%s.ods; x-neomutt-keep;
 
-# Calendar (press `m` when viewing attachments)
-text/ics; gcalcli --calendar 'tibor.simko@gmail.com' import %s;
-text/calendar; gcalcli --calendar 'tibor.simko@gmail.com' import %s;
-application/ics; gcalcli --calendar 'tibor.simko@gmail.com' import %s;
+# Documents: let NeoMutt wrap textutil's paragraphs.
+application/msword; open %s; nametemplate=%s.doc; x-neomutt-keep;
+application/msword; textutil -stdout -convert txt -encoding UTF-8 %s; copiousoutput;
+application/vnd.openxmlformats-officedocument.wordprocessingml.document; open %s; nametemplate=%s.docx; x-neomutt-keep;
+application/vnd.openxmlformats-officedocument.wordprocessingml.document; textutil -stdout -convert txt -encoding UTF-8 %s; copiousoutput;
+application/vnd.openxmlformats-officedocument.wordprocessingml.template; open %s; nametemplate=%s.dotx; x-neomutt-keep;
+application/vnd.sun.xml.writer; open %s; nametemplate=%s.sxw; x-neomutt-keep;
+application/vnd.oasis.opendocument.text; open %s; nametemplate=%s.odt; x-neomutt-keep;
+application/vnd.oasis.opendocument.text; textutil -stdout -convert txt -encoding UTF-8 %s; copiousoutput;
+application/rtf; open %s; nametemplate=%s.rtf; x-neomutt-keep;
+application/rtf; textutil -stdout -convert txt -encoding UTF-8 %s; copiousoutput;
+text/rtf; open %s; nametemplate=%s.rtf; x-neomutt-keep;
+text/rtf; textutil -stdout -convert txt -encoding UTF-8 %s; copiousoutput;
+
+# Presentations
+application/vnd.ms-powerpoint; open %s; nametemplate=%s.ppt; x-neomutt-keep;
+application/vnd.openxmlformats-officedocument.presentationml.template; open %s; nametemplate=%s.potx; x-neomutt-keep;
+application/vnd.openxmlformats-officedocument.presentationml.slideshow; open %s; nametemplate=%s.ppsx; x-neomutt-keep;
+application/vnd.openxmlformats-officedocument.presentationml.presentation; open %s; nametemplate=%s.pptx; x-neomutt-keep;
+# PPTX paragraphs can exceed --columns; let NeoMutt wrap the preview.
+application/vnd.openxmlformats-officedocument.presentationml.presentation; pandoc --from=pptx --to=plain --columns=80 %s; copiousoutput;
+application/vnd.openxmlformats-officedocument.presentationml.slide; open %s; nametemplate=%s.sldx; x-neomutt-keep;
+application/vnd.oasis.opendocument.presentation; open %s; nametemplate=%s.odp; x-neomutt-keep;
+
+# Images: explicit extensions for common types, then a fallback for other images.
+image/jpeg; open %s; nametemplate=%s.jpg; x-neomutt-keep;
+image/pjpeg; open %s; nametemplate=%s.jpg; x-neomutt-keep;
+image/png; open %s; nametemplate=%s.png; x-neomutt-keep;
+image/gif; open %s; nametemplate=%s.gif; x-neomutt-keep;
+image/tiff; open %s; nametemplate=%s.tiff; x-neomutt-keep;
+image/bmp; open %s; nametemplate=%s.bmp; x-neomutt-keep;
+image/webp; open %s; nametemplate=%s.webp; x-neomutt-keep;
+image/heic; open %s; nametemplate=%s.heic; x-neomutt-keep;
+image/heif; open %s; nametemplate=%s.heif; x-neomutt-keep;
+image/avif; open %s; nametemplate=%s.avif; x-neomutt-keep;
+image/svg+xml; open %s; nametemplate=%s.svg; x-neomutt-keep;
+# Other image types rely on the sender's filename for their extension.
+image/*; open %s; x-neomutt-keep;
+
+# Calendar
+text/ics; open -a Calendar %s; nametemplate=%s.ics; x-neomutt-keep;
+text/calendar; open -a Calendar %s; nametemplate=%s.ics; x-neomutt-keep;
+application/ics; open -a Calendar %s; nametemplate=%s.ics; x-neomutt-keep;

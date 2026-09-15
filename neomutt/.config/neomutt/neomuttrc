@@ -18,6 +18,9 @@ set timeout = 30
 
 # Attachments
 set mailcap_path = ~/.config/neomutt/mailcap
+# P previews HTML/PDF and supported Office formats; other types are raw text.
+# m opens the graphical viewer.
+bind attach P view-pager
 
 # Sort preferences
 set sort=threads
