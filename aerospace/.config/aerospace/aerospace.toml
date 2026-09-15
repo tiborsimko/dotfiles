@@ -90,31 +90,31 @@ alt-shift-7 = ['move-node-to-workspace 7', 'workspace 7']
 alt-shift-8 = ['move-node-to-workspace 8', 'workspace 8']
 alt-shift-9 = ['move-node-to-workspace 9', 'workspace 9']
 
-# App mode: focus an existing app or cycle the current app's windows, then exit.
+# App mode: focus or launch an app, or cycle the current app's windows, then exit.
 [mode.apps.binding]
 esc = 'mode main'
 alt-g = 'mode main'
 b = [
-  'exec-and-forget ~/.config/aerospace/focus-app.sh --prefer-title "Google Chrome – work" "Google Chrome"',
+  'exec-and-forget ~/.config/aerospace/focus-app.sh --activate --prefer-title "Google Chrome – work" "Google Chrome"',
   'mode main',
 ]
-c = ['exec-and-forget ~/.config/aerospace/focus-app.sh Calendar', 'mode main']
-f = ['exec-and-forget ~/.config/aerospace/focus-app.sh Finder', 'mode main']
-m = ['exec-and-forget ~/.config/aerospace/focus-app.sh Mattermost', 'mode main']
+c = ['exec-and-forget ~/.config/aerospace/focus-app.sh --activate Calendar', 'mode main']
+f = ['exec-and-forget ~/.config/aerospace/focus-app.sh --activate Finder', 'mode main']
+m = ['exec-and-forget ~/.config/aerospace/focus-app.sh --activate Mattermost', 'mode main']
 n = [
   'exec-and-forget ~/.config/aerospace/focus-next-window.sh',
   'mode main',
 ]
-s = ['exec-and-forget ~/.config/aerospace/focus-app.sh Slack', 'mode main']
-t = ['exec-and-forget ~/.config/aerospace/focus-app.sh Alacritty', 'mode main']
+s = ['exec-and-forget ~/.config/aerospace/focus-app.sh --activate Slack', 'mode main']
+t = ['exec-and-forget ~/.config/aerospace/focus-app.sh --activate Alacritty', 'mode main']
 w = [
-  'exec-and-forget ~/.config/aerospace/focus-app.sh "WhatsApp Web"',
+  'exec-and-forget ~/.config/aerospace/focus-app.sh --activate "WhatsApp Web"',
   'mode main',
 ]
-x = ['exec-and-forget ~/.config/aerospace/focus-app.sh X', 'mode main']
-y = ['exec-and-forget ~/.config/aerospace/focus-app.sh YouTube', 'mode main']
+x = ['exec-and-forget ~/.config/aerospace/focus-app.sh --activate X', 'mode main']
+y = ['exec-and-forget ~/.config/aerospace/focus-app.sh --activate YouTube', 'mode main']
 z = [
-  'exec-and-forget ~/.config/aerospace/focus-app.sh --prefer-title "Zoom Meeting" Zoom',
+  'exec-and-forget ~/.config/aerospace/focus-app.sh --activate --prefer-title "Zoom Meeting" Zoom',
   'mode main',
 ]
 

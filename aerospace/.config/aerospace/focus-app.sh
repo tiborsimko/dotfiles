@@ -4,9 +4,7 @@
 # workspace, then falls back to any workspace. Within each search,
 # --prefer-title puts matching windows first without excluding the others.
 #
-# With --activate, a running app without a managed window is asked to open one.
-# This is reserved for callers such as bounce-cmd-p.sh; direct app shortcuts
-# intentionally do nothing when no window exists.
+# With --activate, an app without a managed window is activated or launched.
 #
 # Usage: focus-app.sh [--activate] [--prefer-title <substring>] <app-name>
 #
@@ -60,7 +58,6 @@ fi
 
 if [ -n "$WINDOW_ID" ]; then
     aerospace focus --window-id "$WINDOW_ID"
-elif [ "$ACTIVATE" = true ] && aerospace list-apps | grep -q " | $APP_NAME\$"; then
-    # Running but windowless: ask it to open one (bounce-cmd-p.sh only).
+elif [ "$ACTIVATE" = true ]; then
     open -a "$APP_NAME"
 fi

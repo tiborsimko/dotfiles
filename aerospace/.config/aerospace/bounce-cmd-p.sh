@@ -18,6 +18,7 @@ if [ "$TERMINAL_APP" = "$TERMINAL_BINDING" ]; then
 fi
 
 TERMINAL_APP=${TERMINAL_APP%%;*}
+TERMINAL_APP=${TERMINAL_APP##* }
 
 case "$TERMINAL_APP" in
     '' | *[!A-Za-z0-9._-]*)
