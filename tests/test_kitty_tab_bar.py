@@ -5,10 +5,11 @@ import json
 import sys
 from pathlib import Path
 from types import SimpleNamespace
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
+from kitty.boss import Boss
 from kitty.config import load_config
-from kitty.fast_data_types import DECAWM, set_options, wcswidth
+from kitty.fast_data_types import DECAWM, get_options, set_options, wcswidth
 
 from kitty import tab_bar as native
 
@@ -179,17 +180,19 @@ def test_rendering():
         assert directory in wide_row, wide_row
     assert "…" not in wide_row, wide_row
     tabs.append(tab(5, "/projects/reana-workflow-controller", ["nvim"]))
+    # Leave room for the fixed traffic-light/session prefix and five tabs.
     for active in range(5):
-        row = render(tabs, 90, active)
+        row = render(tabs, 95, active)
     print("Five tabs:", row)
 
 
 def test_session_prefix_width():
-    for alerts, mode, prefix in (
-        ((), "", "[reana] "),
-        (("mail", "task"), "", "[reana mail! task!] "),
-        ((), "resize", "[reana] RESIZE-MODE "),
-        (("mail",), "resize", "[reana mail!] RESIZE-MODE "),
+    for active_session, alerts, mode, prefix in (
+        ("reana", (), "", " ⬤ ⬤ ⬤ [reana] "),
+        ("reana", ("mail", "task"), "", " ⬤ ⬤ ⬤ [reana mail! task!] "),
+        ("reana", (), "resize", " ⬤ ⬤ ⬤ [reana] RESIZE-MODE "),
+        ("reana", ("mail",), "resize", " ⬤ ⬤ ⬤ [reana mail!] RESIZE-MODE "),
+        ("", (), "", " ⬤ ⬤ ⬤ "),
     ):
         tabs = [tab(1, "/projects/reana", ["nvim"], name="long title " * 10)]
         for tab_id, session in enumerate(alerts, 2):
@@ -206,7 +209,7 @@ def test_session_prefix_width():
             tab_id=1,
             os_window_id=1,
             is_active=True,
-            active_session_name="reana",
+            active_session_name=active_session,
         )
         with (
             patch.object(labels, "get_boss", return_value=boss),
@@ -230,12 +233,171 @@ def test_session_prefix_width():
         assert end == 80 and row.endswith("…*"), row
 
 
+def test_window_focus():
+    original_options = get_options()
+    try:
+        for theme in ("light", "dark"):
+            options = load_config(
+                str(ROOT / "kitty/.config/kitty/kitty.conf"),
+                str(ROOT / f"kitty/.config/kitty/themes/theme-{theme}.conf"),
+            )
+            set_options(options)
+            first = tab(1, "/projects/reana", ["nvim"])
+            second = tab(2, "/projects/reana", ["nvim"])
+            second.os_window_id = 2
+            boss = boss_for([first])
+            boss.os_window_map[2] = boss_for([second]).os_window_map[1]
+            boss.tab_for_id = {1: first, 2: second}.get
+            bars = {}
+            with (
+                patch.object(labels, "get_boss", return_value=boss),
+                patch.object(native, "get_boss", return_value=boss),
+                patch.object(native, "load_custom_draw_title", return_value=""),
+                patch.object(
+                    labels, "current_focused_os_window_id", return_value=0
+                ) as focused_window,
+            ):
+                for window_id, manager in boss.os_window_map.items():
+                    bar = bars[window_id] = native.TabBar(window_id)
+                    bar.laid_out_once = True
+                    bar.screen.resize(1, 40)
+                    bar.screen.reset_mode(DECAWM)
+                    bar.draw_func = labels.draw_tab
+                    bar._update_edge_defaults = lambda _: False
+                    data = native.TabBarData(
+                        title="fallback",
+                        tab_id=window_id,
+                        os_window_id=window_id,
+                        is_active=True,
+                        active_session_name="reana",
+                    )
+                    # Use Kitty's focus callback, rendering synchronously when
+                    # it requests a redraw. No terminal output drives updates.
+                    manager.active_window = None
+                    manager.mark_tab_bar_dirty = Mock(
+                        side_effect=lambda bar=bar, data=data: bar.update([data])
+                    )
+                    bar.update([data])
+
+                previous = 0
+                for focused_id in (1, 0, 2, 1):
+                    focused_window.return_value = focused_id
+                    if previous:
+                        Boss.on_focus(boss, previous, False)
+                    if focused_id:
+                        Boss.on_focus(boss, focused_id, True)
+                    previous = focused_id
+                    for window_id, bar in bars.items():
+                        focused = window_id == focused_id
+                        line = bar.screen.line(0)
+                        # Both OS windows retain an active tab; only one (or
+                        # neither, when another app is focused) gets colours.
+                        assert str(line).rstrip() == " ⬤ ⬤ ⬤ [reana] 1:@nvim*"
+                        colors = (
+                            (0xFF5F57, 0xFEBC2E, 0x28C840)
+                            if focused
+                            else (int(options.color8),) * 3
+                        )
+                        for position, color in zip((1, 3, 5), colors):
+                            circle = line.cursor_from(position)
+                            assert circle.fg == native.as_rgb(color)
+                            assert not circle.bold
+                        # The indicator must not leak its colour or style.
+                        title = line.cursor_from(wcswidth(" ⬤ ⬤ ⬤ [reana] "))
+                        assert title.fg == native.as_rgb(
+                            int(options.active_tab_foreground)
+                            if focused
+                            else int(options.color8)
+                        )
+                        assert title.bold
+                        assert (
+                            bar.screen.color_profile.default_bg
+                            == options.tab_bar_background
+                        )
+                        assert title.bg == native.as_rgb(
+                            int(options.active_tab_background)
+                        )
+    finally:
+        set_options(original_options)
+
+
+def test_unfocused_foreground():
+    original_options = get_options()
+    try:
+        for theme in ("light", "dark"):
+            set_options(
+                load_config(
+                    str(ROOT / "kitty/.config/kitty/kitty.conf"),
+                    str(ROOT / f"kitty/.config/kitty/themes/theme-{theme}.conf"),
+                )
+            )
+            tabs = [tab(i, "/projects/reana", ["nvim"]) for i in (1, 2, 3)]
+            mail = tab(4, "/mail", ["neomutt"], session="mail")
+            mail.active_window.needs_attention = True
+            boss = boss_for([*tabs, mail])
+            boss.mappings.current_keyboard_mode_name = "resize"
+            data = [
+                native.TabBarData(
+                    title="fallback",
+                    tab_id=t.id,
+                    os_window_id=1,
+                    is_active=t.id == 1,
+                    needs_attention=t.id == 2,
+                    active_session_name="reana",
+                )
+                for t in tabs
+            ]
+            bar = native.TabBar(1)
+            bar.laid_out_once = True
+            bar.screen.resize(1, 160)
+            bar.screen.reset_mode(DECAWM)
+            bar.draw_func = labels.draw_tab
+            bar._update_edge_defaults = lambda _: False
+            snapshots = []
+            with (
+                patch.object(labels, "get_boss", return_value=boss),
+                patch.object(native, "get_boss", return_value=boss),
+                patch.object(native, "load_custom_draw_title", return_value=""),
+                patch.object(labels, "current_focused_os_window_id") as focus,
+            ):
+                for focused_id in (1, 0, 1):
+                    focus.return_value = focused_id
+                    bar.update(data)
+                    line = bar.screen.line(0)
+                    row = str(line)
+                    cells = [line.cursor_from(i) for i in range(bar.screen.columns)]
+                    snapshots.append(
+                        (
+                            row,
+                            [(c.fg, c.bg) for c in cells],
+                            bar.screen.color_profile.default_bg,
+                        )
+                    )
+                    if not focused_id:
+                        for text in ("reana", "RESIZE-MODE", "1:@nvim", "3:@nvim"):
+                            assert cells[row.index(text)].fg == native.as_rgb(
+                                int(get_options().color8)
+                            )
+                    assert "mail!" in row and "2:@nvim!" in row, row
+            # Focus loss changes only foregrounds, including with inverted
+            # alerts, mode labels, separators and blank cells after the tabs.
+            assert snapshots[0][0] == snapshots[1][0]
+            assert [bg for fg, bg in snapshots[0][1]] == [
+                bg for fg, bg in snapshots[1][1]
+            ]
+            assert snapshots[0][2] == snapshots[1][2]
+            assert snapshots[2] == snapshots[0]
+    finally:
+        set_options(original_options)
+
+
 def test_renderer_fallback():
     boss = boss_for([tab(1, "/projects/reana", ["nvim"], name="long title " * 10)])
     # Fail both early and late in preparation, including the shortening path.
     # Each case must leave an intact standard title with no partial prefix.
     for owner, attribute in (
         (labels, "get_boss"),
+        (labels, "current_focused_os_window_id"),
         (labels, "wcswidth"),
         (labels, "truncate_point_for_length"),
         (native.TabBarData, "_replace"),
@@ -268,9 +430,14 @@ if __name__ == "__main__" and not __debug__:
 elif __name__ == "__main__":
     set_options(load_config(str(ROOT / "kitty/.config/kitty/kitty.conf")))
     # The helper deliberately precedes the leader in every foreground group.
-    with patch.object(labels.os, "getpgid", side_effect=lambda pid: 20):
+    with (
+        patch.object(labels.os, "getpgid", side_effect=lambda pid: 20),
+        patch.object(labels, "current_focused_os_window_id", return_value=1),
+    ):
         test_names_and_labels()
         test_rendering()
         test_session_prefix_width()
+        test_window_focus()
+        test_unfocused_foreground()
         test_renderer_fallback()
     print("Kitty tab labels and rendering: OK")

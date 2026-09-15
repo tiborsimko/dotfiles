@@ -1,4 +1,4 @@
-"""Render a Tmux-like tab bar with a fixed session name at the left edge.
+"""Render a Tmux-like tab bar with OS focus and a session name at the left edge.
 
 Cross-session alerts and focus history require undocumented Kitty internals.
 If those change after an upgrade, draw_tab falls back to the standard renderer.
@@ -23,9 +23,13 @@ from kitty.tab_bar import (
 )
 
 try:
-    from kitty.fast_data_types import get_boss
+    from kitty.fast_data_types import current_focused_os_window_id, get_boss
 except ImportError:  # Keep the standard tab bar usable after a Kitty API change.
+    current_focused_os_window_id = None
     get_boss = None
+
+# The following space lets Kitty render the larger glyph across two cells.
+FOCUS_CIRCLE = "⬤ "
 
 
 def foreground_process_group_leader(tab):
@@ -146,13 +150,15 @@ def draw_session_status(
     active_session: str,
     alerting_sessions: tuple[str, ...],
     keyboard_mode: str,
+    mode_foreground: int,
+    alert_background: int,
 ) -> None:
     """Draw the active session, keyboard mode, and reverse-colour alerts."""
     screen.draw(f"[{active_session}")
     foreground, background = screen.cursor.fg, screen.cursor.bg
     for session_name in alerting_sessions:
         screen.draw(" ")
-        screen.cursor.fg, screen.cursor.bg = background, foreground
+        screen.cursor.fg, screen.cursor.bg = background, alert_background
         try:
             screen.draw(f"{session_name}!")
         finally:
@@ -160,7 +166,7 @@ def draw_session_status(
     screen.draw("]")
     if keyboard_mode:
         foreground = screen.cursor.fg
-        screen.cursor.fg = as_rgb(color_as_int(get_options().color9))
+        screen.cursor.fg = mode_foreground
         try:
             screen.draw(f" {keyboard_mode.upper()}-MODE")
         finally:
@@ -174,6 +180,17 @@ def current_keyboard_mode_name() -> str:
         raise RuntimeError("Kitty internals are unavailable")
     mode_name = get_boss().mappings.current_keyboard_mode_name or ""
     return "" if mode_name.startswith("__") else mode_name
+
+
+def window_has_focus(os_window_id: int) -> bool:
+    """Use actual OS focus, which can be absent while a tab remains active.
+
+    Kitty's Boss.on_focus already marks the affected tab bar dirty, so the
+    indicator updates even when nothing is happening in the terminal.
+    """
+    if current_focused_os_window_id is None:
+        raise RuntimeError("Kitty focus state is unavailable")
+    return current_focused_os_window_id() == os_window_id
 
 
 def last_focused_tab_id(tab: TabBarData) -> int | None:
@@ -214,15 +231,36 @@ def draw_tab(
         active_session_name = tab.active_session_name
         alerting_sessions = alerting_session_names(tab) if index == 1 else ()
         keyboard_mode = current_keyboard_mode_name() if index == 1 else ""
+        focused = window_has_focus(tab.os_window_id)
+        options = get_options()
+        # Use macOS-like colours when focused and the theme's grey otherwise.
+        colors = (
+            (0xFF5F57, 0xFEBC2E, 0x28C840) if focused else (int(options.color8),) * 3
+        )
+        focus_colors = tuple(as_rgb(color) for color in colors) if index == 1 else ()
+        default_fg = draw_data.inactive_fg
+        foreground, background = (
+            as_rgb(draw_data.tab_fg(tab)),
+            as_rgb(draw_data.tab_bg(tab)),
+        )
+        alert_background = foreground
+        mode_foreground = as_rgb(color_as_int(options.color9))
+        if not focused:
+            # Only the foreground changes, during existing redraws; no timer.
+            default_fg = options.color8
+            foreground = as_rgb(int(default_fg))
+            mode_foreground = foreground
         previous_tab_id = last_focused_tab_id(tab)
         zoom_marker = (
             "Z" if tab.layout_name == "stack" and tab.num_window_groups > 1 else ""
         )
         label = draw_title({"title": tab.title, "tab_id": tab.tab_id})
         show_session = index == 1 and bool(active_session_name)
-        prefix_width = 0
+        prefix_width = (
+            wcswidth(" " + FOCUS_CIRCLE * len(focus_colors)) if focus_colors else 0
+        )
         if show_session:
-            prefix_width = wcswidth(f"[{active_session_name}] ")
+            prefix_width += wcswidth(f"[{active_session_name}] ")
             prefix_width += sum(wcswidth(f" {name}!") for name in alerting_sessions)
             if keyboard_mode:
                 prefix_width += wcswidth(f" {keyboard_mode.upper()}-MODE")
@@ -236,6 +274,14 @@ def draw_tab(
             marker = ""
         alert_marker = "!" if tab.needs_attention else ""
         markers = marker + alert_marker + zoom_marker
+        # Keep the index and markers when the fixed prefix consumes most of
+        # the first tab's allocation. Kitty handles overflow of later tabs.
+        render_max_tab_length = max(
+            render_max_tab_length,
+            wcswidth(f"{index}:{markers}")
+            + draw_data.leading_spaces
+            + draw_data.trailing_spaces,
+        )
         title_width = (
             render_max_tab_length
             - draw_data.leading_spaces
@@ -266,20 +312,33 @@ def draw_tab(
             extra_data,
         )
 
-    if show_session:
+    screen.cursor.fg, screen.cursor.bg = foreground, background
+    if index == 1:
+        # Keep default-coloured separators consistent with the tab text.
+        if screen.color_profile.default_fg != default_fg:
+            screen.color_profile.default_fg = default_fg
         tab_font_style = screen.cursor.bold, screen.cursor.italic
         screen.cursor.bold = screen.cursor.italic = False
-        draw_session_status(
-            screen,
-            active_session_name,
-            alerting_sessions,
-            keyboard_mode,
-        )
+        foreground = screen.cursor.fg
+        screen.draw(" ")
+        for color in focus_colors:
+            screen.cursor.fg = color
+            screen.draw(FOCUS_CIRCLE)
+        screen.cursor.fg = foreground
+        if show_session:
+            draw_session_status(
+                screen,
+                active_session_name,
+                alerting_sessions,
+                keyboard_mode,
+                mode_foreground,
+                alert_background,
+            )
         screen.cursor.bold, screen.cursor.italic = tab_font_style
         before = screen.cursor.x
     foreground, background = screen.cursor.fg, screen.cursor.bg
     if tab.needs_attention:
-        screen.cursor.fg, screen.cursor.bg = background, foreground
+        screen.cursor.fg, screen.cursor.bg = background, alert_background
     try:
         return draw_tab_with_separator(
             render_data,
