@@ -101,6 +101,7 @@ packages=(
   inputrc
   journal
   karabiner
+  kitty
   lazygit
   mbsync
   mimeapps

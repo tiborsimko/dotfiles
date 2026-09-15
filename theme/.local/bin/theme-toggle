@@ -25,6 +25,7 @@ esac
 
 source_alacritty="$config_home/alacritty/theme-$to.toml"
 source_ghostty="$config_home/ghostty/themes/theme-$to"
+source_kitty="$config_home/kitty/themes/theme-$to.conf"
 source_neomutt="$config_home/neomutt/theme-$to"
 source_tmux="$config_home/tmux/theme-$to.conf"
 config_alacritty="$config_home/alacritty/alacritty.toml"
@@ -36,6 +37,11 @@ ghostty_enabled=0
 if [[ -f "$source_ghostty" ]]; then
   sources+=("$source_ghostty")
   ghostty_enabled=1
+fi
+kitty_enabled=0
+if [[ -f "$source_kitty" ]]; then
+  sources+=("$source_kitty")
+  kitty_enabled=1
 fi
 for source_file in "${sources[@]}"; do
   if [[ ! -f "$source_file" ]]; then
@@ -51,6 +57,9 @@ mkdir -p \
   "$config_home/tmux"
 if ((ghostty_enabled)); then
   mkdir -p "$config_home/ghostty/themes"
+fi
+if ((kitty_enabled)); then
+  mkdir -p "$config_home/kitty/themes"
 fi
 
 temporary_files=()
@@ -114,6 +123,9 @@ stage_link "theme-$to.toml" "$config_home/alacritty/theme-current.toml"
 if ((ghostty_enabled)); then
   stage_copy "$source_ghostty" "$config_home/ghostty/themes/theme-current"
 fi
+if ((kitty_enabled)); then
+  stage_copy "$source_kitty" "$config_home/kitty/themes/theme-current.conf"
+fi
 stage_link "theme-$to" "$config_home/neomutt/theme-current"
 stage_link "theme-$to.conf" "$config_home/tmux/theme-current.conf"
 if [[ -f "$config_codex" ]]; then
@@ -136,6 +148,12 @@ touch "$config_alacritty"
 # instance without activating the app or requiring macOS Automation access.
 if ((ghostty_enabled)) && command -v pkill &>/dev/null; then
   pkill -USR2 -x ghostty 2>/dev/null || true
+fi
+
+# Kitty reloads its configuration on SIGUSR1. The signal also covers the first
+# toggle, when auto-reload could not yet watch the absent theme-current file.
+if ((kitty_enabled)) && command -v pkill &>/dev/null; then
+  pkill -USR1 -x kitty 2>/dev/null || true
 fi
 
 # Reload tmux configuration if tmux is running
