@@ -44,11 +44,11 @@ outer.top = 0
 outer.right = 0
 
 # Alt owns the AeroSpace keyspace. Digits address workspaces, HJKL address
-# directions, Shift+letters address applications, and Space enters service mode.
+# directions, G enters app mode, and Space enters service mode.
 [mode.main.binding]
 
-# Enter service mode for layout, window-state, picker, task capture, and
-# multi-monitor actions.
+# Enter app-jumping and service modes.
+alt-g = 'mode apps'
 alt-space = 'mode service'
 
 # Focus neighbour (wraps at workspace edges)
@@ -90,18 +90,33 @@ alt-shift-7 = ['move-node-to-workspace 7', 'workspace 7']
 alt-shift-8 = ['move-node-to-workspace 8', 'workspace 8']
 alt-shift-9 = ['move-node-to-workspace 9', 'workspace 9']
 
-# Focus an existing app wherever it is; absent apps are not launched.
-# H/J/K/L stay reserved for directional focus and movement.
-alt-shift-b = 'exec-and-forget ~/.config/aerospace/focus-app.sh --prefer-title "Google Chrome – work" "Google Chrome"'
-alt-shift-c = 'exec-and-forget ~/.config/aerospace/focus-app.sh Calendar'
-alt-shift-f = 'exec-and-forget ~/.config/aerospace/focus-app.sh Finder'
-alt-shift-m = 'exec-and-forget ~/.config/aerospace/focus-app.sh Mattermost'
-alt-shift-s = 'exec-and-forget ~/.config/aerospace/focus-app.sh Slack'
-alt-shift-t = 'exec-and-forget ~/.config/aerospace/focus-app.sh Alacritty'
-alt-shift-w = 'exec-and-forget ~/.config/aerospace/focus-app.sh "WhatsApp Web"'
-alt-shift-x = 'exec-and-forget ~/.config/aerospace/focus-app.sh X'
-alt-shift-y = 'exec-and-forget ~/.config/aerospace/focus-app.sh YouTube'
-alt-shift-z = 'exec-and-forget ~/.config/aerospace/focus-app.sh --prefer-title "Zoom Meeting" Zoom'
+# App mode: focus an existing app or cycle the current app's windows, then exit.
+[mode.apps.binding]
+esc = 'mode main'
+alt-g = 'mode main'
+b = [
+  'exec-and-forget ~/.config/aerospace/focus-app.sh --prefer-title "Google Chrome – work" "Google Chrome"',
+  'mode main',
+]
+c = ['exec-and-forget ~/.config/aerospace/focus-app.sh Calendar', 'mode main']
+f = ['exec-and-forget ~/.config/aerospace/focus-app.sh Finder', 'mode main']
+m = ['exec-and-forget ~/.config/aerospace/focus-app.sh Mattermost', 'mode main']
+n = [
+  'exec-and-forget ~/.config/aerospace/focus-next-window.sh',
+  'mode main',
+]
+s = ['exec-and-forget ~/.config/aerospace/focus-app.sh Slack', 'mode main']
+t = ['exec-and-forget ~/.config/aerospace/focus-app.sh Alacritty', 'mode main']
+w = [
+  'exec-and-forget ~/.config/aerospace/focus-app.sh "WhatsApp Web"',
+  'mode main',
+]
+x = ['exec-and-forget ~/.config/aerospace/focus-app.sh X', 'mode main']
+y = ['exec-and-forget ~/.config/aerospace/focus-app.sh YouTube', 'mode main']
+z = [
+  'exec-and-forget ~/.config/aerospace/focus-app.sh --prefer-title "Zoom Meeting" Zoom',
+  'mode main',
+]
 
 # Service mode: entered with Alt-Space; most single-key actions auto-exit.
 # Volume up/down remain in service mode so they can be repeated.
@@ -129,7 +144,6 @@ g = [
   'exec-and-forget osascript -e "tell application \"System Events\" to key code 48 using {option down}"',
   'mode main',
 ] # Raycast app/window picker
-n = ['exec-and-forget ~/.config/aerospace/focus-next-window.sh', 'mode main'] # cycle windows of focused app globally
 
 # Multi-monitor
 o = ['move-workspace-to-monitor --wrap-around next', 'mode main']
