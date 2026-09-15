@@ -10,7 +10,7 @@ Personal configuration for my development environment, managed with
 - **Prompt:** Starship
 - **Runtime manager:** Mise
 - **Shell:** Zsh
-- **Terminal:** Alacritty
+- **Terminal:** Ghostty
 - **Theme:** Gruvbox
 - **Window manager:** i3 (Linux); AeroSpace (macOS)
 

@@ -111,7 +111,7 @@ n = [
   'mode main',
 ]
 s = ['exec-and-forget ~/.config/aerospace/focus-app.sh --activate Slack', 'mode main']
-t = ['exec-and-forget ~/.config/aerospace/focus-app.sh --activate Alacritty', 'mode main']
+t = ['exec-and-forget ~/.config/aerospace/focus-app.sh --activate Ghostty', 'mode main']
 w = [
   'exec-and-forget ~/.config/aerospace/focus-app.sh --activate "WhatsApp Web"',
   'mode main',
