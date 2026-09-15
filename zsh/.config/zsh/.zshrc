@@ -298,30 +298,6 @@ compdef _k9s_lazy_completion k9s
 
 alias rg='command rg --line-number --with-filename --no-heading --hidden --glob "!.git/"'
 
-
-# ff = fuzzy file (and edit)
-ff() {
-    IFS=$'\n' files=($(fzf-tmux --query="$1" --multi --select-1 --exit-0))
-    [[ -n "$files" ]] && $=EDITOR "${files[@]}"
-}
-
-# fs = fuzzy search (string and edit matching files)
-fs() {
-    local file
-    local line
-    read -r file line <<<"$(ag --nobreak --noheading $@ | fzf -0 -1 | awk -F: '{print $1, $2}')"
-    if [[ -n $file ]]; then
-        $=EDITOR $file +$line
-    fi
-}
-
-# fv = fuzzy view (of a string in files)
-fv() {
-    if [ ! "$#" -gt 0 ]; then echo "Need a string to search for!"; return 1; fi
-    local file
-    file="$(rg --max-count=1 --ignore-case --files-with-matches --no-messages "$@" | fzf-tmux +m --preview="rg --ignore-case --pretty --context 10 '"$@"' {}")" && ${OPENER} "$file"
-}
-
 # Virtualenv helpers (replacing virtualenvwrapper)
 workon() { source ~/.virtualenvs/${1}/bin/activate }
 mkvirtualenv() {
