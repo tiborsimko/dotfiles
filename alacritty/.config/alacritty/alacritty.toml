@@ -271,10 +271,10 @@ shape = "Beam"
 save_to_clipboard = true
 
 [window]
-decorations = "Transparent"
+decorations = "None"
 dynamic_padding = true
 option_as_alt = "Both"
 
 [window.padding]
-y = 1
-x = 1
+y = 4
+x = 4
