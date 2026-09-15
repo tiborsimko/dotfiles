@@ -359,6 +359,7 @@ set_terminal_window_title() {
     fi
 }
 
+# Show the current directory in the title before each prompt
 typeset -ga precmd_functions
 precmd_functions+=(set_terminal_window_title)
 
@@ -373,9 +374,13 @@ _vi_cursor_shape() {
         main|viins|*) echo -ne '\e[6 q' ;;
     esac
 }
-zle -N zle-keymap-select _vi_cursor_shape
-zle -N zle-line-init _vi_cursor_shape
 
+# Compose cursor updates with Starship's vi-mode prompt hook
+autoload -Uz add-zle-hook-widget
+add-zle-hook-widget keymap-select _vi_cursor_shape
+add-zle-hook-widget line-init _vi_cursor_shape
+
+# Show the running command in the title before execution
 typeset -ga preexec_functions
 preexec_functions+=(set_terminal_window_title)
 
