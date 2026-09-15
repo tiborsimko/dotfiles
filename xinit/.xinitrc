@@ -18,7 +18,7 @@ xsetroot -cursor_name left_ptr
 # Fix Java app troubles in tiling WMs
 export _JAVA_AWT_WM_NONREPARENTING=1
 
-# Do not scale out Alacritty fonts for different DPI external monitors
+# Keep terminal font scaling fixed across monitors with different DPI
 export WINIT_X11_SCALE_FACTOR=1
 
 # Hide mouse when not active

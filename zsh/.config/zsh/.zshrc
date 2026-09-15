@@ -147,7 +147,7 @@ bindkey -M vicmd 'v'    edit-command-line
 bindkey -M vicmd 'k' history-beginning-search-backward
 bindkey -M vicmd 'j' history-beginning-search-forward
 
-# Treat Alacritty Shift+Return (ESC CR) as normal Enter at the shell prompt.
+# Treat legacy Shift+Return (ESC CR) as normal Enter at the shell prompt.
 # The abbreviation widget below later wraps this to expand before accepting.
 bindkey '^[^M' accept-line
 

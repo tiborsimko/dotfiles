@@ -49,7 +49,7 @@
                         ]
                     },
                     {
-                        "description": "Bounce Cmd+P to Alacritty outside supported terminals",
+                        "description": "Bounce Cmd+P to the default terminal outside supported terminals",
                         "manipulators": [
                             {
                                 "conditions": [

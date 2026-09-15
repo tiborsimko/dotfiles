@@ -15,6 +15,7 @@ shell = { program = "/bin/zsh", args = [
   "exec env -u TMUX tmux new-session \\; set-option @alacritty-auto 1",
 ] }
 
+# Set terminal font.
 [font]
 size = 18
 # normal = { family = "JetBrainsMono Nerd Font", style = "Medium" }

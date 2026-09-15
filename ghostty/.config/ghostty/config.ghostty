@@ -1,14 +1,14 @@
 # Tibor's Ghostty configuration.
 
 # Start every OS window as a Tmux client. Unset TMUX so Cmd-N also works when
-# invoked from a Ghostty window that is already attached to Tmux.
+# invoked from a window that is already attached to Tmux.
 command = /bin/zsh -l -c "exec env -u TMUX tmux new-session"
 shell-integration = none
 
 env = LANG=en_GB.UTF-8
 env = LC_ALL=en_GB.UTF-8
 
-# Match the Alacritty typography and window treatment.
+# Set terminal font.
 font-family = Iosevka Term
 font-style = Regular
 font-style-bold = Bold

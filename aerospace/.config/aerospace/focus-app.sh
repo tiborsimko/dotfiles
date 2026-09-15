@@ -10,7 +10,7 @@
 #
 # Usage: focus-app.sh [--activate] [--prefer-title <substring>] <app-name>
 #
-# Example: focus-app.sh Alacritty
+# Example: focus-app.sh Firefox
 
 ACTIVATE=false
 PREFER_TITLE=""

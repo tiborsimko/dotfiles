@@ -11,5 +11,5 @@ set editing-mode emacs
 "\e[A": history-search-backward
 "\e[B": history-search-forward
 
-# Treat Alacritty Shift+Return (ESC CR) as normal Enter in readline apps
+# Treat legacy Shift+Return (ESC CR) as normal Enter in readline apps
 "\e\C-m": accept-line
