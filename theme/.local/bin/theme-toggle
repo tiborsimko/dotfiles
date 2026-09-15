@@ -24,6 +24,7 @@ case "$from" in
 esac
 
 source_alacritty="$config_home/alacritty/theme-$to.toml"
+source_ghostty="$config_home/ghostty/themes/theme-$to"
 source_neomutt="$config_home/neomutt/theme-$to"
 source_tmux="$config_home/tmux/theme-$to.conf"
 config_alacritty="$config_home/alacritty/alacritty.toml"
@@ -31,6 +32,11 @@ config_codex="$HOME/.codex/config.toml"
 codex_theme="gruvbox-$to"
 
 sources=("$source_alacritty" "$source_neomutt" "$source_tmux" "$config_alacritty")
+ghostty_enabled=0
+if [[ -f "$source_ghostty" ]]; then
+  sources+=("$source_ghostty")
+  ghostty_enabled=1
+fi
 for source_file in "${sources[@]}"; do
   if [[ ! -f "$source_file" ]]; then
     echo "theme-toggle: missing theme: $source_file" >&2
@@ -43,6 +49,9 @@ mkdir -p \
   "$config_home/alacritty" \
   "$config_home/neomutt" \
   "$config_home/tmux"
+if ((ghostty_enabled)); then
+  mkdir -p "$config_home/ghostty/themes"
+fi
 
 temporary_files=()
 destination_files=()
@@ -66,6 +75,17 @@ stage_link() {
   destination_files+=("$destination_file")
 }
 
+stage_copy() {
+  local source_file=$1
+  local destination_file=$2
+  local temporary_file
+
+  temporary_file=$(mktemp "$destination_file.tmp.XXXXXX")
+  temporary_files+=("$temporary_file")
+  cp "$source_file" "$temporary_file"
+  destination_files+=("$destination_file")
+}
+
 stage_mode() {
   local temporary_file
 
@@ -86,9 +106,14 @@ stage_codex_config() {
   destination_files+=("$config_codex")
 }
 
-# Prepare every new link before replacing any current state. Relative targets
-# keep tracked theme edits live, while the mode file acts as the commit marker.
+# Prepare every replacement before changing any current state. Relative link
+# targets keep tracked theme edits live, while the mode file acts as the commit
+# marker. Ghostty receives a copy because importing a symlink to its already
+# loaded light fallback is treated as a configuration cycle.
 stage_link "theme-$to.toml" "$config_home/alacritty/theme-current.toml"
+if ((ghostty_enabled)); then
+  stage_copy "$source_ghostty" "$config_home/ghostty/themes/theme-current"
+fi
 stage_link "theme-$to" "$config_home/neomutt/theme-current"
 stage_link "theme-$to.conf" "$config_home/tmux/theme-current.conf"
 if [[ -f "$config_codex" ]]; then
@@ -106,6 +131,12 @@ trap - EXIT
 # was loaded. Touching the main config makes the first toggle reload the newly
 # created theme-current.toml without changing tracked file contents.
 touch "$config_alacritty"
+
+# Ghostty 1.2+ reloads its configuration on SIGUSR2. Reload every running
+# instance without activating the app or requiring macOS Automation access.
+if ((ghostty_enabled)) && command -v pkill &>/dev/null; then
+  pkill -USR2 -x ghostty 2>/dev/null || true
+fi
 
 # Reload tmux configuration if tmux is running
 if command -v tmux &>/dev/null && tmux info &>/dev/null 2>&1; then

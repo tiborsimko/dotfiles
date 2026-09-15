@@ -49,13 +49,15 @@
                         ]
                     },
                     {
-                        "description": "Bounce Cmd+P to Alacritty (focus + re-raise) outside Alacritty",
+                        "description": "Bounce Cmd+P to Alacritty outside supported terminals",
                         "manipulators": [
                             {
                                 "conditions": [
                                     {
                                         "bundle_identifiers": [
-                                            "^org\\.alacritty$"
+                                            "^org\\.alacritty$",
+                                            "^net\\.kovidgoyal\\.kitty$",
+                                            "^com\\.mitchellh\\.ghostty$"
                                         ],
                                         "type": "frontmost_application_unless"
                                     }

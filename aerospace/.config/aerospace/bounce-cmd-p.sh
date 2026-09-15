@@ -1,8 +1,8 @@
 #!/bin/bash
 #
 # Focus Alacritty, wait until it's actually frontmost, then synthesize Cmd-P
-# so tmux's session picker fires. Bound from Karabiner so Cmd-P outside
-# Alacritty hops over and triggers it.
+# so tmux's session picker fires. Karabiner invokes this fallback only outside
+# Alacritty, Kitty, and Ghostty; Cmd-P stays local inside each terminal.
 #
 # Usage: bounce-cmd-p.sh
 

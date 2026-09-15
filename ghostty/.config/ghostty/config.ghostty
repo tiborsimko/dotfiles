@@ -1,0 +1,113 @@
+# Tibor's Ghostty configuration.
+
+# Start every OS window as a Tmux client. Unset TMUX so Cmd-N also works when
+# invoked from a Ghostty window that is already attached to Tmux.
+command = /bin/zsh -l -c "exec env -u TMUX tmux new-session"
+shell-integration = none
+
+env = LANG=en_GB.UTF-8
+env = LC_ALL=en_GB.UTF-8
+
+# Match the Alacritty typography and window treatment.
+font-family = Iosevka Term
+font-style = Regular
+font-style-bold = Bold
+font-style-italic = Italic
+font-style-bold-italic = Bold Italic
+font-size = 18
+
+# Disable ligatures.
+font-feature = -calt, -liga, -dlig
+
+# Keep SGR faint text legible while retaining a distinction from normal text.
+faint-opacity = 0.7
+
+cursor-style = bar
+cursor-style-blink = false
+adjust-cursor-thickness = 3
+
+window-padding-x = 4
+window-padding-y = 4
+window-padding-balance = true
+window-padding-color = background
+macos-titlebar-style = hidden
+macos-option-as-alt = true
+
+# Tmux owns persistent layout and session state.
+window-save-state = never
+
+# Guard against closing a window or quitting Ghostty by accident.
+confirm-close-surface = true
+
+# Keep the safe macOS default. For a latency-only A/B test, false removes
+# synchronization but can tear, use more power, and upset some display paths.
+window-vsync = true
+
+# Start with the light palette; theme-toggle installs theme-current and reloads
+# running Ghostty instances.
+config-file = themes/theme-light
+config-file = ?themes/theme-current
+
+# Ghostty's native tabs, splits, search, command palette, and navigation would
+# compete with Tmux. Clear every default binding, then restore only deliberate
+# macOS application actions and Tmux forwarding bindings below.
+keybind = clear
+
+# macOS application and clipboard actions.
+# Keep Cmd-C plain-text-only; Ghostty's default mixed copy also adds HTML.
+keybind = super+c=copy_to_clipboard:plain
+keybind = super+v=paste_from_clipboard
+keybind = super+a=select_all
+keybind = super+n=new_window
+keybind = super+w=close_surface
+keybind = super+q=quit
+keybind = super+shift+,=reload_config
+
+# Shift bypasses Tmux mouse reporting; copy native selections to the clipboard.
+copy-on-select = clipboard
+
+# Detect URLs independently of Tmux. Tmux mouse reporting means Ghostty needs
+# Cmd-Shift-click to open them; prefer terminal-independent Tmux hints instead.
+link-url = true
+link-previews = true
+
+# Font size (Cmd-0 remains reserved for Tmux's alternate window).
+keybind = super+==increase_font_size:1
+keybind = super++=increase_font_size:1
+keybind = super+-=decrease_font_size:1
+keybind = super+shift+0=reset_font_size
+
+# Send a distinct Shift+Return sequence for terminal apps that support
+# modified keys, including Codex's shift-enter keymap.
+keybind = shift+enter=text:\x1b[13;2u
+
+# Tmux sessions and windows. Tmux's prefix is Ctrl-Space (NUL, \x00).
+keybind = super+s=text:\x00s
+keybind = super+p=text:\x00g
+keybind = super+i=text:\x00I
+keybind = super+t=text:\x00t
+keybind = super+0=text:\x000
+keybind = super+1=text:\x001
+keybind = super+2=text:\x002
+keybind = super+3=text:\x003
+keybind = super+4=text:\x004
+keybind = super+5=text:\x005
+keybind = super+6=text:\x006
+keybind = super+7=text:\x007
+keybind = super+8=text:\x008
+keybind = super+9=text:\x009
+keybind = super+[=text:\x00(
+keybind = super+]=text:\x00)
+keybind = super+shift+[=text:\x00N
+keybind = super+shift+]=text:\x00n
+
+# Tmux panes.
+keybind = super+d=text:\x00|
+keybind = super+shift+d=text:\x00-
+keybind = f18=text:\x08
+keybind = super+j=text:\x0a
+keybind = super+k=text:\x0b
+keybind = super+l=text:\x0c
+keybind = super+g=text:\x00w
+keybind = super+z=text:\x00z
+keybind = super+f=text:\x00f

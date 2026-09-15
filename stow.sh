@@ -94,6 +94,7 @@ packages=(
   dunst
   # flake8
   fontconfig
+  ghostty
   git
   gnupg
   i3
