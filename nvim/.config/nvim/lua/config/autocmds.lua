@@ -5,16 +5,6 @@ vim.api.nvim_create_autocmd("VimLeave", {
   end,
 })
 
--- Dim inactive splits to match Tmux's inactive pane background.
--- Re-applied on every colorscheme load so live theme switches (theme-toggle) work.
-vim.api.nvim_create_autocmd("ColorScheme", {
-  pattern = "gruvbox",
-  callback = function()
-    local bg = vim.o.background == "dark" and "#282726" or "#e6e4d9"
-    vim.api.nvim_set_hl(0, "NormalNC", { bg = bg })
-  end,
-})
-
 -- Show cursor line only in active window
 vim.api.nvim_create_autocmd({ "InsertLeave", "WinEnter" }, {
   callback = function()
