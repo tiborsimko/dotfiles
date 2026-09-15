@@ -1,0 +1,11 @@
+new_tab
+layout splits
+cd ~/Code/github.com/reanahub/reana
+launch
+
+new_tab
+layout splits
+cd ~/Code/github.com/reanahub/reana-demo-root6-roofit
+launch
+
+focus_tab 0

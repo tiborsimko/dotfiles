@@ -1,0 +1,11 @@
+new_tab
+layout splits
+cd ~/Code/github.com/reanahub/blog.reana.io
+launch
+
+new_tab
+layout splits
+cd ~/Code/github.com/reanahub/blog.reana.io
+launch --env KITTY_SI_RUN_COMMAND_AT_STARTUP="hugo server -DF"
+
+focus_tab 0

@@ -32,6 +32,7 @@ ipython3
 isort
 isync
 jekyll
+jq
 libsasl2-modules-kdexoauth2
 lm-sensors
 luarocks

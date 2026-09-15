@@ -1,8 +1,8 @@
 #!/bin/bash
 #
-# Focus the default terminal, wait until it is frontmost, then synthesize
-# Cmd-P so Tmux's session picker fires. Karabiner invokes this fallback only
-# outside supported terminals; Cmd-P stays local inside each terminal.
+# Focus the default terminal, wait until it is frontmost, then synthesize Cmd-P
+# so its session picker fires. Karabiner invokes this fallback only outside
+# supported terminals; Cmd-P stays local inside each terminal.
 #
 # Usage: bounce-cmd-p.sh
 

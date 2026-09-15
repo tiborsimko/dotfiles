@@ -1,8 +1,9 @@
 return {
   "mrjones2014/smart-splits.nvim",
+  build = "./kitty/install-kittens.bash",
   lazy = false,
   opts = {
-    at_edge = "wrap",
+    at_edge = "stop",
     disable_multiplexer_nav_when_zoomed = false,
     ignored_buftypes = { "nofile" },
     ignored_filetypes = {

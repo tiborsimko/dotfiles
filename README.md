@@ -6,11 +6,11 @@ Personal configuration for my development environment, managed with
 [GNU Stow](https://www.gnu.org/software/stow/).
 
 - **Editor:** Neovim
-- **Multiplexer:** Tmux
+- **Multiplexer:** Kitty sessions (local); Tmux (remote)
 - **Prompt:** Starship
 - **Runtime manager:** Mise
 - **Shell:** Zsh
-- **Terminal:** Ghostty
+- **Terminal:** Kitty
 - **Theme:** Gruvbox
 - **Window manager:** i3 (Linux); AeroSpace (macOS)
 

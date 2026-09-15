@@ -180,7 +180,15 @@ if command -v nvim &>/dev/null; then
   shopt -u nullglob
 fi
 
-# Reload running NeoMutt instances (via tmux send-keys to F5 macro)
+# Reload NeoMutt in the native Kitty mail session. The socket address is
+# inherited by commands launched inside Kitty and is deliberately not forwarded
+# over SSH.
+if ((kitty_enabled)) && command -v kitten &>/dev/null && [[ -n ${KITTY_LISTEN_ON:-} ]]; then
+  kitten @ send-key --match 'session:^mail$ and var:role=neomutt' f5 \
+    >/dev/null 2>&1 || true
+fi
+
+# Keep the Tmux path for remote hosts and the historical terminal setup.
 if command -v tmux &>/dev/null && tmux info &>/dev/null 2>&1; then
   tmux list-panes -a -F '#{pane_id} #{pane_current_command}' \
     | awk '$2 == "neomutt" {print $1}' \

@@ -103,6 +103,11 @@ check_abbrev_table "Zsh" "$dotfiles_dir/zsh/.config/zsh/.zshrc" \
 check_abbrev_table "Bash" "$dotfiles_dir/bash/.bashrc" \
   "declare -A BASH_ABBREVS=("
 
+section "Kitty configuration"
+check python3 "python3 \"$dotfiles_dir/tests/test_kitty_config.py\""
+check bash "\"$dotfiles_dir/tests/test-kitty-session-picker.sh\""
+check kitty "kitty +runpy 'import runpy; runpy.run_path(\"$dotfiles_dir/tests/test_kitty_tab_bar.py\", run_name=\"__main__\")'"
+
 section "Git aliases"
 check bash "\"$dotfiles_dir/tests/test-git-aliases.sh\""
 

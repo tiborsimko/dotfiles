@@ -1,10 +1,9 @@
 #!/bin/sh
 #
-# Jump to the email referenced by the given Taskwarrior task (looked up
-# via the `mid` UDA). Requires a Tmux session 'mail' with a 'neomutt'
-# window: drives that NeoMutt via the `,j` macro (which sources a Notmuch
-# virtual-folder query prepared in ~/.cache/neomutt-jump.rc) and switches
-# focus to it.
+# Jump to the email referenced by the given Taskwarrior task (looked up via the
+# `mid` UDA). Requires Kitty's 'mail' session with a window tagged
+# role=neomutt. The `,j` macro sources the Notmuch virtual-folder query prepared
+# in ~/.cache/neomutt-jump.rc; Kitty then switches to that window and session.
 set -eu
 
 if [ $# -ne 1 ]; then
@@ -19,10 +18,14 @@ if [ -z "$mid" ]; then
   exit 1
 fi
 
-if ! command -v tmux >/dev/null 2>&1 \
-   || ! tmux has-session -t mail 2>/dev/null \
-   || ! tmux list-windows -t mail -F '#{window_name}' 2>/dev/null | grep -qx neomutt; then
-  echo "task-jump-mail.sh: no Tmux 'mail' session with a 'neomutt' window — start it first" >&2
+if ! command -v kitten >/dev/null 2>&1 || [ -z "${KITTY_LISTEN_ON:-}" ]; then
+  echo "task-jump-mail.sh: not running inside the local Kitty instance" >&2
+  exit 1
+fi
+
+kitty_match='session:^mail$ and var:role=neomutt'
+if ! kitten @ get-text --match "$kitty_match" --extent screen >/dev/null 2>&1; then
+  echo "task-jump-mail.sh: no Kitty 'mail' session with a role=neomutt window — start it first" >&2
   exit 1
 fi
 
@@ -32,9 +35,5 @@ notmuch new --quiet >/dev/null 2>&1 || true
 cache_root="${XDG_CACHE_HOME:-$HOME/.cache}"
 jump_file="$cache_root/neomutt-jump.rc"
 printf 'push "<vfolder-from-query>id:%s<enter>"\n' "$mid" > "$jump_file"
-tmux send-keys -t mail:neomutt -l ',j'
-if [ -n "${TMUX:-}" ]; then
-  exec tmux switch-client -t mail
-else
-  exec tmux attach -t mail
-fi
+kitten @ send-text --match "$kitty_match" ',j'
+exec kitten @ focus-window --match "$kitty_match"

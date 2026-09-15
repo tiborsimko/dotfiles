@@ -1,0 +1,4 @@
+new_tab
+layout splits
+cd ~
+launch --env KITTY_SI_RUN_COMMAND_AT_STARTUP="tasksh"

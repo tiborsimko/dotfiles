@@ -1,0 +1,19 @@
+[
+  {"argv": ["-zsh", "--login"], "name": "zsh", "idle": true},
+  {"argv": ["/bin/zsh"], "name": "zsh", "idle": true},
+  {"argv": ["zsh", "-l", "-i"], "name": "zsh", "idle": true},
+  {"argv": ["/bin/bash", "--login"], "name": "bash", "idle": true},
+  {"argv": ["sh", "-i"], "name": "sh", "idle": true},
+  {"argv": ["dash"], "name": "dash", "idle": true},
+  {"argv": ["zsh", "--login", "-c", "exec session-picker.sh pane"], "name": "zsh", "idle": false},
+  {"argv": ["bash", "-c", "sleep 60 & wait"], "name": "bash", "idle": false},
+  {"argv": ["/bin/bash", "/path/mail-sync", "--loop", "300"], "name": "mail-sync", "idle": false},
+  {"argv": ["bash", "/path/zsh"], "name": "zsh", "idle": false},
+  {"argv": ["sh", "-s"], "name": "sh", "idle": false},
+  {"argv": ["dash", "/path/script.sh"], "name": "script.sh", "idle": false},
+  {"argv": ["fish", "-i"], "name": "fish", "idle": true},
+  {"argv": ["bash", "--noprofile", "/path/script.sh"], "name": "bash", "idle": false},
+  {"argv": ["python", "manage.py", "runserver"], "name": "python", "idle": false},
+  {"argv": ["python3", "-m", "pytest"], "name": "python3", "idle": false},
+  {"argv": ["/opt/homebrew/bin/nvim", "startup.py"], "name": "nvim", "idle": false}
+]
