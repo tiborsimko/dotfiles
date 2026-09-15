@@ -239,13 +239,21 @@ unset _fzf_cache
 # Fzf with rg
 export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*"'
 
-# Fzf to use fd instead of find to list path candidates
+# Fzf to use fd (fdfind on Debian) instead of find for path candidates
+_fzf_fd() {
+  if command -v fd >/dev/null 2>&1; then
+    command fd "$@"
+  else
+    command fdfind "$@"
+  fi
+}
+
 _fzf_compgen_path() {
-  fd --hidden --follow --exclude ".git" . "$1"
+  _fzf_fd --hidden --follow --exclude ".git" . "$1"
 }
 
 _fzf_compgen_dir() {
-  fd --type d --hidden --follow --exclude ".git" . "$1"
+  _fzf_fd --type d --hidden --follow --exclude ".git" . "$1"
 }
 
 # Use mise activate for full PATH/env management (hooks, auto-venv, etc.)
