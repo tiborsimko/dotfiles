@@ -107,6 +107,7 @@ section "Kitty configuration"
 check python3 "python3 \"$dotfiles_dir/tests/test_kitty_config.py\""
 check bash "\"$dotfiles_dir/tests/test-kitty-session-picker.sh\""
 check kitty "kitty +runpy 'import runpy; runpy.run_path(\"$dotfiles_dir/tests/test_kitty_tab_bar.py\", run_name=\"__main__\")'"
+check kitty "kitty +runpy 'import runpy; runpy.run_path(\"$dotfiles_dir/tests/test_kitty_session_focus.py\", run_name=\"__main__\")'"
 
 section "Git aliases"
 check bash "\"$dotfiles_dir/tests/test-git-aliases.sh\""
