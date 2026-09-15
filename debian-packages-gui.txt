@@ -1,7 +1,6 @@
 # Debian apt packages installed by `install.sh base-gui`.
 # One package per line; blank lines and `#`-prefixed comments are ignored.
 acpi
-alacritty
 autocutsel
 chromium
 chromium-l10n
@@ -17,6 +16,7 @@ flameshot
 gimp
 hsetroot
 i3
+kitty
 light
 lxappearance
 maim

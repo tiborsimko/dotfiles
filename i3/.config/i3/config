@@ -27,7 +27,7 @@ set $right l
 floating_modifier $mod
 
 # Open new terminal window
-bindsym $mod+Return exec alacritty
+bindsym $mod+Return exec kitty
 
 # Open new browser window
 bindsym $mod+Shift+Return exec firefox --new-window

@@ -18,9 +18,6 @@ xsetroot -cursor_name left_ptr
 # Fix Java app troubles in tiling WMs
 export _JAVA_AWT_WM_NONREPARENTING=1
 
-# Keep terminal font scaling fixed across monitors with different DPI
-export WINIT_X11_SCALE_FACTOR=1
-
 # Hide mouse when not active
 if [ -z "$(pgrep -x unclutter)" ]; then
   unclutter &
@@ -54,7 +51,7 @@ if [ -z "$(pgrep -x dunst)" ]; then
 fi
 
 # Start terminal
-alacritty &
+kitty &
 
 # Start browser
 firefox &

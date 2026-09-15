@@ -86,7 +86,6 @@ stow_folded_package() {
 
 packages=(
   aerospace
-  alacritty
   bash
   claude
   codex

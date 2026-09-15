@@ -23,16 +23,14 @@ case "$from" in
     ;;
 esac
 
-source_alacritty="$config_home/alacritty/theme-$to.toml"
 source_ghostty="$config_home/ghostty/themes/theme-$to"
 source_kitty="$config_home/kitty/themes/theme-$to.conf"
 source_neomutt="$config_home/neomutt/theme-$to"
 source_tmux="$config_home/tmux/theme-$to.conf"
-config_alacritty="$config_home/alacritty/alacritty.toml"
 config_codex="$HOME/.codex/config.toml"
 codex_theme="gruvbox-$to"
 
-sources=("$source_alacritty" "$source_neomutt" "$source_tmux" "$config_alacritty")
+sources=("$source_neomutt" "$source_tmux")
 ghostty_enabled=0
 if [[ -f "$source_ghostty" ]]; then
   sources+=("$source_ghostty")
@@ -52,7 +50,6 @@ done
 
 mkdir -p \
   "$state_dir" \
-  "$config_home/alacritty" \
   "$config_home/neomutt" \
   "$config_home/tmux"
 if ((ghostty_enabled)); then
@@ -119,7 +116,6 @@ stage_codex_config() {
 # targets keep tracked theme edits live, while the mode file acts as the commit
 # marker. Ghostty receives a copy because importing a symlink to its already
 # loaded light fallback is treated as a configuration cycle.
-stage_link "theme-$to.toml" "$config_home/alacritty/theme-current.toml"
 if ((ghostty_enabled)); then
   stage_copy "$source_ghostty" "$config_home/ghostty/themes/theme-current"
 fi
@@ -138,11 +134,6 @@ for index in "${!temporary_files[@]}"; do
 done
 temporary_files=()
 trap - EXIT
-
-# Alacritty does not watch an imported file that was missing when its config
-# was loaded. Touching the main config makes the first toggle reload the newly
-# created theme-current.toml without changing tracked file contents.
-touch "$config_alacritty"
 
 # Ghostty 1.2+ reloads its configuration on SIGUSR2. Reload every running
 # instance without activating the app or requiring macOS Automation access.
