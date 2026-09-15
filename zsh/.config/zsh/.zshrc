@@ -338,7 +338,22 @@ mkvirtualenv() {
   ${python_bin} -m venv ~/.virtualenvs/${name} && workon ${name}
 }
 lsvirtualenvs() { local d; for d in ~/.virtualenvs/*/; do [ -d "$d" ] && basename "$d"; done }
-rmvirtualenv() { rm -rf ~/.virtualenvs/${1} }
+rmvirtualenv() {
+  if [ "$#" -ne 1 ] || [ -z "$1" ]; then
+    echo "usage: rmvirtualenv <name>" >&2
+    return 2
+  fi
+
+  case $1 in
+  .|..|*/*)
+    echo "rmvirtualenv: invalid environment name: $1" >&2
+    return 2
+    ;;
+  esac
+
+  local target="$HOME/.virtualenvs/$1"
+  command rm -rf -- "$target"
+}
 
 # SSH agent
 # $(ssh-add -l | grep -q 'The agent has no identities') && ssh-add
