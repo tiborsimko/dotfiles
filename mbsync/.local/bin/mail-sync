@@ -20,11 +20,11 @@ Usage:
   $program_name --scope SCOPE [--scope SCOPE ...] [--loop SECONDS]
   $program_name --notmuch [--loop SECONDS]
 
-Synchronise CERN mail and update the notmuch index.
+Synchronise CERN mail and update the Notmuch index.
 
 Options:
   --scope SCOPE   Select inbox, archive, or all. May be repeated.
-  --notmuch       Update only the notmuch index, without running mbsync.
+  --notmuch       Update only the Notmuch index, without running mbsync.
   --loop SECONDS  Repeat indefinitely, sleeping after each attempt.
   --help          Display this help and exit.
 
@@ -33,7 +33,7 @@ Scopes:
   archive         Synchronise the Archive channel.
   all             Synchronise all configured channels.
 
-All mail synchronisation scopes update the notmuch index afterwards.
+All mail synchronisation scopes update the Notmuch index afterwards.
 
 Exit statuses (without --loop):
   0               Operation completed successfully.
@@ -124,7 +124,7 @@ fi
 
 if [ -n "$loop_interval" ]; then
   if [ "$notmuch_only" -eq 1 ]; then
-    loop_action="updating notmuch index"
+    loop_action="updating Notmuch index"
   elif [ "$sync_all" -eq 1 ]; then
     loop_action="syncing all"
   else

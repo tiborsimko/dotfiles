@@ -53,7 +53,7 @@ Alternatively, to activate a single package by hand:
 ./stow.sh tmux
 ```
 
-### 4. Install mise-managed toolchain
+### 4. Install Mise-managed toolchain
 
 Once the dotfiles are linked, install the development tools managed by Mise,
 i.e. helm, kubectl, lazygit, nvim, several Python versions, etc:

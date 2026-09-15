@@ -1,4 +1,4 @@
-# Tibor's notmuch configuration.
+# Tibor's Notmuch configuration.
 
 [database]
 path=Local/mbsyncmail

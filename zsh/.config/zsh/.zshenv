@@ -1,6 +1,6 @@
 # Tibor's zshenv configuration.
 
-# This file is sourced by all zsh instances (including non-interactive). This
+# This file is sourced by all Zsh instances (including non-interactive). This
 # file sets only those environment variables that are of interest for
 # non-interactive tools (LSP servers etc).
 

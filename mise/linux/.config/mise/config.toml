@@ -1,4 +1,4 @@
-# Tibor's mise configuration.
+# Tibor's Mise configuration.
 
 [settings]
 # Python 3.8 is EOL and has no GitHub artifact attestations; skip the check.

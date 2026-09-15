@@ -1,4 +1,4 @@
-# Tibor's bash configuration.
+# Tibor's Bash configuration.
 # shellcheck shell=bash
 # shellcheck disable=SC1090,SC1091  # cached/dynamic/external sources
 
@@ -166,7 +166,7 @@ alias rg='command rg --line-number --with-filename --no-heading --hidden --glob 
 
 # Command abbreviations: only expands when the entire pre-cursor input matches
 # a key. Synthetic `\C-x\C-a` runs the expander via `bind -x`; Enter/Tab chain
-# it via macros that end with non-recursing readline commands (`\C-j` =
+# it via macros that end with non-recursing Readline commands (`\C-j` =
 # accept-line, `\C-x\C-c` = complete). Space uses `bind -x` directly to avoid
 # macro recursion on a literal space. Keep keys to one lowercase letter;
 # test.sh enforces it.
@@ -248,7 +248,7 @@ unset _starship_cache
 # Configure dynamic terminal window titles
 set_terminal_window_title() {
   local cmd="$1"
-  # Skip hooks, internal functions, and starship
+  # Skip hooks, internal functions, and Starship
   if [[ "$cmd" != *"_hook"* ]] &&
     [[ "$cmd" != "set_terminal_window_title"* ]] &&
     [[ "$cmd" != "__bp_"* ]] &&

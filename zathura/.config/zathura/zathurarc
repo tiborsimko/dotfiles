@@ -1,4 +1,4 @@
-# Tibor's zathura configuration.
+# Tibor's Zathura configuration.
 
 # disable status bar
 set guioptions none
@@ -7,7 +7,7 @@ set guioptions none
 set window-title-basename true
 set window-title-page true
 
-# gruvbox dark colours; modified from https://github.com/rwrr/zathura-gruvbox
+# Gruvbox dark colours; modified from https://github.com/rwrr/zathura-gruvbox
 set notification-error-bg       "#1d2021" # bg
 set notification-error-fg       "#fb4934" # bright:red
 set notification-warning-bg     "#1d2021" # bg

@@ -5,7 +5,7 @@ vim.api.nvim_create_autocmd("VimLeave", {
   end,
 })
 
--- Dim inactive splits to match tmux's inactive pane background.
+-- Dim inactive splits to match Tmux's inactive pane background.
 -- Re-applied on every colorscheme load so live theme switches (theme-toggle) work.
 vim.api.nvim_create_autocmd("ColorScheme", {
   pattern = "gruvbox",
@@ -36,7 +36,7 @@ vim.api.nvim_create_autocmd({ "InsertEnter", "WinLeave" }, {
 })
 
 -- Enable spelling in mail messages, and wrap for RFC 3676 format=flowed
--- (neomutt sets the header; `formatoptions+=w` makes Vim end soft-wrapped
+-- (NeoMutt sets the header; `formatoptions+=w` makes Vim end soft-wrapped
 -- lines with a trailing space so phones can re-flow them to screen width)
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "mail",

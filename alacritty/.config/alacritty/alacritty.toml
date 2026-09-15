@@ -77,7 +77,7 @@ action = "DecreaseFontSize"
 key = "-"
 mods = "Command"
 
-# Reset font size (Cmd-0 is reserved for tmux)
+# Reset font size (Cmd-0 is reserved for Tmux)
 [[keyboard.bindings]]
 action = "ResetFontSize"
 key = ")"

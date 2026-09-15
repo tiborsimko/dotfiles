@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Tiered tmux session switcher with three stages.
+# Tiered Tmux session switcher with three stages.
 #
 # Stage 1 (switch):   pick a running session, or + Create new session.
 # Stage 2 (template): pick a predefined template, or + Create new custom session.
@@ -106,7 +106,7 @@ attach_or_switch() {
   fi
 }
 
-# fzf 0.39+ supports the `one` event (auto-accept on unique match);
+# Fzf 0.39+ supports the `one` event (auto-accept on unique match);
 # older versions (e.g. Debian 12's 0.38) error out, so fall back to
 # Enter-to-accept there.
 fzf_ver=$(fzf --version 2>/dev/null | head -n1 | awk '{print $1}')

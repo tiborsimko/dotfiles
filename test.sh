@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Verify the dotfiles environment to ensure that shell loads cleanly,
-# mise-managed binaries run, helm-diff plugin is installed.
+# Mise-managed binaries run, helm-diff plugin is installed.
 
 set -eo pipefail
 

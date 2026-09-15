@@ -4,12 +4,12 @@ set bell-style none
 # Richer autocompletion
 set show-all-if-ambiguous on
 
-# Use emacs mode in prompt
+# Use Emacs mode in prompt
 set editing-mode emacs
 
 # Complete command history by up/down arrows
 "\e[A": history-search-backward
 "\e[B": history-search-forward
 
-# Treat legacy Shift+Return (ESC CR) as normal Enter in readline apps
+# Treat legacy Shift+Return (ESC CR) as normal Enter in Readline apps
 "\e\C-m": accept-line

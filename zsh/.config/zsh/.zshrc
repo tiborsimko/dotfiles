@@ -31,10 +31,10 @@ export GPG_TTY
 # Claude Code client
 export COLORTERM=truecolor
 
-# Configure where to install zsh plugins
+# Configure where to install Zsh plugins
 ZSHPLUGGED=$HOME/.zsh/plugged
 
-# Install zsh plugins if necessary
+# Install Zsh plugins if necessary
 if [ ! -d $ZSHPLUGGED ]; then
     mkdir -p $ZSHPLUGGED && cd $ZSHPLUGGED
     git clone https://github.com/zsh-users/zsh-syntax-highlighting
@@ -109,7 +109,7 @@ KEYTIMEOUT=1
 # Use vi bindings (must come before custom bindings)
 bindkey -v
 
-# Bind arrow keys for history prefix search (like bash's history-search-backward)
+# Bind arrow keys for history prefix search (like Bash's history-search-backward)
 bindkey '^[[A' history-beginning-search-backward
 bindkey '^[[B' history-beginning-search-forward
 bindkey '^[OA' history-beginning-search-backward
@@ -119,13 +119,13 @@ bindkey '^N' history-beginning-search-forward
 bindkey '^[[5~' history-beginning-search-backward
 bindkey '^[[6~' history-beginning-search-forward
 
-# Bind Home/End keys (both escape code variants for tmux compatibility)
+# Bind Home/End keys (both escape code variants for Tmux compatibility)
 bindkey '^[[H' beginning-of-line
 bindkey '^[OH' beginning-of-line
 bindkey '^[[F' end-of-line
 bindkey '^[OF' end-of-line
 
-# Emacs-inspired comforts in vi insert mode (not exact emacs semantics).
+# Emacs-inspired comforts in vi insert mode (not exact Emacs semantics).
 # (Ctrl-W backward-kill-word, Ctrl-U kill-line-backward, Ctrl-R history search work by default)
 bindkey -M viins '^A' beginning-of-line
 bindkey -M viins '^E' end-of-line
@@ -137,7 +137,7 @@ bindkey -M viins '^[d' kill-word
 bindkey -M viins '^[f' forward-word
 bindkey -M viins '^[b' backward-word
 
-# Edit current command line in $EDITOR (long pipelines benefit from full nvim)
+# Edit current command line in $EDITOR (long pipelines benefit from full Neovim)
 autoload -Uz edit-command-line
 zle -N edit-command-line
 bindkey -M viins '^X^E' edit-command-line
@@ -174,7 +174,7 @@ HISTFILE=$HOME/.cache/zsh/history
 HISTSIZE=90000
 SAVEHIST=90000
 
-# Do not share history between terminals with my tmux workflow
+# Do not share history between terminals with my Tmux workflow
 setopt no_share_history
 unsetopt share_history
 
@@ -225,7 +225,7 @@ _expand_abbrev_space() {
 }
 _expand_abbrev_tab() {
     [[ -n $ZSH_ABBREVS[$LBUFFER] ]] && LBUFFER=$ZSH_ABBREVS[$LBUFFER]' '
-    # fzf's `fzf --zsh` integration rebinds Tab; defer to it when present.
+    # Fzf's `fzf --zsh` integration rebinds Tab; defer to it when present.
     if (( $+widgets[fzf-completion] )); then
         zle fzf-completion
     else
@@ -388,7 +388,7 @@ fi
 [[ -f "$_fzf_completion_cache" ]] && source "$_fzf_completion_cache"
 unset _fzf_completion_cache
 
-# Restore abbreviation expansion on Tab; fzf's source rebinds `^I` to fzf-completion.
+# Restore abbreviation expansion on Tab; Fzf's source rebinds `^I` to fzf-completion.
 bindkey -M viins '^I' _expand_abbrev_tab
 
 # Load local host customisations

@@ -156,12 +156,12 @@ if ((kitty_enabled)) && command -v pkill &>/dev/null; then
   pkill -USR1 -x kitty 2>/dev/null || true
 fi
 
-# Reload tmux configuration if tmux is running
+# Reload Tmux configuration if Tmux is running
 if command -v tmux &>/dev/null && tmux info &>/dev/null 2>&1; then
   tmux source-file "$config_home/tmux/tmux.conf"
 fi
 
-# Reload running neovim instances (in background — each --server spawn is ~600ms)
+# Reload running Neovim instances (in background — each --server spawn is ~600ms)
 if command -v nvim &>/dev/null; then
   tmp_dir=${TMPDIR:-/tmp}
   tmp_dir=${tmp_dir%/}
@@ -180,7 +180,7 @@ if command -v nvim &>/dev/null; then
   shopt -u nullglob
 fi
 
-# Reload running neomutt instances (via tmux send-keys to F5 macro)
+# Reload running NeoMutt instances (via tmux send-keys to F5 macro)
 if command -v tmux &>/dev/null && tmux info &>/dev/null 2>&1; then
   tmux list-panes -a -F '#{pane_id} #{pane_current_command}' \
     | awk '$2 == "neomutt" {print $1}' \

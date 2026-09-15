@@ -1,4 +1,4 @@
-# Tibor's neomutt configuration.
+# Tibor's NeoMutt configuration.
 
 # Colour scheme. theme-current is a local symlink managed by theme-toggle;
 # reading exactly one file avoids leaking additive colour rules across themes.
@@ -76,13 +76,13 @@ set realname = "Tibor Simko"
 set from = "tibor.simko@cern.ch"
 set sendmail = "/opt/homebrew/bin/msmtp --account=cern"
 
-# Native notmuch integration (enables notmuch:// virtual folders)
+# Native Notmuch integration (enables notmuch:// virtual folders)
 set nm_default_url = "notmuch://$HOME/Local/mbsyncmail"
 
-# Key bindings - reload colour theme (driven externally by theme-toggle via tmux)
+# Key bindings - reload colour theme (driven externally by theme-toggle via Tmux)
 macro index,pager <F5> "<enter-command>source ~/.config/neomutt/neomuttrc<enter>" "Reload colour theme"
 
-# Key bindings - general vim-like
+# Key bindings - general Vim-like
 bind index,pager,attach,browser g noop
 bind attach,browser,index gg first-entry
 bind pager gg top
@@ -100,14 +100,14 @@ macro index,pager g1  "<change-folder>=INBOX<enter><limit>~(~d <1d)<enter>" "Go 
 macro index,pager g7  "<change-folder>=INBOX<enter><limit>~(~d <1w)<enter>" "Go to 7 days in INBOX"
 macro index,pager g9  "<change-folder>=INBOX<enter><limit>~(~d <30d)<enter>" "Go to 30 days in INBOX"
 macro index,pager ga  "<change-folder>=Archive<enter>" "Go to Archive folder"
-macro index,pager gh  "<change-folder>=Github<enter>" "Go to Github folder (all)"
+macro index,pager gh  "<change-folder>=Github<enter>" "Go to GitHub folder (all)"
 macro index,pager gi  "<change-folder>=INBOX<enter>" "Go to INBOX folder"
-macro index,pager gn  "<change-folder>notmuch://?query=folder:Github%20and%20%28subject:neovim%20or%20subject:lazyvim%20or%20subject:lazy.nvim%29<enter>" "Go to Github view (neovim)"
-macro index,pager go  "<change-folder>notmuch://?query=folder:Github%20and%20not%20%28subject:cernopendata%20or%20subject:continuous-reuse%20or%20subject:lhcb-ntupling-service%20or%20subject:reana*%29<enter>" "Go to Github view (other)"
-macro index,pager gp  "<change-folder>notmuch://?query=folder:Github%20and%20%28subject:puppet%20or%20subject:inveniosoftware%20or%20subject:inspire*%20or%20subject:cds-videos%29<enter>" "Go to Github view (puppet, inveniosoftware, etc)"
+macro index,pager gn  "<change-folder>notmuch://?query=folder:Github%20and%20%28subject:neovim%20or%20subject:lazyvim%20or%20subject:lazy.nvim%29<enter>" "Go to GitHub view (Neovim)"
+macro index,pager go  "<change-folder>notmuch://?query=folder:Github%20and%20not%20%28subject:cernopendata%20or%20subject:continuous-reuse%20or%20subject:lhcb-ntupling-service%20or%20subject:reana*%29<enter>" "Go to GitHub view (other)"
+macro index,pager gp  "<change-folder>notmuch://?query=folder:Github%20and%20%28subject:puppet%20or%20subject:inveniosoftware%20or%20subject:inspire*%20or%20subject:cds-videos%29<enter>" "Go to GitHub view (puppet, inveniosoftware, etc)"
 macro index,pager gs  "<change-folder>=Spam<enter>" "Go to Spam folder"
 macro index,pager gu  "<change-folder>=INBOX<enter><limit>~U<enter>" "Go to unread in INBOX"
-macro index,pager gw  "<change-folder>notmuch://?query=folder:Github%20and%20%28subject:cernopendata%20or%20subject:continuous-reuse%20or%20subject:lhcb-ntupling-service%20or%20subject:reana*%29<enter>" "Go to Github view (work)"
+macro index,pager gw  "<change-folder>notmuch://?query=folder:Github%20and%20%28subject:cernopendata%20or%20subject:continuous-reuse%20or%20subject:lhcb-ntupling-service%20or%20subject:reana*%29<enter>" "Go to GitHub view (work)"
 macro index,pager ,w1 "<limit>~(~d <1d)<enter>" "Widen to last 1 day"
 macro index,pager ,w7 "<limit>~(~d <1w)<enter>" "Widen to last 7 days"
 macro index,pager ,w9 "<limit>~(~d <30d)<enter>" "Widen to last 30 days"
@@ -116,24 +116,24 @@ macro index,pager ,wa "<limit>all<enter>" "Widen to all messages"
 # Key bindings - mail archiving
 macro index,pager ,a ":set confirmappend=no delete=yes auto_tag=yes\n<save-message>=Archive\n<sync-mailbox>:set confirmappend=yes delete=ask-yes\n" "Move message(s) to Archive"
 
-# Key bindings - taskwarrior capture
-macro index,pager ,t "<pipe-message>$HOME/.config/task/task-capture-mail.sh<enter>" "Capture as taskwarrior task"
+# Key bindings - Taskwarrior capture
+macro index,pager ,t "<pipe-message>$HOME/.config/task/task-capture-mail.sh<enter>" "Capture as Taskwarrior task"
 
-# Key bindings - taskwarrior jump
+# Key bindings - Taskwarrior jump
 macro index,pager ,j "<enter-command>source ~/.cache/neomutt-jump.rc<enter>" "Jump to message prepared by task-jump-mail.sh"
 
-# Key bindings - native notmuch
-macro index ,s "<vfolder-from-query>" "notmuch: search mail"
+# Key bindings - native Notmuch
+macro index ,s "<vfolder-from-query>" "Notmuch: search mail"
 bind index ,l limit-current-thread
 macro pager ,l "<exit><limit-current-thread>" "Limit to current thread"
-macro index ,L "<entire-thread>" "notmuch: reconstruct thread"
+macro index ,L "<entire-thread>" "Notmuch: reconstruct thread"
 
 # Key bindings - mbsync
 macro index ,u \
 "<enter-command>set my_old_pipe_decode=\$pipe_decode my_old_wait_key=\$wait_key nopipe_decode nowait_key<enter>\
 <shell-escape>mail-sync --notmuch<enter>\
 <enter-command>set pipe_decode=\$my_old_pipe_decode wait_key=\$my_old_wait_key<enter>" \
-"Update notmuch (fast)"
+"Update Notmuch (fast)"
 macro index ,x \
 "<enter-command>set my_old_pipe_decode=\$pipe_decode my_old_wait_key=\$wait_key nopipe_decode nowait_key<enter>\
 <shell-escape>mail-sync --scope inbox<enter>\

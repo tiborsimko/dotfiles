@@ -44,7 +44,8 @@ path=(
   $path
 )
 
-# Enrich path to Nvim/Mason for Helix to use the same LSP servers, and Cargo and Go paths
+# Enrich PATH to Neovim/Mason for Helix to use the same LSP servers, plus the
+# Cargo and Go paths.
 export PATH=$HOME/.local/share/nvim/mason/bin:$HOME/.cargo/bin:$GOPATH/bin:/usr/local/go/bin:$PATH
 
 # User PATH additions

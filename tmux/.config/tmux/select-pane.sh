@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Fuzzy pane switcher across all tmux sessions. Lists every pane with its
+# Fuzzy pane switcher across all Tmux sessions. Lists every pane with its
 # running command and directory; if no pane matches the typed query, creates
 # a new session with that query as name.
 #

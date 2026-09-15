@@ -68,7 +68,7 @@ XTerm*saveLines: 8192
 ! XTerm select system clipboard
 xterm*selectToClipboard: true
 
-! XTerm allow tmux to modify clipboard (i.e. drop SetSelection from defaults)
+! XTerm allow Tmux to modify clipboard (i.e. drop SetSelection from defaults)
 xterm*disallowedWindowOps: 20,21,SetXProp
 
 ! XTerm shortcuts

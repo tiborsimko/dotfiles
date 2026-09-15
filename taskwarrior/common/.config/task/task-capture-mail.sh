@@ -4,7 +4,7 @@
 # is stored in the `mid` UDA; the description defaults to "From: Subject"
 # and is presented for editing with Readline (left/right, backspace, etc. all
 # work). Trailing +tag tokens added while editing become Taskwarrior metadata.
-# Invoked by neomutt's <pipe-message>task-capture-mail.sh.
+# Invoked by NeoMutt's <pipe-message>task-capture-mail.sh.
 set -eu
 
 script_name=${0##*/}

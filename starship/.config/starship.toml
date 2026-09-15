@@ -1,4 +1,4 @@
-# Tibor's starship configuration.
+# Tibor's Starship configuration.
 
 "$schema" = 'https://starship.rs/config-schema.json'
 

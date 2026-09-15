@@ -1,4 +1,4 @@
-# Tibor's bash profile configuration.
+# Tibor's Bash profile configuration.
 # shellcheck shell=bash
 # shellcheck disable=SC1090,SC1091  # cached/external sources
 
@@ -68,5 +68,5 @@ unset -f _path_prepend
 # Load Cargo
 [[ -f "$HOME/.cargo/env" ]] && source "$HOME/.cargo/env"
 
-# Load my bash configuration
+# Load my Bash configuration
 [[ -f "$HOME/.bashrc" ]] && source "$HOME/.bashrc"

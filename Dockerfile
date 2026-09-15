@@ -32,7 +32,7 @@ RUN sudo apt-get update \
 COPY --chown=tibor:tibor install.sh ./install.sh
 RUN DEBIAN_FRONTEND=noninteractive ./install.sh mise
 
-# Pre-stage mise config so the mise-install layer is keyed on config.toml,
+# Pre-stage Mise config so the Mise installation layer is keyed on config.toml,
 # not on every dotfile edit. The stow step further down replaces it with a symlink.
 RUN mkdir -p /home/tibor/.config/mise
 COPY --chown=tibor:tibor mise/linux/.config/mise/config.toml /home/tibor/.config/mise/config.toml
@@ -48,7 +48,7 @@ RUN DEBIAN_FRONTEND=noninteractive ./install.sh locales
 # At runtime the bind mount overlays this so relative symlinks stay valid
 # and host edits propagate without rebuild.
 COPY --chown=tibor:tibor . .
-# Drop the pre-staged mise config so stow can place a symlink in its stead.
+# Drop the pre-staged Mise config so stow can place a symlink in its stead.
 RUN rm -f /home/tibor/.config/mise/config.toml && ./stow.sh all
 
 # Set runtime default cwd to $HOME so interactive sessions feel like an ssh login

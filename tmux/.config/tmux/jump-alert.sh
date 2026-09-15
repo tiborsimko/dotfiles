@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Jump to the most recently active window carrying a tmux alert, even when it
+# Jump to the most recently active window carrying a Tmux alert, even when it
 # belongs to another session. A pane ID lets switch-client select the session,
 # window, and active pane in one step.
 

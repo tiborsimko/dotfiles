@@ -1,8 +1,8 @@
 #!/bin/sh
 #
 # Jump to the email referenced by the given Taskwarrior task (looked up
-# via the `mid` UDA). Requires a tmux session 'mail' with a 'neomutt'
-# window: drives that neomutt via the `,j` macro (which sources a notmuch
+# via the `mid` UDA). Requires a Tmux session 'mail' with a 'neomutt'
+# window: drives that NeoMutt via the `,j` macro (which sources a Notmuch
 # virtual-folder query prepared in ~/.cache/neomutt-jump.rc) and switches
 # focus to it.
 set -eu
@@ -22,11 +22,11 @@ fi
 if ! command -v tmux >/dev/null 2>&1 \
    || ! tmux has-session -t mail 2>/dev/null \
    || ! tmux list-windows -t mail -F '#{window_name}' 2>/dev/null | grep -qx neomutt; then
-  echo "task-jump-mail.sh: no tmux 'mail' session with a 'neomutt' window — start it first" >&2
+  echo "task-jump-mail.sh: no Tmux 'mail' session with a 'neomutt' window — start it first" >&2
   exit 1
 fi
 
-# Refresh notmuch so folder moves since the last mbsync are picked up.
+# Refresh Notmuch so folder moves since the last mbsync are picked up.
 notmuch new --quiet >/dev/null 2>&1 || true
 
 cache_root="${XDG_CACHE_HOME:-$HOME/.cache}"
