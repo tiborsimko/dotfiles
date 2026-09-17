@@ -51,11 +51,15 @@ outer.right = 0
 alt-g = 'mode apps'
 alt-space = 'mode service'
 
-# Focus neighbour (stops at workspace edges)
+# Focus neighbour with HJKL or arrows (stops at workspace edges)
 alt-h = 'focus left'
 alt-j = 'focus down'
 alt-k = 'focus up'
 alt-l = 'focus right'
+alt-left = 'focus left'
+alt-down = 'focus down'
+alt-up = 'focus up'
+alt-right = 'focus right'
 
 # Move window in layout
 alt-shift-h = 'move left'
