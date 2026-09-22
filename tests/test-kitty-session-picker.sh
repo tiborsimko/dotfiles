@@ -174,7 +174,7 @@ touch \
 run_picker new 'scratch'
 generated="$runtime_dir/kitty-sessions-$UID/scratch.kitty-session"
 assert_equal "$(cat "$generated")" \
-  "$(printf 'new_tab\nlayout splits\ncd %s\nlaunch' "$project_dir")" \
+  "$(printf 'new_tab\ncd %s\nlaunch' "$project_dir")" \
   "generated session"
 assert_equal "$(cat "$actions_file")" "@ action goto_session $generated" \
   "custom session action"

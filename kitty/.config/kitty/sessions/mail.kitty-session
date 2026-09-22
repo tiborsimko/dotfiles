@@ -1,10 +1,8 @@
 new_tab
-layout splits
 cd ~
 launch --var role=neomutt --env KITTY_SI_RUN_COMMAND_AT_STARTUP="neomutt"
 
 new_tab
-layout splits
 cd ~
 launch --env KITTY_SI_RUN_COMMAND_AT_STARTUP="mail-sync --loop 300 --scope inbox --scope archive"
 

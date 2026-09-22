@@ -257,7 +257,6 @@ create_session() {
   session_file="$runtime_dir/$name.kitty-session"
   {
     printf 'new_tab\n'
-    printf 'layout splits\n'
     printf 'cd %s\n' "$start_dir"
     printf 'launch\n'
   } > "$session_file"

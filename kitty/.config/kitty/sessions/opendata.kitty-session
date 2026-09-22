@@ -1,15 +1,12 @@
 new_tab
-layout splits
 cd ~/Code/github.com/cernopendata/opendata.cern.ch
 launch
 
 new_tab
-layout splits
 cd ~/Code/github.com/cernopendata/data-curation
 launch
 
 new_tab
-layout splits
 cd ~/Code/github.com/cernopendata/cernopendata-client
 launch --env KITTY_SI_RUN_COMMAND_AT_STARTUP="workon cernopendata-client"
 

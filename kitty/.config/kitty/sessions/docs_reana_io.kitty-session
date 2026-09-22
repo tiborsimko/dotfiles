@@ -1,10 +1,8 @@
 new_tab
-layout splits
 cd ~/Code/github.com/reanahub/docs.reana.io
 launch
 
 new_tab
-layout splits
 cd ~/Code/github.com/reanahub/docs.reana.io
 launch --env KITTY_SI_RUN_COMMAND_AT_STARTUP="workon docs.reana.io && mkdocs serve"
 
