@@ -2,12 +2,131 @@
 
 set -e
 
-start_colima() {
-  local binfmt_image="tonistiigi/binfmt:qemu-v10.2.3-68"
-  local qemu_arches="amd64,arm,386,ppc64le,riscv64,s390x,mips64,mips64le,loong64"
-  local binfmt_ok=false binfmt_output attempt arch
+readonly BINFMT_IMAGE="tonistiigi/binfmt:qemu-v10.2.3-68"
+QEMU_VERSION="${BINFMT_IMAGE##*:qemu-v}"
+readonly QEMU_VERSION="${QEMU_VERSION%-*}"
+readonly PROBE_IMAGE="busybox:1.37.0"
 
-  echo "==> Starting Colima..."
+heading() {
+  if [ -t 1 ] && [ "${TERM:-dumb}" != dumb ] && [ -z "${NO_COLOR:-}" ]; then
+    printf '\033[1;34m==>\033[0m \033[1m%s\033[0m\n' "$*"
+  else
+    printf '==> %s\n' "$*"
+  fi
+}
+
+prepare_probe_image() {
+  local architecture
+
+  # Fetch the amd64 probe before changing any interpreter registrations.
+  architecture=$(docker --context colima image inspect --platform linux/amd64 \
+    --format '{{.Architecture}}' "$PROBE_IMAGE" 2>/dev/null) || architecture=""
+  if [ "$architecture" != amd64 ]; then
+    docker --context colima pull --platform linux/amd64 "$PROBE_IMAGE"
+  fi
+}
+
+probe_emulator() (
+  local probe_id="" probe_pid interpreter active_emulator version
+
+  # The binfmt F flag pins an open binary, so reading the registration's
+  # interpreter path cannot distinguish the VM's QEMU 7 from QEMU 10.
+  # Inspect a live amd64 process instead. Pull the small probe image only
+  # when missing, and remove its container even when the probe fails.
+  trap '[ -z "$probe_id" ] || docker --context colima rm -f "$probe_id" >/dev/null 2>&1 || true' EXIT
+  trap 'exit 130' INT
+  trap 'exit 143' TERM
+
+  heading "Probing VM-wide amd64 emulation (builds and containers)"
+  probe_id=$(docker --context colima run --detach --rm --platform linux/amd64 \
+    --network none --read-only --memory 128m --memory-swap 128m \
+    --cpus 0.5 --pids-limit 32 --cap-drop ALL \
+    --security-opt no-new-privileges "$PROBE_IMAGE" sleep 120)
+  probe_pid=$(docker --context colima inspect --format '{{.State.Pid}}' "$probe_id")
+  test "$probe_pid" -gt 0
+  interpreter=$(colima ssh --profile default -- sudo readlink "/proc/$probe_pid/exe")
+  # Match exact names, allowing procfs's suffix for unlinked interpreters.
+  case "$interpreter" in
+  */qemu-x86_64 | */qemu-x86_64" (deleted)")
+    active_emulator=qemu
+    echo "Active emulator: QEMU ($interpreter)"
+    version=$(colima ssh --profile default -- sudo "/proc/$probe_pid/exe" --version)
+    printf '%s\n' "$version"
+    case "$version" in
+    "qemu-x86_64 version $QEMU_VERSION ("*) ;;
+    *)
+      echo "ERROR: Expected QEMU $QEMU_VERSION; run colima-vm start to refresh." >&2
+      return 1
+      ;;
+    esac
+    ;;
+  */rosetta | */rosetta" (deleted)")
+    active_emulator=rosetta
+    echo "Active emulator: Rosetta ($interpreter)"
+    ;;
+  *)
+    echo "ERROR: Unexpected amd64 interpreter: $interpreter" >&2
+    return 1
+    ;;
+  esac
+  if [ -n "${1:-}" ] && [ "$active_emulator" != "$1" ]; then
+    echo "ERROR: Requested $1, but the live process uses $active_emulator." >&2
+    return 1
+  fi
+)
+
+select_emulator() {
+  heading "Selecting $1 for all amd64 builds and containers"
+  echo "Switch only when image builds and workflow jobs are idle."
+  prepare_probe_image
+  # Enable the requested interpreter before disabling the other one, so
+  # selection does not depend on the order in which they were registered.
+  # shellcheck disable=SC2016 # Variables are expanded by the guest shell.
+  colima ssh --profile default -- sudo sh -ec '
+    binfmt_dir=/proc/sys/fs/binfmt_misc
+    case "$1" in
+      qemu) selected=qemu-x86_64; other=rosetta ;;
+      rosetta) selected=rosetta; other=qemu-x86_64
+        if [ ! -x /mnt/lima-rosetta/rosetta ]; then
+          echo "ERROR: Rosetta is unavailable; check its installation and restart Colima." >&2
+          exit 1
+        fi ;;
+      *) exit 1 ;;
+    esac
+    if ! grep -q "^enabled$" "$binfmt_dir/status" || [ ! -f "$binfmt_dir/$selected" ]; then
+      echo "ERROR: $selected is not available; run colima-vm start first." >&2
+      exit 1
+    fi
+    printf "1\n" > "$binfmt_dir/$selected"
+    if [ -f "$binfmt_dir/$other" ]; then
+      printf "0\n" > "$binfmt_dir/$other"
+    fi
+  ' colima-emulator "$1"
+  probe_emulator "$1"
+}
+
+status_colima() {
+  heading "Colima status"
+  colima status --profile default
+  heading "Registered amd64 interpreters"
+  # shellcheck disable=SC2016 # Variables are expanded by the guest shell.
+  colima ssh --profile default -- sh -ec '
+    for name in qemu-x86_64 rosetta; do
+      entry=/proc/sys/fs/binfmt_misc/$name
+      if [ -f "$entry" ]; then
+        printf "%s: " "$name"
+        head -n 1 "$entry"
+      fi
+    done
+  '
+  probe_emulator
+}
+
+start_colima() {
+  local qemu_arches="amd64,arm,386,ppc64le,riscv64,s390x,mips64,mips64le,loong64"
+  local binfmt_ok=false binfmt_output attempt arch builder_info
+
+  heading "Starting Colima"
   colima start \
     --activate \
     --arch aarch64 \
@@ -21,27 +140,28 @@ start_colima() {
     --vm-type vz \
     --vz-rosetta
 
-  echo "==> Waiting for Docker to be ready..."
-  until docker info >/dev/null 2>&1; do sleep 1; done
+  heading "Waiting for Docker to be ready"
+  until docker --context colima info >/dev/null 2>&1; do sleep 1; done
+  prepare_probe_image
 
-  echo "==> Checking Rosetta availability..."
+  heading "Checking Rosetta availability (start selects QEMU)"
   if colima ssh -- test -x /mnt/lima-rosetta/rosetta &&
-    colima ssh -- grep -q '^enabled$' /proc/sys/fs/binfmt_misc/rosetta; then
-    echo "    Rosetta is available."
+    colima ssh -- test -f /proc/sys/fs/binfmt_misc/rosetta; then
+    echo "Rosetta is available for explicit selection."
   else
-    echo "    WARNING: Rosetta is unavailable; check the macOS Rosetta installation and restart Colima." >&2
+    echo "WARNING: Rosetta is unavailable; check the macOS Rosetta installation and restart Colima." >&2
   fi
 
   # Keep app hostPath data on the big 300G data disk instead of the ~19G
   # root disk. Symlinks persist across VM restarts; `ln -sfnT` fails loudly
   # if a path already exists as a real directory (migrate manually then).
-  echo "==> Relocating app data directories onto the data disk..."
+  heading "Relocating app data directories onto the data disk"
   for dir in reana lhcb-ntupling-service; do
     colima ssh -- sudo mkdir -p "/mnt/lima-colima/${dir}"
     colima ssh -- sudo ln -sfnT "/mnt/lima-colima/${dir}" "/var/${dir}"
   done
 
-  echo "==> Capping systemd journal size..."
+  heading "Capping systemd journal size"
   colima ssh -- sudo mkdir -p /etc/systemd/journald.conf.d
   colima ssh -- sudo /usr/bin/bash -c "printf '[Journal]\nSystemMaxUse=200M\n' > /etc/systemd/journald.conf.d/size.conf"
   colima ssh -- sudo systemctl restart systemd-journald
@@ -49,12 +169,12 @@ start_colima() {
   # --install all skips architectures already handled by QEMU or Rosetta.
   # Remove old QEMU registrations and install an explicit list so that the
   # kernel uses the new binaries, even when /usr/bin still contains QEMU 7.
-  # Keep Rosetta registered. QEMU is registered last and therefore handles
-  # amd64 containers as well as builds; binfmt does not distinguish them.
-  echo "==> Refreshing QEMU 10.2.3 binfmt emulators..."
+  # Keep Rosetta registered for explicit selection. Startup selects QEMU
+  # for both amd64 containers and builds; binfmt does not distinguish them.
+  heading "Refreshing QEMU $QEMU_VERSION binfmt emulators"
   for attempt in 1 2 3; do
-    if binfmt_output=$(docker run --privileged --rm --platform linux/arm64 \
-      "$binfmt_image" --uninstall 'qemu-*' --install "$qemu_arches" 2>&1); then
+    if binfmt_output=$(docker --context colima run --privileged --rm --platform linux/arm64 \
+      "$BINFMT_IMAGE" --uninstall 'qemu-*' --install "$qemu_arches" 2>&1); then
       binfmt_ok=true
       # binfmt can exit successfully after an individual registration fails.
       for arch in ${qemu_arches//,/ }; do
@@ -66,51 +186,90 @@ start_colima() {
     fi
     printf '%s\n' "$binfmt_output"
     [ "$binfmt_ok" = true ] && break
-    echo "    binfmt registration failed (attempt $attempt/3)." >&2
+    echo "binfmt registration failed (attempt $attempt/3)." >&2
     [ "$attempt" -lt 3 ] && sleep 3
   done
   if [ "$binfmt_ok" = false ]; then
-    echo "    ERROR: QEMU refresh failed; inspect the registration errors before running amd64 workloads." >&2
+    echo "ERROR: QEMU refresh failed; inspect the registration errors before running amd64 workloads." >&2
     return 1
   fi
 
-  echo "==> QEMU version and amd64 registration (takes precedence over Rosetta):"
-  docker run --rm --platform linux/arm64 "$binfmt_image" --version
-  colima ssh -- cat /proc/sys/fs/binfmt_misc/qemu-x86_64
+  select_emulator qemu
 
-  echo "==> Setting colima as default buildx builder..."
-  docker buildx use colima
+  heading "Setting colima as default buildx builder"
+  docker --context colima buildx use colima
 
-  echo "==> Ready. Supported platforms:"
-  docker buildx inspect | grep Platforms
+  heading "Supported platforms"
+  builder_info=$(docker --context colima buildx inspect)
+  printf '%s\n' "$builder_info" | grep Platforms || true
+  heading "Ready"
 }
 
 stop_colima() {
-  echo "==> Stopping Colima..."
+  heading "Stopping Colima"
   colima stop
 }
 
 destroy_colima() {
-  echo "==> Deleting Colima 'default' profile and its data..."
+  heading "Deleting Colima 'default' profile and its data"
   colima delete --profile default --force --data
 
-  echo "==> Colima destroyed. Run 'colima-vm start' for a fresh setup."
+  heading "Colima destroyed"
+  echo "Run 'colima-vm start' for a fresh setup."
 }
 
 usage() {
-  echo "Usage: $(basename "$0") {start|stop|destroy}"
-  exit 1
+  local usage_status="${1:-1}"
+  if [ "$usage_status" -ne 0 ]; then
+    exec >&2
+  fi
+  cat <<EOF
+Usage: $(basename "$0") COMMAND
+
+Commands:
+  start             Start Colima and select QEMU
+  stop              Stop Colima
+  destroy           Delete the default Colima VM and its data
+  status            Show VM status and verify the active amd64 emulator
+  emulator qemu     Select QEMU for amd64 execution
+  emulator rosetta  Select Rosetta for amd64 execution
+  help              Show this help (also --help or -h)
+
+Notes:
+  Emulator changes affect amd64 builds and containers; switch only when idle.
+EOF
+  exit "$usage_status"
 }
 
 case "${1:-}" in
+help | --help | -h)
+  [ "$#" -eq 1 ] || usage
+  usage 0
+  ;;
 start)
+  [ "$#" -eq 1 ] || usage
   start_colima
   ;;
 stop)
+  [ "$#" -eq 1 ] || usage
   stop_colima
   ;;
 destroy)
+  [ "$#" -eq 1 ] || usage
   destroy_colima
+  ;;
+status)
+  [ "$#" -eq 1 ] || usage
+  status_colima
+  ;;
+emulator)
+  case "${2:-}" in
+  qemu | rosetta)
+    [ "$#" -eq 2 ] || usage
+    select_emulator "$2"
+    ;;
+  *) usage ;;
+  esac
   ;;
 *)
   usage
