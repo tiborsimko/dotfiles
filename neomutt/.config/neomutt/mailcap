@@ -75,3 +75,37 @@ image/*; open %s; x-neomutt-keep;
 text/ics; open -a Calendar %s; nametemplate=%s.ics; x-neomutt-keep;
 text/calendar; open -a Calendar %s; nametemplate=%s.ics; x-neomutt-keep;
 application/ics; open -a Calendar %s; nametemplate=%s.ics; x-neomutt-keep;
+
+# Audio: macOS default player per file extension, metadata preview on demand.
+audio/wav; open %s; nametemplate=%s.wav; x-neomutt-keep;
+audio/x-wav; open %s; nametemplate=%s.wav; x-neomutt-keep;
+audio/wave; open %s; nametemplate=%s.wav; x-neomutt-keep;
+audio/vnd.wave; open %s; nametemplate=%s.wav; x-neomutt-keep;
+audio/mpeg; open %s; nametemplate=%s.mp3; x-neomutt-keep;
+audio/mp3; open %s; nametemplate=%s.mp3; x-neomutt-keep;
+audio/mp4; open %s; nametemplate=%s.m4a; x-neomutt-keep;
+audio/m4a; open %s; nametemplate=%s.m4a; x-neomutt-keep;
+audio/x-m4a; open %s; nametemplate=%s.m4a; x-neomutt-keep;
+audio/aac; open %s; nametemplate=%s.aac; x-neomutt-keep;
+audio/x-aac; open %s; nametemplate=%s.aac; x-neomutt-keep;
+audio/aiff; open %s; nametemplate=%s.aiff; x-neomutt-keep;
+audio/x-aiff; open %s; nametemplate=%s.aiff; x-neomutt-keep;
+audio/basic; open %s; nametemplate=%s.au; x-neomutt-keep;
+# Ogg, FLAC, WMA and Matroska rely on VLC; CoreAudio cannot decode them.
+audio/flac; open %s; nametemplate=%s.flac; x-neomutt-keep;
+audio/x-flac; open %s; nametemplate=%s.flac; x-neomutt-keep;
+audio/ogg; open %s; nametemplate=%s.ogg; x-neomutt-keep;
+audio/x-ogg; open %s; nametemplate=%s.ogg; x-neomutt-keep;
+audio/opus; open %s; nametemplate=%s.opus; x-neomutt-keep;
+audio/webm; open %s; nametemplate=%s.webm; x-neomutt-keep;
+audio/x-matroska; open %s; nametemplate=%s.mka; x-neomutt-keep;
+audio/x-ms-wma; open %s; nametemplate=%s.wma; x-neomutt-keep;
+audio/midi; open %s; nametemplate=%s.mid; x-neomutt-keep;
+audio/x-midi; open %s; nametemplate=%s.mid; x-neomutt-keep;
+# Phone voice messages.
+audio/amr; open %s; nametemplate=%s.amr; x-neomutt-keep;
+audio/3gpp; open %s; nametemplate=%s.3gp; x-neomutt-keep;
+# Other audio types rely on the sender's filename for their extension.
+audio/*; open %s; x-neomutt-keep;
+# Duration, codec and tags without leaving the pager; ffprobe writes to stderr.
+audio/*; ffprobe -hide_banner %s 2>&1; copiousoutput;
