@@ -3,6 +3,10 @@
 set -e
 
 start_colima() {
+  local binfmt_image="tonistiigi/binfmt:qemu-v10.2.3-68"
+  local qemu_arches="amd64,arm,386,ppc64le,riscv64,s390x,mips64,mips64le,loong64"
+  local binfmt_ok=false binfmt_output attempt arch
+
   echo "==> Starting Colima..."
   colima start \
     --activate \
@@ -20,6 +24,14 @@ start_colima() {
   echo "==> Waiting for Docker to be ready..."
   until docker info >/dev/null 2>&1; do sleep 1; done
 
+  echo "==> Checking Rosetta availability..."
+  if colima ssh -- test -x /mnt/lima-rosetta/rosetta &&
+    colima ssh -- grep -q '^enabled$' /proc/sys/fs/binfmt_misc/rosetta; then
+    echo "    Rosetta is available."
+  else
+    echo "    WARNING: Rosetta is unavailable; check the macOS Rosetta installation and restart Colima." >&2
+  fi
+
   # Keep app hostPath data on the big 300G data disk instead of the ~19G
   # root disk. Symlinks persist across VM restarts; `ln -sfnT` fails loudly
   # if a path already exists as a real directory (migrate manually then).
@@ -34,19 +46,37 @@ start_colima() {
   colima ssh -- sudo /usr/bin/bash -c "printf '[Journal]\nSystemMaxUse=200M\n' > /etc/systemd/journald.conf.d/size.conf"
   colima ssh -- sudo systemctl restart systemd-journald
 
-  echo "==> Registering QEMU binfmt emulators for cross-platform builds..."
-  binfmt_ok=false
+  # --install all skips architectures already handled by QEMU or Rosetta.
+  # Remove old QEMU registrations and install an explicit list so that the
+  # kernel uses the new binaries, even when /usr/bin still contains QEMU 7.
+  # Keep Rosetta registered. QEMU is registered last and therefore handles
+  # amd64 containers as well as builds; binfmt does not distinguish them.
+  echo "==> Refreshing QEMU 10.2.3 binfmt emulators..."
   for attempt in 1 2 3; do
-    if docker run --privileged --rm tonistiigi/binfmt --install all; then
+    if binfmt_output=$(docker run --privileged --rm --platform linux/arm64 \
+      "$binfmt_image" --uninstall 'qemu-*' --install "$qemu_arches" 2>&1); then
       binfmt_ok=true
-      break
+      # binfmt can exit successfully after an individual registration fails.
+      for arch in ${qemu_arches//,/ }; do
+        if ! grep -Fxq "installing: $arch OK" <<<"$binfmt_output"; then
+          binfmt_ok=false
+          break
+        fi
+      done
     fi
+    printf '%s\n' "$binfmt_output"
+    [ "$binfmt_ok" = true ] && break
     echo "    binfmt registration failed (attempt $attempt/3)." >&2
     [ "$attempt" -lt 3 ] && sleep 3
   done
   if [ "$binfmt_ok" = false ]; then
-    echo "    WARNING: binfmt registration failed; cross-platform builds may be unavailable." >&2
+    echo "    ERROR: QEMU refresh failed; inspect the registration errors before running amd64 workloads." >&2
+    return 1
   fi
+
+  echo "==> QEMU version and amd64 registration (takes precedence over Rosetta):"
+  docker run --rm --platform linux/arm64 "$binfmt_image" --version
+  colima ssh -- cat /proc/sys/fs/binfmt_misc/qemu-x86_64
 
   echo "==> Setting colima as default buildx builder..."
   docker buildx use colima
