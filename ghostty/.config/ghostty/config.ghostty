@@ -127,9 +127,6 @@ keybind = super++=increase_font_size:1
 keybind = super+-=decrease_font_size:1
 keybind = super+shift+0=reset_font_size
 
-# Preserve Shift-Enter for terminal applications.
-keybind = shift+enter=text:\x1b[13;2u
-
 # Scrollback and search.
 keybind = super+home=scroll_to_top
 keybind = super+end=scroll_to_bottom
