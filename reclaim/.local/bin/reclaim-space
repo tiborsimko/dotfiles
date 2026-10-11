@@ -26,6 +26,14 @@ trap cleanup_docker_log 0
 trap 'exit 130' INT
 trap 'exit 143' TERM
 
+heading() {
+    if [ -t 1 ] && [ "${TERM:-dumb}" != dumb ] && [ -z "${NO_COLOR:-}" ]; then
+        printf '\033[1;34m==>\033[0m \033[1m%s\033[0m\n' "$*"
+    else
+        printf '==> %s\n' "$*"
+    fi
+}
+
 # Sum the sizes of the given paths in KB, skipping missing ones.
 du_kb() {
     total=0
@@ -110,22 +118,22 @@ show_docker_buildx_usage() {
     # These totals cover all ages, not just the cache eligible for pruning.
     # Buildx 0.38 ignores the age limit in `du --filter until=720h`.
     if buildx_usage=$(docker buildx du 2>/dev/null); then
-        printf '%s\n' "$buildx_usage" | awk -v target="$target" '
+        printf '%s\n' "$buildx_usage" | awk '
             $1 == "Total:" { total = $2 }
             $1 == "Private:" { private_size = $2 }
             $1 == "Shared:" { shared_size = $2 }
             END {
                 if (total == "") {
-                    print target ": cache usage unavailable."
+                    print "Cache usage unavailable."
                 } else {
                     if (shared_size == "") shared_size = "0B"
                     if (private_size == "") private_size = total
-                    printf "%s: cache usage (all ages): %s total, %s private, %s shared.\n", target, total, private_size, shared_size
+                    printf "Cache usage (all ages): %s total, %s private, %s shared.\n", total, private_size, shared_size
                 }
             }
         '
     else
-        echo "$target: cache usage unavailable."
+        echo "Cache usage unavailable."
     fi
 }
 
@@ -150,17 +158,17 @@ stream_docker_prune() {
 
 run_docker_target() {
     if ! command -v docker >/dev/null; then
-        echo "$target: Docker not installed; skipped."
+        echo "Docker not installed; skipped."
         return
     fi
     case $target in
     docker-buildx)
-        echo "$target: cache unused for $buildx_expire; builder: $(docker_buildx_name)."
+        echo "Cache unused for $buildx_expire; builder: $(docker_buildx_name)."
         docker_steps=buildx
         ;;
     docker-all)
-        echo "$target: WARNING: deletes unused data, including named volumes."
-        echo "$target: current Docker daemon; Buildx builder: $(docker_buildx_name)."
+        echo "WARNING: deletes unused data, including named volumes."
+        echo "Current Docker daemon; Buildx builder: $(docker_buildx_name)."
         docker_steps="buildx-all system volumes"
         ;;
     *) docker_steps=${target#docker-} ;;
@@ -181,15 +189,15 @@ run_docker_target() {
             case $docker_step in
             buildx | buildx-all) show_docker_buildx_usage ;;
             esac
-            echo "$target: would run $*; reclaimable size unknown."
+            echo "Would run $*; reclaimable size unknown."
             docker_size_unknown=1
             continue
         fi
-        echo "$target: running $*."
+        echo "Running $*."
         if stream_docker_prune "$@"; then
             freed=$(docker_reclaimed_kb <"$docker_log_dir/output")
             if [ "$freed" = "?" ]; then
-                echo "$target: reclaimed size unknown."
+                echo "Reclaimed size unknown."
                 docker_size_unknown=1
             else
                 total_kb=$((total_kb + freed))
@@ -275,6 +283,11 @@ reclaim_relay() {
 run_target() {
     target=$1
     count=$((count + 1))
+    if [ "$dry_run" -eq 1 ]; then
+        heading "$target (dry run)"
+    else
+        heading "$target"
+    fi
     case $target in
     docker-*)
         run_docker_target
@@ -284,16 +297,16 @@ run_target() {
     if [ "$dry_run" -eq 1 ]; then
         if [ "$target" = gem ]; then
             # Sizing old gem versions needs the uninstall run itself.
-            echo "$target: reclaimable size unknown."
+            echo "Reclaimable size unknown."
             unknown_sizes=$((unknown_sizes + 1))
             return
         fi
         before=$("size_$target")
         if [ "$before" = "?" ]; then
-            echo "$target: reclaimable size unknown."
+            echo "Reclaimable size unknown."
             unknown_sizes=$((unknown_sizes + 1))
         else
-            echo "$target: about $(fmt_kb "$before") reclaimable."
+            echo "About $(fmt_kb "$before") reclaimable."
             total_kb=$((total_kb + before))
         fi
         return
@@ -317,7 +330,7 @@ run_target() {
     if [ "$freed" -lt 0 ]; then
         freed=0
     fi
-    echo "$target: reclaimed about $(fmt_kb "$freed")."
+    echo "Reclaimed about $(fmt_kb "$freed")."
     total_kb=$((total_kb + freed))
 }
 
@@ -401,6 +414,7 @@ if [ "$count" -eq 0 ]; then
 fi
 
 if [ "$count" -gt 1 ]; then
+    heading "Summary"
     total_note=""
     if [ "$unknown_sizes" -gt 0 ]; then
         target_word="targets"
@@ -410,9 +424,9 @@ if [ "$count" -gt 1 ]; then
         total_note=" (plus unknown sizes from $unknown_sizes $target_word)"
     fi
     if [ "$dry_run" -eq 1 ]; then
-        echo "total: about $(fmt_kb "$total_kb") reclaimable$total_note."
+        echo "About $(fmt_kb "$total_kb") reclaimable$total_note."
     else
-        echo "total: reclaimed about $(fmt_kb "$total_kb")$total_note."
+        echo "Reclaimed about $(fmt_kb "$total_kb")$total_note."
     fi
 fi
 
