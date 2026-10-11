@@ -5,12 +5,26 @@
 # Usage: reclaim-space [--dry-run] target ...
 #
 # Example: reclaim-space all
-# Example: reclaim-space docker
-# Example: reclaim-space --dry-run brew docker npm
+# Example: reclaim-space docker-buildx
+# Example: BUILDX_EXPIRE=360h reclaim-space docker-buildx
+# Example: reclaim-space --dry-run brew docker-all npm
+# Example: BUILDX_BUILDER=reana-multiarch reclaim-space docker-buildx
 
 set -eu
 
 relay_dir="${XDG_STATE_HOME:-$HOME/.local/state}/ai-relay"
+buildx_expire="${BUILDX_EXPIRE:-720h}"
+docker_log_dir=""
+
+cleanup_docker_log() {
+    if [ -n "$docker_log_dir" ]; then
+        rm -rf "$docker_log_dir"
+    fi
+}
+
+trap cleanup_docker_log 0
+trap 'exit 130' INT
+trap 'exit 143' TERM
 
 # Sum the sizes of the given paths in KB, skipping missing ones.
 du_kb() {
@@ -44,26 +58,151 @@ reclaim_brew() {
     fi
 }
 
-size_docker() {
-    command -v docker >/dev/null || { echo 0; return; }
-    if ! df_out=$(docker system df --format '{{.Type}}|{{.Reclaimable}}' 2>/dev/null); then
-        echo "?"
-        return
+validate_buildx_expire() {
+    # Go durations fit in signed 64-bit nanoseconds: at most 2562047 whole hours.
+    if ! printf '%s\n' "$buildx_expire" | awk '
+        {
+            if (NR != 1 || $0 !~ /^[0-9]+h$/ || $0 + 0 < 1 || $0 + 0 > 2562047)
+                invalid = 1
+        }
+        END { exit invalid }
+    '; then
+        echo "[ERROR] BUILDX_EXPIRE must be whole hours from 1h to 2562047h; use 720h for 30 days." >&2
+        return 1
     fi
-    # Volumes excluded: `docker system prune` without `--volumes` keeps them.
-    echo "$df_out" | awk -F'|' '$1 != "Local Volumes" {
-        v = $2
-        if (sub(/TB.*/, "", v)) s += v * 1000000000000
-        else if (sub(/GB.*/, "", v)) s += v * 1000000000
-        else if (sub(/MB.*/, "", v)) s += v * 1000000
-        else if (sub(/kB.*/, "", v)) s += v * 1000
-        else if (sub(/B.*/, "", v)) s += v
-    } END { printf "%d\n", s / 1024 }'
 }
 
-reclaim_docker() {
-    if command -v docker >/dev/null; then
-        docker system prune -f
+# Read Docker's own prune result: system df includes resources outside the
+# scope of individual targets, such as tagged images for docker-images.
+docker_reclaimed_kb() {
+    awk '
+        /^Total reclaimed space:|^Total:/ {
+            v = $0
+            sub(/^[^:]*:[[:space:]]*/, "", v)
+            gsub(/[[:space:]]/, "", v)
+            if (v !~ /^[0-9]+([.][0-9]+)?(B|kB|MB|GB|TB)$/) next
+            if (sub(/TB$/, "", v)) v *= 1000000000000
+            else if (sub(/GB$/, "", v)) v *= 1000000000
+            else if (sub(/MB$/, "", v)) v *= 1000000
+            else if (sub(/kB$/, "", v)) v *= 1000
+            else sub(/B$/, "", v)
+            kb = v / 1024
+            found = 1
+        }
+        END { if (found) printf "%.0f\n", kb; else print "?" }
+    '
+}
+
+docker_buildx_name() {
+    if [ -n "${BUILDX_BUILDER:-}" ]; then
+        printf '%s\n' "$BUILDX_BUILDER"
+    elif buildx_info=$(docker buildx inspect 2>/dev/null); then
+        printf '%s\n' "$buildx_info" | awk '
+            $1 == "Name:" { print $2; found = 1; exit }
+            END { if (!found) print "current" }
+        '
+    else
+        echo "current"
+    fi
+}
+
+show_docker_buildx_usage() {
+    # These totals cover all ages, not just the cache eligible for pruning.
+    # Buildx 0.38 ignores the age limit in `du --filter until=720h`.
+    if buildx_usage=$(docker buildx du 2>/dev/null); then
+        printf '%s\n' "$buildx_usage" | awk -v target="$target" '
+            $1 == "Total:" { total = $2 }
+            $1 == "Private:" { private_size = $2 }
+            $1 == "Shared:" { shared_size = $2 }
+            END {
+                if (total == "") {
+                    print target ": cache usage unavailable."
+                } else {
+                    if (shared_size == "") shared_size = "0B"
+                    if (private_size == "") private_size = total
+                    printf "%s: cache usage (all ages): %s total, %s private, %s shared.\n", target, total, private_size, shared_size
+                }
+            }
+        '
+    else
+        echo "$target: cache usage unavailable."
+    fi
+}
+
+stream_docker_prune() {
+    if [ -z "$docker_log_dir" ]; then
+        docker_log_dir=$(mktemp -d "${TMPDIR:-/tmp}/reclaim-space.XXXXXX") || return 1
+    fi
+    : >"$docker_log_dir/status" || return 1
+    # Record Docker's status separately so tee cannot hide a failed prune,
+    # including on shells without pipefail. Stream Docker's stderr directly.
+    if (
+        docker_status=0
+        "$@" || docker_status=$?
+        printf '%s\n' "$docker_status" >"$docker_log_dir/status"
+    ) | tee "$docker_log_dir/output"; then
+        IFS= read -r docker_status <"$docker_log_dir/status" || return 1
+        [ "$docker_status" -eq 0 ]
+    else
+        return 1
+    fi
+}
+
+run_docker_target() {
+    if ! command -v docker >/dev/null; then
+        echo "$target: Docker not installed; skipped."
+        return
+    fi
+    case $target in
+    docker-buildx)
+        echo "$target: cache unused for $buildx_expire; builder: $(docker_buildx_name)."
+        docker_steps=buildx
+        ;;
+    docker-all)
+        echo "$target: WARNING: deletes unused data, including named volumes."
+        echo "$target: current Docker daemon; Buildx builder: $(docker_buildx_name)."
+        docker_steps="buildx-all system volumes"
+        ;;
+    *) docker_steps=${target#docker-} ;;
+    esac
+    docker_size_unknown=0
+    for docker_step in $docker_steps; do
+        case $docker_step in
+        buildx) set -- docker buildx prune --filter "until=$buildx_expire" -f ;;
+        buildx-all) set -- docker buildx prune --all -f ;;
+        containers) set -- docker container prune -f ;;
+        images) set -- docker image prune -f ;;
+        system) set -- docker system prune --all --volumes -f ;;
+        # System prune only removes anonymous volumes. Also prune named ones
+        # after stopped containers have been removed and released their volumes.
+        volumes) set -- docker volume prune --all -f ;;
+        esac
+        if [ "$dry_run" -eq 1 ]; then
+            case $docker_step in
+            buildx | buildx-all) show_docker_buildx_usage ;;
+            esac
+            echo "$target: would run $*; reclaimable size unknown."
+            docker_size_unknown=1
+            continue
+        fi
+        echo "$target: running $*."
+        if stream_docker_prune "$@"; then
+            freed=$(docker_reclaimed_kb <"$docker_log_dir/output")
+            if [ "$freed" = "?" ]; then
+                echo "$target: reclaimed size unknown."
+                docker_size_unknown=1
+            else
+                total_kb=$((total_kb + freed))
+            fi
+        else
+            echo "$target: failed to reclaim." >&2
+            failures=$((failures + 1))
+            docker_size_unknown=1
+            break
+        fi
+    done
+    if [ "$docker_size_unknown" -eq 1 ]; then
+        unknown_sizes=$((unknown_sizes + 1))
     fi
 }
 
@@ -136,17 +275,25 @@ reclaim_relay() {
 run_target() {
     target=$1
     count=$((count + 1))
+    case $target in
+    docker-*)
+        run_docker_target
+        return
+        ;;
+    esac
     if [ "$dry_run" -eq 1 ]; then
         if [ "$target" = gem ]; then
             # Sizing old gem versions needs the uninstall run itself.
-            echo "$target: reclaimable size unknown"
+            echo "$target: reclaimable size unknown."
+            unknown_sizes=$((unknown_sizes + 1))
             return
         fi
         before=$("size_$target")
         if [ "$before" = "?" ]; then
-            echo "$target: reclaimable size unknown"
+            echo "$target: reclaimable size unknown."
+            unknown_sizes=$((unknown_sizes + 1))
         else
-            echo "$target: about $(fmt_kb "$before") reclaimable"
+            echo "$target: about $(fmt_kb "$before") reclaimable."
             total_kb=$((total_kb + before))
         fi
         return
@@ -158,7 +305,7 @@ run_target() {
     # The `if !` suppresses `set -e` inside the cleaner, so cleaners must
     # stay single-command to not mask failures of any earlier steps.
     if ! "reclaim_$target"; then
-        echo "$target: failed to reclaim"
+        echo "$target: failed to reclaim." >&2
         failures=$((failures + 1))
         return
     fi
@@ -170,13 +317,13 @@ run_target() {
     if [ "$freed" -lt 0 ]; then
         freed=0
     fi
-    echo "$target: reclaimed about $(fmt_kb "$freed")"
+    echo "$target: reclaimed about $(fmt_kb "$freed")."
     total_kb=$((total_kb + freed))
 }
 
 run_all() {
     run_target brew
-    run_target docker
+    run_target docker-buildx
     run_target gem
     run_target go
     run_target mise
@@ -188,21 +335,33 @@ run_all() {
 help() {
     echo "Usage: $0 [--dry-run] target ..."
     echo "Options:"
-    echo "  --dry-run  Report reclaimable space without cleaning"
-    echo "  --help     Display this help message"
+    echo "  --dry-run  Report cleanup plans and known sizes without cleaning."
+    echo "  --help     Display this help message."
     echo "Targets:"
-    echo "  all     Reclaim all targets"
-    echo "  brew    Clean Homebrew caches (brew cleanup --prune=all)"
-    echo "  docker  Prune Docker containers, images, networks, build cache"
-    echo "  gem     Remove old Ruby gem versions"
-    echo "  go      Clean Go build and module caches"
-    echo "  mise    Clear mise cache"
-    echo "  npm     Clean npm cache"
-    echo "  pip     Purge pip cache"
-    echo "  relay   Prune AI relay packet history"
+    printf '  %-18s %s\n' \
+        all 'Reclaim usual targets (Docker: docker-buildx only).' \
+        brew 'Clean Homebrew caches (brew cleanup --prune=all).' \
+        docker-buildx 'Prune expired build cache (default: unused for 30 days).' \
+        docker-containers 'Prune all stopped Docker containers.' \
+        docker-images 'Prune dangling Docker images.' \
+        docker-all 'Prune all unused Docker data. WARNING: deletes volumes.' \
+        gem 'Remove old Ruby gem versions.' \
+        go 'Clean Go build and module caches.' \
+        mise 'Clear mise cache.' \
+        npm 'Clean npm cache.' \
+        pip 'Purge pip cache.' \
+        relay 'Prune AI relay packet history.'
+    echo "Docker scope: current daemon and selected Buildx builder."
+    echo "Environment:"
+    echo "  BUILDX_BUILDER     Override the selected builder for cache pruning."
+    echo "  BUILDX_EXPIRE      Positive whole hours for docker-buildx (default: 720h = 30 days)."
+    echo "Examples:"
+    echo "  BUILDX_BUILDER=reana-multiarch reclaim-space docker-buildx"
+    echo "  BUILDX_EXPIRE=360h reclaim-space --dry-run docker-buildx"
 }
 
 dry_run=0
+needs_buildx_expire=0
 for arg in "$@"; do
     case $arg in
     --dry-run) dry_run=1 ;;
@@ -210,14 +369,24 @@ for arg in "$@"; do
         help
         exit 0
         ;;
-    all | brew | docker | gem | go | mise | npm | pip | relay) ;;
+    all | docker-buildx) needs_buildx_expire=1 ;;
+    brew | docker-containers | docker-images | docker-all | gem | go | mise | npm | pip | relay) ;;
+    docker)
+        echo "[ERROR] Target 'docker' was removed; use 'docker-buildx' for cache cleanup or 'docker-all' to delete all unused data, including volumes." >&2
+        exit 1
+        ;;
     *) echo "[ERROR] Unknown argument '$arg'. Exiting." && help && exit 1 ;;
     esac
 done
 
+if [ "$needs_buildx_expire" -eq 1 ]; then
+    validate_buildx_expire
+fi
+
 count=0
 failures=0
 total_kb=0
+unknown_sizes=0
 for arg in "$@"; do
     case $arg in
     --dry-run) ;;
@@ -232,10 +401,18 @@ if [ "$count" -eq 0 ]; then
 fi
 
 if [ "$count" -gt 1 ]; then
+    total_note=""
+    if [ "$unknown_sizes" -gt 0 ]; then
+        target_word="targets"
+        if [ "$unknown_sizes" -eq 1 ]; then
+            target_word="target"
+        fi
+        total_note=" (plus unknown sizes from $unknown_sizes $target_word)"
+    fi
     if [ "$dry_run" -eq 1 ]; then
-        echo "total: about $(fmt_kb "$total_kb") reclaimable"
+        echo "total: about $(fmt_kb "$total_kb") reclaimable$total_note."
     else
-        echo "total: reclaimed about $(fmt_kb "$total_kb")"
+        echo "total: reclaimed about $(fmt_kb "$total_kb")$total_note."
     fi
 fi
 
