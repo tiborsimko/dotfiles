@@ -1,11 +1,12 @@
 #!/bin/sh
 #
-# Reclaim disk space by clearing package manager and build caches.
+# Reclaim disk space by clearing caches and trimming Colima VM disks.
 #
 # Usage: reclaim-space [--dry-run] target ...
 #
 # Example: reclaim-space all
 # Example: reclaim-space docker-buildx
+# Example: reclaim-space docker-buildx colima
 # Example: BUILDX_EXPIRE=360h reclaim-space docker-buildx
 # Example: reclaim-space --dry-run brew docker-all npm
 # Example: BUILDX_BUILDER=reana-multiarch reclaim-space docker-buildx
@@ -77,6 +78,34 @@ validate_buildx_expire() {
     '; then
         echo "[ERROR] BUILDX_EXPIRE must be whole hours from 1h to 2562047h; use 720h for 30 days." >&2
         return 1
+    fi
+}
+
+run_colima_target() {
+    if ! command -v colima >/dev/null; then
+        echo "Colima not installed; skipped."
+        return
+    fi
+    colima_profile="${COLIMA_PROFILE:-default}"
+    if ! colima status >/dev/null 2>&1; then
+        echo "Colima profile '$colima_profile' is stopped or inaccessible; skipped."
+        return
+    fi
+    echo "Return unused VM disk blocks to the host; profile: $colima_profile."
+    # fstrim counts ranges offered for discard, including previously discarded
+    # blocks. Adding them would also double-count preceding Docker cleanup.
+    echo "Trim byte counts are excluded from cleanup totals."
+    set -- colima ssh -- sudo fstrim -av
+    if [ "$dry_run" -eq 1 ]; then
+        echo "Would run $*; host savings unknown."
+        return
+    fi
+    echo "Running $*."
+    if "$@"; then
+        echo "Trim complete."
+    else
+        echo "$target: failed to reclaim." >&2
+        failures=$((failures + 1))
     fi
 }
 
@@ -289,6 +318,10 @@ run_target() {
         heading "$target"
     fi
     case $target in
+    colima)
+        run_colima_target
+        return
+        ;;
     docker-*)
         run_docker_target
         return
@@ -337,6 +370,7 @@ run_target() {
 run_all() {
     run_target brew
     run_target docker-buildx
+    run_target colima
     run_target gem
     run_target go
     run_target mise
@@ -354,6 +388,7 @@ help() {
     printf '  %-18s %s\n' \
         all 'Reclaim usual targets (Docker: docker-buildx only).' \
         brew 'Clean Homebrew caches (brew cleanup --prune=all).' \
+        colima 'Return unused Colima VM disk blocks to the host.' \
         docker-buildx 'Prune expired build cache (default: unused for 30 days).' \
         docker-containers 'Prune all stopped Docker containers.' \
         docker-images 'Prune dangling Docker images.' \
@@ -366,9 +401,11 @@ help() {
         relay 'Prune AI relay packet history.'
     echo "Docker scope: current daemon and selected Buildx builder."
     echo "Environment:"
+    echo "  COLIMA_PROFILE     Select the Colima profile to trim (default: default)."
     echo "  BUILDX_BUILDER     Override the selected builder for cache pruning."
     echo "  BUILDX_EXPIRE      Positive whole hours for docker-buildx (default: 720h = 30 days)."
     echo "Examples:"
+    echo "  reclaim-space docker-buildx colima"
     echo "  BUILDX_BUILDER=reana-multiarch reclaim-space docker-buildx"
     echo "  BUILDX_EXPIRE=360h reclaim-space --dry-run docker-buildx"
 }
@@ -383,7 +420,7 @@ for arg in "$@"; do
         exit 0
         ;;
     all | docker-buildx) needs_buildx_expire=1 ;;
-    brew | docker-containers | docker-images | docker-all | gem | go | mise | npm | pip | relay) ;;
+    brew | colima | docker-containers | docker-images | docker-all | gem | go | mise | npm | pip | relay) ;;
     docker)
         echo "[ERROR] Target 'docker' was removed; use 'docker-buildx' for cache cleanup or 'docker-all' to delete all unused data, including volumes." >&2
         exit 1
