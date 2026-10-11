@@ -30,7 +30,7 @@
   f = "!f() { ~/.config/git/git-fetch.sh \"$@\"; }; f"
   g = grep
   i = "!f() { ~/.config/git/git-forge.sh issue \"$@\"; }; f"
-  k = log --graph --decorate --pretty=format:'%C(blue)%d%Creset %C(yellow)%h%Creset %s, %C(bold green)%an%Creset, %C(green)%cd%Creset' --date=relative --all
+  k = log --graph --decorate --clear-decorations --pretty=format:'%C(blue)%d%Creset %C(yellow)%h%Creset %s, %C(bold green)%an%Creset, %C(green)%cd%Creset' --date=relative --all
   l = "!f() { ~/.config/git/git-log.sh \"$@\"; }; f"
   p = "!f() { ~/.config/git/git-forge.sh pr \"$@\"; }; f"
   r = "!f() { ~/.config/git/git-forge.sh repo \"$@\"; }; f"
