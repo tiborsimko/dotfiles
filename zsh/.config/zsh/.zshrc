@@ -117,6 +117,30 @@ KEYTIMEOUT=1
 # Use vi bindings (must come before custom bindings)
 bindkey -v
 
+# Discard unknown CSI input without changing vi mode or waiting indefinitely.
+zmodload zsh/zselect
+_discard_csi() {
+    emulate -L zsh
+    unsetopt multibyte
+    local char
+    # Bound malformed input as well as the wait for each remaining byte.
+    repeat 64; do
+        if (( ! (KEYS_QUEUED_COUNT || PENDING) )); then
+            zselect -t "$KEYTIMEOUT"
+            (( KEYS_QUEUED_COUNT || PENDING )) || return 0
+        fi
+        read -r -s -k 1 char || return 0
+        case $char in
+            [@-~]) return 0 ;;
+            [\ -\?]) ;;
+            *) zle -U "$char"; return 0 ;;
+        esac
+    done
+}
+zle -N _discard_csi
+bindkey -M viins '^[[' _discard_csi
+bindkey -M vicmd '^[[' _discard_csi
+
 # Bind arrow keys for history prefix search (like Bash's history-search-backward)
 bindkey '^[[A' history-beginning-search-backward
 bindkey '^[[B' history-beginning-search-forward
