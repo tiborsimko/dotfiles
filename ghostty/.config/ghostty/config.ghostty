@@ -29,6 +29,9 @@ window-padding-y = 4
 window-padding-balance = true
 window-padding-color = background
 
+# Dim unfocused splits.
+unfocused-split-opacity = 0.55
+
 # Show tabs in the title bar.
 window-title-font-family = Iosevka Term
 macos-titlebar-style = tabs
